@@ -39,7 +39,6 @@ class UserProfile extends \yii\db\ActiveRecord
             [['name' ], 'required'],
             [['profile_type_id', 'rating', 'tel_address'], 'integer'],
             [['name', 'user_code', 'location'], 'string', 'max' => 255],
-            [['profile_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProfileType::className(), 'targetAttribute' => ['profile_type_id' => 'id']],
             //[['profile_type_id', 'name', 'tel_address', 'location'], 'on' => 'create'],
             //[[ 'name', 'tel_address', 'location'], 'on' => 'create'],
         ];
@@ -67,23 +66,6 @@ class UserProfile extends \yii\db\ActiveRecord
     public function getProducts()
     {
         return $this->hasMany(Products::className(), ['fmcg_code' => 'user_code']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProfileType()
-    {
-        return $this->hasOne(ProfileType::className(), ['id' => 'profile_type_id']);
-    }
-
-    /**
-     * get list of profile types for dropdown
-     */
-    public static function getProfileTypeList()
-    {
-        $droptions = ProfileType::find()->asArray()->all();
-        return ArrayHelper::map($droptions, 'id', 'name');
     }
 
     public static function userHasProfile()

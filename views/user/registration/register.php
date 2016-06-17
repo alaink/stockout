@@ -46,12 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
                 <?php
-                $a= ['1' => 'RETAILER', '2' => 'SUBDEALER', '3' => 'FMCG'];
+                $a= ['2' => 'SUBDEALER', '3' => 'FMCG'];
                 echo $form->field($model, 'profile_type_id')->dropDownList($a,['prompt'=>'Select Option']);
                 ?>
-
-<!--                <?//= $form->field($model, 'profile_type_id')->dropDownList($model-> profileTypeList,
-//                    ['prompt' => 'Please Choose One' ]);?>-->
 
                 <?= $form->field($model, 'tel_address')->textInput() ?>
 

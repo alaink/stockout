@@ -52,7 +52,7 @@ use yii\helpers\Url;
                     <!-- /input-group -->
                 </li>
                 <li>
-                    <a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    <a href=<?php echo Yii::$app->getHomeUrl() ?>><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                 </li>
                 <!-- TICKETS-->
                 <li>

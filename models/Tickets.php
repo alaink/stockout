@@ -27,6 +27,8 @@ use Yii;
  */
 class Tickets extends \yii\db\ActiveRecord
 {
+    
+    public $status_col;
     /**
      * @inheritdoc
      */

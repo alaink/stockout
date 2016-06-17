@@ -23,12 +23,8 @@ class m160606_150321_create_user_profile extends Migration
             'location' => 'VARCHAR(255) NULL',
         ]);
 
-        $this->createIndex('idx_profile_type_id_8623_00','user_profile','profile_type_id',0);
         $this->createIndex('idx_user_code_8624_01','user_profile','user_code',0);
 
-        $this->execute('SET foreign_key_checks = 0');
-        $this->addForeignKey('fk_profile_type_8621_00','{{%user_profile}}', 'profile_type_id', '{{%profile_type}}', 'id', 'RESTRICT', 'RESTRICT' );
-        $this->execute('SET foreign_key_checks = 1;');
     }
 
     /**

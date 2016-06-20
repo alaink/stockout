@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "tickets".
@@ -21,6 +23,7 @@ use Yii;
  * @property string $created_at
  * @property integer $updated_by
  * @property string $updated_at
+ * @property string $title
  *
  * @property Products $product
  * @property User $user
@@ -43,13 +46,27 @@ class Tickets extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'required'],
+            [['user_id', 'title'], 'required'],
             [['user_id', 'product_id', 'product_quantity', 'status_subdea', 'status_fmcg', 'created_by', 'updated_by'], 'integer'],
             [['response_time_preference', 'noticed_at', 'created_at', 'updated_at'], 'safe'],
             [['comments'], 'string'],
-            [['subdea_code'], 'string', 'max' => 255],
+            [['subdea_code', 'title'], 'string', 'max' => 255],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::className(), 'targetAttribute' => ['product_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                'value' => new Expression('NOW()'),
+            ],
         ];
     }
 
@@ -73,6 +90,7 @@ class Tickets extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_by' => 'Updated By',
             'updated_at' => 'Updated At',
+            'title' => 'Title'
         ];
     }
 
@@ -82,6 +100,12 @@ class Tickets extends \yii\db\ActiveRecord
     public function getProduct()
     {
         return $this->hasOne(Products::className(), ['id' => 'product_id']);
+    }
+
+    public function getProductName()
+    {
+        $product = Products::findOne(['id' => $this->product_id]);
+        return $product->name;
     }
 
     /**

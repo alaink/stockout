@@ -63,4 +63,70 @@ class RecordHelpers
         return $status_col;
     }
 
+    public function getProductName()
+    {
+        $product = Products::findOne(['id' => product_id]);
+
+        if($product)
+        {
+            echo "amazo";
+        }else{echo "jjjj";}
+        exit(0);
+
+        return $product->name;
+    }
+
+    /**
+     * returns the profile type of a user
+     * @return int
+     */
+    public function getProfileType()
+    {
+        $user = User::findOne(Yii::$app->user->identity->id);
+        $user_profile = UserProfile::findOne(['id' => $user->user_profile_id]);
+        $profile_type = $user_profile->profile_type_id;
+        
+        return $profile_type;
+    }
+
+    /**
+     * @param $id of the model
+     * @param $newStatus    
+     */
+    public function changeTicketStatus($id, $newStatus)
+    {
+        // user's profile type to either change status_fmcg or status_subdea
+        $profile_type =  RecordHelpers::getProfileType();
+
+        $status_col = RecordHelpers::getTicketStatusCol($profile_type);
+
+        $tickets = Tickets::findOne(['id' => $id]);
+
+        if($newStatus == Yii::$app->params['VIEWED_TICKET'])
+        {
+            $tickets->$status_col = Yii::$app->params['VIEWED_TICKET'];
+            $tickets->save();
+        }
+        else if($newStatus == Yii::$app->params['PENDING_TICKET'])
+        {
+            $tickets->$status_col = Yii::$app->params['PENDING_TICKET'];
+            $tickets->save();
+        }
+        else if($newStatus == Yii::$app->params['IN_PROGRESS_TICKET'])
+        {
+            $tickets->$status_col = Yii::$app->params['IN_PROGRESS_TICKET'];
+            $tickets->save();
+        }
+        else if($newStatus == Yii::$app->params['RESOLVED_TICKET'])
+        {
+            $tickets->$status_col = Yii::$app->params['RESOLVED_TICKET'];
+            $tickets->save();
+        }
+        else// if($newStatus == Yii::$app->params['CLOSED_TICKET'])
+        {
+            $tickets->$status_col = Yii::$app->params['CLOSED_TICKET'];
+            $tickets->save();
+        }
+    }
+    
 }

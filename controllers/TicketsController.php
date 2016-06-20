@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+use app\models\Products;
 use app\models\RecordHelpers;
 use app\models\Tickets;
 use app\models\User;
@@ -11,26 +12,15 @@ class TicketsController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-
-        // get the user model
-        $user = User::findOne(Yii::$app->user->identity->id);
-
-        // get his/her profile type id
-        $user_profile = UserProfile::findOne(['id' => $user->user_profile_id]);
-        $profile_type = $user_profile->profile_type_id;
+        $profile_type =  RecordHelpers::getProfileType();
         
         $status_col = RecordHelpers::getTicketStatusCol($profile_type);
-//        echo $status_col;
-//        exit(0);
 
+        // get ticket status from user
+        $ticket_status = Yii::$app->request->get('status');
         $model = new Tickets();
 
-        $tickets = Tickets::find()->all();
-
-        $ticket_status = Yii::$app->request->get('status');
-        echo $ticket_status;
-
-        if($ticket_status)
+        if($ticket_status != null)
         {
             $tickets = Tickets::find()
                 ->where([$status_col => $ticket_status])
@@ -39,48 +29,100 @@ class TicketsController extends \yii\web\Controller
         else{
             $tickets = Tickets::find()->all();
         }
-        
-        
-
-
-//        // list tickets for subdealers
-//        if($profile_type_id == Yii::$app->params['SUBDEALER']):
-//
-//            $tickets = Tickets::getTicketsByStatus('status_subdea');
-//        // list tickets for fmcg
-//        else :
-//            // list (find) tickets where status_fmcg = $status
-//            $tickets = Tickets::getTicketsByStatus('status_fmcg');
-//
-//        endif;
-
 
         return $this->render('index', [
             'tickets' => $tickets,
             'model' => $model,
-            //'status_col' => $status_col
+            'profile_type' => $profile_type,
         ]);
     }
 
-    public function actionSearch()
+    public function actionCreate()
     {
-        $ticket_status = Yii::$app->request->get('status');
+        $model = new Tickets();
 
-        // get the user model
-        $user = User::findOne(Yii::$app->user->identity->id);
-        // get his/her profile type id
-        $user_profile = UserProfile::findOne(['id' => $user->user_profile_id]);
-        $profile_type = $user_profile->profile_type_id;
+        if ($model->load(Yii::$app->request->post())) 
+        {
+            $model->user_id = Yii::$app->user->identity->id;
+            $model->created_by = $model->user_id;
 
-        $status_col = RecordHelpers::getTicketStatusCol($profile_type);
+            $model->save();
+            return $this->redirect(['view', 'id' => $model->id]);
+        } 
+        else {
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
+    }
 
-        $tickets = Tickets::find()
-            ->where([$status_col => $ticket_status])
-            ->all();
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
 
-        return $this->render('index', [
-            'tickets' => $tickets,
+        if ($model->load(Yii::$app->request->post())) {
+            $model->updated_by = Yii::$app->user->identity->id;
+            $model->save();
+
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    /**
+     * Displays a single Tickets model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionView($id)
+    {
+        RecordHelpers::changeTicketStatus($id, Yii::$app->params['VIEWED_TICKET']);
+
+        return $this->render('view', [
+            'model' => $this->findModel($id),
         ]);
     }
+        
+
+    /**
+     * Finds the Tickets model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Tickets the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Tickets::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+
+//    public function actionSearch()
+//    {
+//        $ticket_status = Yii::$app->request->get('status');
+//
+//        // get the user model
+//        $user = User::findOne(Yii::$app->user->identity->id);
+//        // get his/her profile type id
+//        $user_profile = UserProfile::findOne(['id' => $user->user_profile_id]);
+//        $profile_type = $user_profile->profile_type_id;
+//
+//        $status_col = RecordHelpers::getTicketStatusCol($profile_type);
+//
+//        $tickets = Tickets::find()
+//            ->where([$status_col => $ticket_status])
+//            ->all();
+//
+//        return $this->render('index', [
+//            'tickets' => $tickets,
+//        ]);
+//    }
 
 }

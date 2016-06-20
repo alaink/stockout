@@ -8,61 +8,11 @@ $this->title = 'Stock Out';
 
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Tickets</h1>
+            <h1 class="page-header">Dashboard</h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <!-- /.row -->
-    <div class="row">
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-yellow">
-                <a href=<?= Yii::$app->getHomeUrl() . 'tickets/?status=' . Yii::$app->params['NEW_TICKET']?> >
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-tasks fa-4x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div><h2>New Tickets</h2></div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <a href=<?= Yii::$app->getHomeUrl() . 'tickets/?status='. Yii::$app->params['PENDING_TICKET']?> >
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-tasks fa-4x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div><h2>Pending Tickets</h2></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-green">
-                <a href=<?= Yii::$app->getHomeUrl() . 'tickets/?status=' . Yii::$app->params['OLD_TICKET']?> >
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="glyphicon glyphicon-check fa-3x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div><h2>Old Tickets</h2></div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
+
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-8">

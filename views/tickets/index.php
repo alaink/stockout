@@ -10,7 +10,7 @@ use \app\models\Tickets;
 <h1>Tickets</h1>
 
 <!-- create ticket button for subdealer -->
-<?php if ($profile_type == Yii::$app->params['FMCG'])
+<?php if ($profile_type == Yii::$app->params['SUBDEALER'])
         {
             echo Html::a('Create Ticket', ['/tickets/create'], ['class'=>'btn btn-primary']);
         }

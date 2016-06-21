@@ -1,5 +1,6 @@
 <?php
 
+
 /* @var $this yii\web\View */
 
 $this->title = 'Stock Out';
@@ -138,3 +139,5 @@ $this->title = 'Stock Out';
 
 </div>
 <!-- /.container-fluid -->
+
+

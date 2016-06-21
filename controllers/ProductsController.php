@@ -2,54 +2,39 @@
 
 namespace app\controllers;
 
+use app\models\UploadForm;
+use Yii;
 use app\models\Products;
-use yii\base\Exception;
+use yii\web\UploadedFile;
 
 class ProductsController extends \yii\web\Controller
 {
+    /**
+     * uploads a products's file
+     * @return string|\yii\web\Response
+     */
     public function actionIndex()
     {
-        return $this->render('index');
-    }
+        $model = new UploadForm();
 
-    public function actionImportExcel()
-    {
-        $inputFile = '../uploadedFiles/products_file.xlsx';
+        if (Yii::$app->request->isPost) {
+            $model->uploadedFile = UploadedFile::getInstance($model, 'uploadedFile');
 
-        // read the file
-        try{
-            $inputFileType = \PHPExcel_IOFactory::identify($inputFile);
-            $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
-            $objPHPExcel = $objReader->load($inputFile);
-        }catch (Exception $e)
-        {
-            die('Error');
-        }
+            if ($model->upload()) {
 
-        // read through the file
-        $sheet = $objPHPExcel->getSheet(0);
-        $highestRow = $sheet->getHighestRow();
-        $highestColumn = $sheet->getHighestColumn();
+                $inputFile = \Yii::$app->basePath .'/web/uploads/' . $model->uploadedFile->baseName . '.' . $model->uploadedFile->extension;
 
-        // loop through rows from the file
-        for($row = 1; $row <= $highestRow; $row++)
-        {
-            $rowData = $sheet->rangeToArray('A'.$row.':'.$highestColumn.$row, NULL, TRUE, FALSE);
+                Products::importExcel($inputFile);
 
-            // skip file header
-            if ($row == 1)
-            {
-                continue;
+                Yii::$app->session->setFlash('success', "Products saved successfully!");
+                return $this->redirect(['index']);
+
             }
-
-            // create database records
-            $product = new Products();
-            $product->id = NULL;
-            $product->name = $rowData[0][1];
-            $product->fmcg_code = $rowData[0][2];
-            $product->save();
         }
-        die('okay');
+        
+        return $this->render('index', [
+            'model' => $model
+        ]);
     }
 
 }

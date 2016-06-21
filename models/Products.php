@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
- * @property string $fmcg_code
+ * @property string $fmcg_id
  *
  * @property ActionUndertaken[] $actionUndertakens
  * @property Broadcast[] $broadcasts
@@ -22,7 +22,7 @@ class Products extends \yii\db\ActiveRecord
      * @inheritdoc
      */
 
-    public $productFile;
+//    public $uploadedFile;
 
     public static function tableName()
     {
@@ -35,9 +35,11 @@ class Products extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'fmcg_code'], 'required'],
-            [['name', 'fmcg_code'], 'string', 'max' => 255],
-            [['fmcg_code'], 'exist', 'skipOnError' => true, 'targetClass' => UserProfile::className(), 'targetAttribute' => ['fmcg_code' => 'user_code']],
+            [['name', 'fmcg_id'], 'required'],
+            [['name'], 'string', 'max' => 255],
+            [['fmcg_id'], 'integer'],
+            [['fmcg_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserProfile::className(), 'targetAttribute' => ['fmcg_id' => 'id']],
+            //[['uploadedFile'], 'file', 'extensions' => 'xlsx, xls'],
         ];
     }
 
@@ -49,7 +51,7 @@ class Products extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'fmcg_code' => 'Fmcg Code',
+            'fmcg_id' => 'Fmcg ID',
         ];
     }
 
@@ -72,9 +74,9 @@ class Products extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFmcgCode()
+    public function getFmcgId()
     {
-        return $this->hasOne(UserProfile::className(), ['user_code' => 'fmcg_code']);
+        return $this->hasOne(UserProfile::className(), ['id' => 'fmcg_id']);
     }
 
     /**
@@ -85,27 +87,47 @@ class Products extends \yii\db\ActiveRecord
         return $this->hasMany(Tickets::className(), ['product_id' => 'id']);
     }
 
-    public function uploadAttachment()
+    public static function importExcel($inputFile)
     {
-        $productFileDir = \Yii::getAlias('@common') . '/uploadedFiles/productFiles/file_' . Yii::$app->user->id . '/';
-        if (!is_dir($productFileDir))
-            exec(mkdir($productFileDir, 0755, true));
+        //$inputFile = '../uploadedFiles/products_file.xlsx';
 
-
-        if ($this->validate()) {
-            if (!empty($this->attachment)) {
-
-                $location = preg_replace('/\s+/', '_', $productFileDir . $this->attachment->baseName . '.' . $this->attachment->extension);
-                $this->attachment->saveAs($location);
-
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
+        // read the file
+        try{
+            $inputFileType = \PHPExcel_IOFactory::identify($inputFile);
+            $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
+            $objPHPExcel = $objReader->load($inputFile);
+        }catch (Exception $e)
+        {
+            die('Error');
         }
 
+        // read through the file
+        $sheet = $objPHPExcel->getSheet(0);
+        $highestRow = $sheet->getHighestRow();
+        $highestColumn = $sheet->getHighestColumn();
 
+        // loop through rows from the file
+        for($row = 1; $row <= $highestRow; $row++)
+        {
+            $rowData = $sheet->rangeToArray('A'.$row.':'.$highestColumn.$row, NULL, TRUE, FALSE);
+
+            // skip file header
+            if ($row == 1)
+            {
+                continue;
+            }
+
+            // create database records
+            $product = new Products();
+            $product->id = NULL;
+            $product->name = $rowData[0][3];  // BRAND
+            $product->fmcg_id = Yii::$app->user->identity->user_profile_id;
+            $product->category = $rowData[0][1];
+            $product->product = $rowData[0][2];
+            $product->type_flavor = $rowData[0][4];
+            $product->size = $rowData[0][5];
+            $product->bar_code = $rowData[0][6];
+            $product->save();
+        }
     }
 }

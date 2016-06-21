@@ -35,7 +35,7 @@ class ActionUndertakenController extends \yii\web\Controller
 
             RecordHelpers::changeTicketStatus($id, Yii::$app->params['RESOLVED_TICKET']);
 
-            return $this->redirect(['..web/tickets/index']);//, 'id' => $model->id]);
+            return $this->redirect(['/tickets/index']);//, 'id' => $model->id]);
         } else {
             return $this->render('resolve', [
                 'model' => $model,

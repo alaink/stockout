@@ -14,7 +14,8 @@ class TicketsController extends \yii\web\Controller
     {
         $profile_type =  RecordHelpers::getProfileType();
         
-        $status_col = RecordHelpers::getTicketStatusCol($profile_type);
+        //$status_col = RecordHelpers::getTicketStatusCol($profile_type);
+        $status_col = RecordHelpers::getTicketStatusCol();
 
         // get ticket status from user
         $ticket_status = Yii::$app->request->get('status');
@@ -56,20 +57,38 @@ class TicketsController extends \yii\web\Controller
         }
     }
 
+    /**
+     * change ticket status to in progress
+     * @param $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
+     */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post())) {
-            $model->updated_by = Yii::$app->user->identity->id;
-            $model->save();
-
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        // change status to in progress only if not viewed before hand
+        if(RecordHelpers::getCurrentTicketStatus($id) < Yii::$app->params['IN_PROGRESS_TICKET']) {
+            RecordHelpers::changeTicketStatus($id, Yii::$app->params['IN_PROGRESS_TICKET']);
         }
+
+        $currentTicketStatus  = RecordHelpers::getCurrentTicketStatus($id);
+
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+            'currentTicketStatus' => $currentTicketStatus
+        ]);
+        
+//        $model = $this->findModel($id);
+//
+//        if ($model->load(Yii::$app->request->post())) {
+//            $model->updated_by = Yii::$app->user->identity->id;
+//            $model->save();
+//
+//            return $this->redirect(['view', 'id' => $model->id]);
+//        } else {
+//            return $this->render('update', [
+//                'model' => $model,
+//            ]);
+//        }
     }
 
     /**
@@ -79,10 +98,16 @@ class TicketsController extends \yii\web\Controller
      */
     public function actionView($id)
     {
-        RecordHelpers::changeTicketStatus($id, Yii::$app->params['VIEWED_TICKET']);
+        // change status to viewed only if not viewed before hand
+        if(RecordHelpers::getCurrentTicketStatus($id) < Yii::$app->params['VIEWED_TICKET']) {
+            RecordHelpers::changeTicketStatus($id, Yii::$app->params['VIEWED_TICKET']);
+        }
+        
+        $currentTicketStatus  = RecordHelpers::getCurrentTicketStatus($id);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'currentTicketStatus' => $currentTicketStatus
         ]);
     }
         

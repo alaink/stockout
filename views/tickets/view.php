@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use \app\models\RecordHelpers;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Tickets */
@@ -16,11 +17,27 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Change to >> In Progress', ['update', 'id' => $model->id], ['class' => 'btn btn-warning']) ?>
+        <?php //change button as either in progress or not
+        if($currentTicketStatus == Yii::$app->params['IN_PROGRESS_TICKET']) {
+            echo Html::a('In progress', ['update', 'id' => $model->id], ['class' => 'btn btn-warning disabled']);
+        }elseif ($currentTicketStatus == Yii::$app->params['RESOLVED_TICKET']){
+            // nothing to display
+        }
+        else {
+            echo Html::a('Change to >> In Progress', ['update', 'id' => $model->id], ['class' => 'btn btn-warning']);
+        }
+        ?>
 
-        <?php //display this button only for unresolved tickets ?>
-        <?= Html::a('Resolve', ['action-undertaken/resolve', 'id' => $model->id], [
-            'class' => 'btn btn-success']) ?>
+        <?php //display this button only for unresolved tickets
+                if($currentTicketStatus == Yii::$app->params['RESOLVED_TICKET']) {
+                    echo Html::a('Resolved', ['action-undertaken/resolve', 'id' => $model->id], [
+                        'class' => 'btn btn-info disabled']);
+                } else {
+                    echo Html::a('Resolve', ['action-undertaken/resolve', 'id' => $model->id], [
+                        'class' => 'btn btn-success']);
+                }
+        ?>
+
     </p>
 
     <?= DetailView::widget([

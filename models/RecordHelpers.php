@@ -52,8 +52,12 @@ class RecordHelpers
     /**
      * returns the ticket status column to fetch from
      */
-    public function getTicketStatusCol($profile_type)
+    //public function getTicketStatusCol($profile_type)
+    public function getTicketStatusCol()
     {
+        $profile_type = RecordHelpers::getProfileType();
+        
+        
         if($profile_type == Yii::$app->params['SUBDEALER']){
             $status_col = 'status_subdea';
         }else{
@@ -98,35 +102,46 @@ class RecordHelpers
         // user's profile type to either change status_fmcg or status_subdea
         $profile_type =  RecordHelpers::getProfileType();
 
-        $status_col = RecordHelpers::getTicketStatusCol($profile_type);
+        //$status_col = RecordHelpers::getTicketStatusCol($profile_type);
+        $status_col = RecordHelpers::getTicketStatusCol();
 
-        $tickets = Tickets::findOne(['id' => $id]);
+        $ticket = Tickets::findOne(['id' => $id]);
 
         if($newStatus == Yii::$app->params['VIEWED_TICKET'])
         {
-            $tickets->$status_col = Yii::$app->params['VIEWED_TICKET'];
-            $tickets->save();
+            $ticket->$status_col = Yii::$app->params['VIEWED_TICKET'];
+            $ticket->save();
         }
         else if($newStatus == Yii::$app->params['PENDING_TICKET'])
         {
-            $tickets->$status_col = Yii::$app->params['PENDING_TICKET'];
-            $tickets->save();
+            $ticket->$status_col = Yii::$app->params['PENDING_TICKET'];
+            $ticket->save();
         }
         else if($newStatus == Yii::$app->params['IN_PROGRESS_TICKET'])
         {
-            $tickets->$status_col = Yii::$app->params['IN_PROGRESS_TICKET'];
-            $tickets->save();
+            $ticket->$status_col = Yii::$app->params['IN_PROGRESS_TICKET'];
+            $ticket->save();
         }
         else if($newStatus == Yii::$app->params['RESOLVED_TICKET'])
         {
-            $tickets->$status_col = Yii::$app->params['RESOLVED_TICKET'];
-            $tickets->save();
+            $ticket->$status_col = Yii::$app->params['RESOLVED_TICKET'];
+            $ticket->save();
         }
         else// if($newStatus == Yii::$app->params['CLOSED_TICKET'])
         {
-            $tickets->$status_col = Yii::$app->params['CLOSED_TICKET'];
-            $tickets->save();
+            $ticket->$status_col = Yii::$app->params['CLOSED_TICKET'];
+            $ticket->save();
         }
+    }
+
+    public function getCurrentTicketStatus($id)
+    {
+        $status_col = RecordHelpers::getTicketStatusCol();
+
+        $ticket = Tickets::findOne(['id' => $id]);
+        $currentTicketStatus = $ticket->$status_col;
+        
+        return $currentTicketStatus;
     }
     
 }

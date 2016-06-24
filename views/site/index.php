@@ -1,10 +1,14 @@
 <?php
 
+use miloschuman\highcharts\Highcharts;
 
 /* @var $this yii\web\View */
 
 $this->title = 'Stock Out';
 ?>
+
+<!--<script src="https://code.highcharts.com/highcharts.js"></script>-->
+<!--<script src="https://code.highcharts.com/modules/exporting.js"></script>-->
 <div class="container-fluid">
 
     <div class="row">
@@ -19,7 +23,7 @@ $this->title = 'Stock Out';
         <div class="col-lg-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-bar-chart-o fa-fw"></i> Bar Chart Example
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Most active subdealers
                     <div class="pull-right">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -115,19 +119,86 @@ $this->title = 'Stock Out';
         <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> Notifications Panel
+                    <i class="fa fa-bell fa-fw"></i> Tickets Evolvement
                 </div>
                 <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div class="list-group">
-                        <a href="#" class="list-group-item">
-                            <i class="fa fa-bolt fa-fw"></i> Server Crashed!
-                                    <span class="pull-right text-muted small"><em>11:13 AM</em>
-                                    </span>
-                        </a>
-                    </div>
-                    <!-- /.list-group -->
-                    <a href="#" class="btn btn-default btn-block">View All Alerts</a>
+                <div class="panel-body" id="tickets-evolvement" style="min-width: 330px; height: 250px; max-width:600px; margin: 0 auto">
+<!--                    <div class="list-group">-->
+<!--                        <h4>New Tickets</h4>-->
+<!--                        <h4>Viewed Tickets</h4>-->
+<!--                        <h4>Pending Tickets</h4>-->
+<!--                        <a href="#" class="list-group-item">-->
+<!--                            <i class="fa fa-bolt fa-fw"></i> Server Crashed!-->
+<!--                                    <span class="pull-right text-muted small"><em>11:13 AM</em>-->
+<!--                                    </span>-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                    <!-- /.list-group -->
+<!--                    <a href="#" class="btn btn-default btn-block">View All Alerts</a>-->
+                    <?php
+                    echo Highcharts::widget([
+                        'options' => [
+//                            'title' => ['text' => 'Fruit Consumption'],
+//                            'xAxis' => [
+//                                'categories' => ['Apples', 'Bananas', 'Oranges']
+//                            ],
+//                            'yAxis' => [
+//                                'title' => ['text' => 'Fruit eaten']
+//                            ],
+//                            'series' => [
+//                                ['name' => 'Jane', 'data' => [1, 0, 4]],
+//                                ['name' => 'John', 'data' => [5, 7, 3]]
+//                            ]
+                            'chart'=> [
+                                'type' => 'pie',
+                            ],
+                            'title'=> [
+                                'text'=> 'Tickets Evolvement',
+                                'y'=> 5
+                            ],
+                            'tooltip'=> [
+                                'pointFormat'=> '{series.name}: <b>{point.percentage:.1f}%</b>'
+                            ],
+                            'plotOptions'=> [
+                                'pie' => [
+                                    'dataLabels'=> [
+                                        'enabled'=> true,
+                                        'distance'=> -10,
+                                        'style'=> [
+                                            'fontWeight'=> 'bold',
+                                            'color'=> 'white',
+                                            'textShadow'=> '0px 1px 2px black'
+                                        ]
+                                    ],
+                                    'size' => 250,
+                                    'startAngle'=> -90,
+                                    'endAngle'=> 90,
+                                    'center'=> ['50%', '35%']
+                                ],
+                            ],
+                            'series'=> [[
+                                'type'=> 'pie',
+                                'name'=> 'Evolution',
+                                'innerSize'=> '50%',
+                                'data'=> [
+                                    ['New Tickets',   10.38],
+                                    ['Viewed Tickets',       56.33],
+                                    ['Pending Tickets', 24.03],
+                                    ['Resolved Tickets',    4.77],
+                                    ['Closed Tickets',     0.91],
+                                    [
+                                        'name'=> 'Tickets Evolvement',
+                                        'y'=> 0.2,
+                                        'dataLabels'=> [
+                                            'enabled'=> 'false',
+                                        ]
+                                    ]
+                                ]
+                            ]],
+                            'credits' => ['enabled' => false],
+                        ]
+                    ]);
+                    ?>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -139,5 +210,4 @@ $this->title = 'Stock Out';
 
 </div>
 <!-- /.container-fluid -->
-
 

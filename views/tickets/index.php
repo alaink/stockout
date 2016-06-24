@@ -6,8 +6,18 @@ use \app\models\Tickets;
 
 /* @var $this yii\web\View */
 ?>
+<?php
+$a= ['0' => 'New Tickets','1' => 'Viewed Tickets', '2' => 'Pending Tickets', '3' => 'In Progress Tickets',
+    '4' => 'Resolved Tickets', '5' => 'Closed Tickets'];
 
-<h1>Tickets</h1>
+if($ticket_status != null){
+    $this->title = $a[$ticket_status];
+}else {
+    $this->title = "All Tickets";
+}
+?>
+
+<h1><?= Html::encode($this->title) ?></h1>
 
 <!-- create ticket button for subdealer -->
 <?php if ($profile_type == Yii::$app->params['SUBDEALER'])
@@ -21,8 +31,6 @@ use \app\models\Tickets;
                         //'type' => ActiveForm::TYPE_INLINE,
                         'method' => 'get']) ?>
 <div class="form-group">
-    <?php $a= ['0' => 'NEW TICKET','1' => 'VIEWED TICKET', '2' => 'PENDING TICKET', '3' => 'IN PROGRESS TICKET',
-                '4' => 'RESOLVED TICKET', '5' => 'CLOSED TICKET']; ?>
     <?= $form->field($model, 'status_col')->dropDownList($a, ['id' => 'ticket-status', 'prompt' => 'Choose Tickets']); ?>
 </div>
 <?php ActiveForm::end(); ?>
@@ -50,21 +58,20 @@ use \app\models\Tickets;
                 <td><?php echo $ticket->comments ?></td>
                 <td><?php echo $ticket->product_quantity ?></td>
 <!--                <td>--><?php //echo $ticket->subdea_code ?><!--</td>-->
-                <td><?php echo $ticket->status_fmcg ?></td>
-                <td><?php echo $ticket->status_subdea ?></td>
+<!--                <td>--><?php //echo $ticket->status_fmcg ?><!--</td>-->
+                <td><?php echo Tickets::printStatus($ticket->status_fmcg) ?></td>
+                <td><?php echo Tickets::printStatus($ticket->status_subdea) ?></td>
                 <td><?php echo $ticket->response_time_preference ?></td>
-                <td><?php echo Html::a('', ['/tickets/view?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-eye-open']) . "        ";
-                          echo Html::a('', ['/tickets/update?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-pencil']) . "        ";
-                          echo Html::a('', ['/tickets/resolve?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-ok']);?></td>
+                <td><?php echo Html::a('', ['/tickets/view?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-eye-open', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'View']) . "        ";
+                          echo Html::a('', ['/tickets/update?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-pencil', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'To In Progress']) . "        ";
+                          echo Html::a('', ['/tickets/resolve?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-ok', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'Resolve']);?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
 <?php
-
 }else{
     echo "No Tickets to display";
-
 }; ?>
 
 

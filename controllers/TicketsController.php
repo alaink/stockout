@@ -13,9 +13,8 @@ class TicketsController extends \yii\web\Controller
     public function actionIndex()
     {
         $profile_type =  RecordHelpers::getProfileType();
-        
-        //$status_col = RecordHelpers::getTicketStatusCol($profile_type);
         $status_col = RecordHelpers::getTicketStatusCol();
+        $user_id = Yii::$app->user->identity->id;
 
         // get ticket status from user
         $ticket_status = Yii::$app->request->get('status');
@@ -24,17 +23,21 @@ class TicketsController extends \yii\web\Controller
         if($ticket_status != null)
         {
             $tickets = Tickets::find()
-                ->where([$status_col => $ticket_status])
+                ->where([$status_col => $ticket_status,
+                    'user_id' => $user_id])
                 ->all();
         }
         else{
-            $tickets = Tickets::find()->all();
+            $tickets = Tickets::find()
+                ->where(['user_id' => $user_id])
+                ->all();
         }
 
         return $this->render('index', [
             'tickets' => $tickets,
             'model' => $model,
             'profile_type' => $profile_type,
+            'ticket_status' => $ticket_status
         ]);
     }
 
@@ -76,19 +79,6 @@ class TicketsController extends \yii\web\Controller
             'model' => $this->findModel($id),
             'currentTicketStatus' => $currentTicketStatus
         ]);
-        
-//        $model = $this->findModel($id);
-//
-//        if ($model->load(Yii::$app->request->post())) {
-//            $model->updated_by = Yii::$app->user->identity->id;
-//            $model->save();
-//
-//            return $this->redirect(['view', 'id' => $model->id]);
-//        } else {
-//            return $this->render('update', [
-//                'model' => $model,
-//            ]);
-//        }
     }
 
     /**
@@ -128,26 +118,5 @@ class TicketsController extends \yii\web\Controller
         }
     }
 
-
-//    public function actionSearch()
-//    {
-//        $ticket_status = Yii::$app->request->get('status');
-//
-//        // get the user model
-//        $user = User::findOne(Yii::$app->user->identity->id);
-//        // get his/her profile type id
-//        $user_profile = UserProfile::findOne(['id' => $user->user_profile_id]);
-//        $profile_type = $user_profile->profile_type_id;
-//
-//        $status_col = RecordHelpers::getTicketStatusCol($profile_type);
-//
-//        $tickets = Tickets::find()
-//            ->where([$status_col => $ticket_status])
-//            ->all();
-//
-//        return $this->render('index', [
-//            'tickets' => $tickets,
-//        ]);
-//    }
 
 }

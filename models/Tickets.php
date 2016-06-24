@@ -78,7 +78,8 @@ class Tickets extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'product_id' => 'Product ID',
+//            'product_id' => 'Product ID',
+            'product_id' => 'Product Name',
             'subdea_code' => 'Subdea Code',
             'product_quantity' => 'Product Quantity',
             'response_time_preference' => 'Response Time Preference',
@@ -119,23 +120,55 @@ class Tickets extends \yii\db\ActiveRecord
     public static function getTicketsByStatus($status){
         
         $ticket_status = Yii::$app->request->get('status');
+        $user_id = Yii::$app->user->identity->id;
 
         if($ticket_status == Yii::$app->params['NEW_TICKET']):
 
-            $tickets = Tickets::find()->where([$status=> Yii::$app->params['NEW_TICKET']])->all();
+            $tickets = Tickets::find()->where([
+                $status=> Yii::$app->params['NEW_TICKET'],
+                'user_id' => $user_id
+            ])->all();
 
         elseif($ticket_status == Yii::$app->params['PENDING_TICKET']) :
 
-            $tickets = Tickets::find()->where([$status=> Yii::$app->params['PENDING_TICKET']])->all();
+            $tickets = Tickets::find()->where([
+                $status=> Yii::$app->params['PENDING_TICKET'], 'user_id' => $user_id])->all();
 
         elseif($ticket_status == Yii::$app->params['OLD_TICKET']) :
 
-            $tickets = Tickets::find()->where([$status=> Yii::$app->params['OLD_TICKET']])->all();
+            $tickets = Tickets::find()->where([
+                $status=> Yii::$app->params['OLD_TICKET'], 'user_id' => $user_id,])->all();
         else:
-            $tickets = Tickets::find()->where([$status=> Yii::$app->params['NEW_TICKET']])->all();
+            $tickets = Tickets::find()->where([
+                $status=> Yii::$app->params['NEW_TICKET'], 'user_id' => $user_id,])->all();
 
         endif;
         
         return $tickets;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function printStatus($status)
+    {
+        if($status == Yii::$app->params['NEW_TICKET']){
+            return "New";
+        }
+        elseif ($status == Yii::$app->params['VIEWED_TICKET']){
+            return "Viewed";
+        }
+        elseif ($status == Yii::$app->params['PENDING_TICKET']){
+            return "Pending";
+        }
+        elseif ($status == Yii::$app->params['IN_PROGRESS_TICKET']){
+            return "In Progress";
+        }
+        elseif ($status == Yii::$app->params['RESOLVED_TICKET']){
+            return "Resolved";
+        }
+        elseif ($status == Yii::$app->params['CLOSED_TICKET']){
+            return "Closed";
+        }
     }
 }

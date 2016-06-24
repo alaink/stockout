@@ -13,7 +13,7 @@ use yii\widgets\ActiveForm;
     <!-- displaying success flash info if set   -->
     <div class="'row">
         <?php if(Yii::$app->session->hasFlash('success')):?>
-            <div class="success">
+            <div class="success alert alert-success">
                 <?php echo Yii::$app->session->getFlash('success'); ?>
             </div>
         <?php endif; ?>

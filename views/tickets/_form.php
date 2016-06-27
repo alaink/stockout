@@ -20,9 +20,6 @@ use kartik\date\DatePicker;
 <!--    <?//= $form->field($model, 'product_id')->textInput() ?>-->
     <?= $form->field($model, 'product_id')->dropDownList($a, ['id' => 'product-id', 'prompt' => 'Choose a product']); ?>
 
-    <!-- no need coz subdea reporting himself   -->
-<!--    <?//= $form->field($model, 'subdea_code')->textInput(['maxlength' => true]) ?>-->
-
     <?= $form->field($model, 'product_quantity')->textInput() ?>
 
     <?= $form->field($model, 'response_time_preference')->widget(DatePicker::classname(), [

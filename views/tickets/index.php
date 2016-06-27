@@ -26,6 +26,8 @@ if($ticket_status != null){
         }
 ?>
 
+<?= Html::a('building', ['/tickets/something'], ['class'=>'btn btn-primary']); ?>
+
 
 <?php $form = ActiveForm::begin([
                         //'type' => ActiveForm::TYPE_INLINE,
@@ -39,6 +41,7 @@ if($ticket_status != null){
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
+            <th>N.</th>
             <th>Title</th>
             <th>Product name</th>
             <th>Comments</th>
@@ -53,6 +56,7 @@ if($ticket_status != null){
         <tbody>
         <?php foreach ($tickets as $ticket) : ?>
             <tr>
+                <td><?php echo $ticket->id ?></td>
                 <td><?php echo $ticket->title ?></td>
                 <td><?php echo $ticket->getProductName() ?></td>
                 <td><?php echo $ticket->comments ?></td>

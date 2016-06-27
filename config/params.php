@@ -13,7 +13,16 @@ return [
     'RETAILER' => 1,
     'SUBDEALER' => 2,
     'FMCG' => 3,
+    
+    // action names for history table
+    /**
+     * create, view, progress, resolve
+     */
 
+    // type of issues
+    'STOCK_ISSUE' => 1,
+    'PRODUCT_ISSUE' => 2,
+    'OTHER_ISSUE' => 3,
     
     
 ];

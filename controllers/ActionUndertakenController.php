@@ -34,6 +34,7 @@ class ActionUndertakenController extends \yii\web\Controller
             $model->save();
 
             RecordHelpers::changeTicketStatus($id, Yii::$app->params['RESOLVED_TICKET']);
+            RecordHelpers::createHistory($id, 'resolve');
 
             return $this->redirect(['/tickets/index']);//, 'id' => $model->id]);
         } else {

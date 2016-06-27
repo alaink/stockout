@@ -6,7 +6,9 @@ use app\models\RecordHelpers;
 use app\models\Tickets;
 use app\models\User;
 use app\models\UserProfile;
+use \app\models\MajorIssue;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class TicketsController extends \yii\web\Controller
 {
@@ -51,6 +53,8 @@ class TicketsController extends \yii\web\Controller
             $model->created_by = $model->user_id;
 
             $model->save();
+            RecordHelpers::createHistory($model->id, 'create');
+            
             return $this->redirect(['view', 'id' => $model->id]);
         } 
         else {
@@ -59,6 +63,15 @@ class TicketsController extends \yii\web\Controller
             ]);
         }
     }
+
+//    public function actionSomething()
+//    {
+//        $major_issues = ArrayHelper::map(MajorIssue::find()->all(), 'id', 'name');
+//
+//        return $this->render('something', [
+//            'major_issues' => $major_issues,
+//        ]);
+//    }
 
     /**
      * change ticket status to in progress
@@ -72,6 +85,8 @@ class TicketsController extends \yii\web\Controller
         if(RecordHelpers::getCurrentTicketStatus($id) < Yii::$app->params['IN_PROGRESS_TICKET']) {
             RecordHelpers::changeTicketStatus($id, Yii::$app->params['IN_PROGRESS_TICKET']);
         }
+
+        RecordHelpers::createHistory($id, 'progress');
 
         $currentTicketStatus  = RecordHelpers::getCurrentTicketStatus($id);
 
@@ -92,6 +107,8 @@ class TicketsController extends \yii\web\Controller
         if(RecordHelpers::getCurrentTicketStatus($id) < Yii::$app->params['VIEWED_TICKET']) {
             RecordHelpers::changeTicketStatus($id, Yii::$app->params['VIEWED_TICKET']);
         }
+        
+        RecordHelpers::createHistory($id, 'view');
         
         $currentTicketStatus  = RecordHelpers::getCurrentTicketStatus($id);
 

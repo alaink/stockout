@@ -22,7 +22,8 @@
         "c006/yii2-migration-utility": "dev-master",
         "kartik-v/yii2-widget-datepicker": "@dev",
         "phpoffice/phpexcel": "dev-develop",
-        "miloschuman/yii2-highcharts-widget": "dev-master"
+        "miloschuman/yii2-highcharts-widget": "dev-master",
+        "kartik-v/yii2-widget-depdrop": "@dev"
 
     },
     "require-dev": {

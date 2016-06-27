@@ -144,4 +144,17 @@ class RecordHelpers
         return $currentTicketStatus;
     }
     
+    public function createHistory($ticket_id, $action_name)
+    {
+        $user_id = Yii::$app->user->identity->id;
+
+        $history = new History();
+
+        $history->user_id = $user_id;
+        $history->action_made = $action_name;
+        $history->ticket_id = $ticket_id;
+        
+        $history->save();
+    }
+    
 }

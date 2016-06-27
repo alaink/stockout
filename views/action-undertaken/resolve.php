@@ -23,15 +23,16 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <?php echo '<br />';?>
-    <?= $form->field($model, 'product_delivered')->textInput() ?>
 
-    <?= $form->field($model, 'product_picked')->textInput() ?>
+    <?= $form->field($model, 'product_delivered')->checkbox() ?>
 
-    <?= $form->field($model, 'pickup_underway')->textInput() ?>
+    <?= $form->field($model, 'product_picked')->checkbox() ?>
 
-    <?= $form->field($model, 'delivery_underway')->textInput() ?>
+    <?= $form->field($model, 'pickup_underway')->checkbox() ?>
 
-    <?= $form->field($model, 'stock_ordered')->textInput() ?>
+    <?= $form->field($model, 'delivery_underway')->checkbox() ?>
+
+    <?= $form->field($model, 'stock_ordered')->checkbox() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Send action undertaken' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

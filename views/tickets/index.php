@@ -26,7 +26,7 @@ if($ticket_status != null){
         }
 ?>
 
-<?= Html::a('building', ['/tickets/something'], ['class'=>'btn btn-primary']); ?>
+<?= Html::a('choose', ['/tickets/choose'], ['class'=>'btn btn-primary']); ?>
 
 
 <?php $form = ActiveForm::begin([

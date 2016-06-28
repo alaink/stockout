@@ -143,7 +143,12 @@ class RecordHelpers
         
         return $currentTicketStatus;
     }
-    
+
+    /**
+     * creates a history of every action made on a ticket
+     * @param $ticket_id
+     * @param $action_name
+     */
     public function createHistory($ticket_id, $action_name)
     {
         $user_id = Yii::$app->user->identity->id;
@@ -156,5 +161,7 @@ class RecordHelpers
         
         $history->save();
     }
+    
+    
     
 }

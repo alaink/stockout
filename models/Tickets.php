@@ -32,8 +32,10 @@ class Tickets extends \yii\db\ActiveRecord
 {
     
     public $status_col;
-    public $major_issue;
-    public $specific_issue;
+    public $issue;
+    public $sub_issue;
+
+    public $stock_issues = false;
 
     /**
      * @inheritdoc

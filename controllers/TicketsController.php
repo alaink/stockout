@@ -1,12 +1,10 @@
 <?php
 
 namespace app\controllers;
-use app\models\Products;
+use app\models\Issue;
 use app\models\RecordHelpers;
+use app\models\SubIssue;
 use app\models\Tickets;
-use app\models\User;
-use app\models\UserProfile;
-use \app\models\MajorIssue;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -64,14 +62,64 @@ class TicketsController extends \yii\web\Controller
         }
     }
 
-//    public function actionSomething()
-//    {
-//        $major_issues = ArrayHelper::map(MajorIssue::find()->all(), 'id', 'name');
-//
-//        return $this->render('something', [
-//            'major_issues' => $major_issues,
-//        ]);
-//    }
+    public function actionChoose()
+    {
+        $model = new Tickets();
+        $issues = ArrayHelper::map(Issue::find()->all(), 'issue_id', 'name');
+
+        $id = Yii::$app->request->get('id');
+
+        if($id != null)
+        {
+            $sub_issues = SubIssue::find()
+                ->where(['issue_id' => $id])
+                ->all();
+
+            if(!empty($sub_issues))
+            {
+                foreach ($sub_issues as $sub_issue){
+                    echo "<option value='" .$sub_issue->sub_issue_id."'>".$sub_issue->name."</option>";
+                }
+            }else{
+                echo "<option>-<option>";
+            }
+
+            return ;
+        }
+
+
+        return $this->render('choose', [
+            'model' => $model,
+            'issues' => $issues,
+        ]);
+    }
+
+    public function actionLists()
+    {
+//        $model = new Tickets();
+
+        $id = Yii::$app->request->get('id');
+
+//        if($id == Yii::$app->params['STOCK_ISSUE'])
+//        {
+//            $model->stock_issues = true;
+//        }
+
+
+        $sub_issues = SubIssue::find()
+            ->where(['issue_id' => $id])
+            ->all();
+
+        if(!empty($sub_issues))
+        {
+            foreach ($sub_issues as $sub_issue){
+                echo "<option value='" .$sub_issue->sub_issue_id."'>".$sub_issue->name."</option>";
+            }
+        }else{
+            echo "<option>-<option>";
+        }
+    }
+
 
     /**
      * change ticket status to in progress

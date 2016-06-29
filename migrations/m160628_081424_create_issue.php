@@ -18,9 +18,9 @@ class m160628_081424_create_issue extends Migration
         ]);
 
         $this->execute('SET foreign_key_checks = 0');
-        $this->insert('{{%issue}}',['issue_id'=>'1','name'=>'stock_issue']);
-        $this->insert('{{%issue}}',['issue_id'=>'2','name'=>'product_issue']);
-        $this->insert('{{%issue}}',['issue_id'=>'3','name'=>'other_issues']);
+        $this->insert('{{%issue}}',['issue_id'=>'1','name'=>'Stock Issue']);
+        $this->insert('{{%issue}}',['issue_id'=>'2','name'=>'Product Issue']);
+        $this->insert('{{%issue}}',['issue_id'=>'3','name'=>'Other Issues']);
         $this->execute('SET foreign_key_checks = 1;');
     }
 

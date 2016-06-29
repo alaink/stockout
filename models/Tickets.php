@@ -35,7 +35,8 @@ class Tickets extends \yii\db\ActiveRecord
     public $issue;
     public $sub_issue;
 
-    public $stock_issues = false;
+    public $data;
+    public $viewed = 0;
 
     /**
      * @inheritdoc
@@ -53,7 +54,7 @@ class Tickets extends \yii\db\ActiveRecord
         return [
             [['user_id', 'title'], 'required'],
             [['user_id', 'product_id', 'product_quantity', 'status_subdea', 'status_fmcg', 'created_by', 'updated_by'], 'integer'],
-            [['response_time_preference', 'noticed_at', 'created_at', 'updated_at'], 'safe'],
+            [['response_time_preference', 'noticed_at', 'created_at', 'updated_at','period_delivered'], 'safe'],
             [['comments'], 'string'],
             [['subdea_code', 'title'], 'string', 'max' => 255],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::className(), 'targetAttribute' => ['product_id' => 'id']],
@@ -88,6 +89,7 @@ class Tickets extends \yii\db\ActiveRecord
             'subdea_code' => 'Subdea Code',
             'product_quantity' => 'Product Quantity',
             'response_time_preference' => 'Response Time Preference',
+            'period_delivered' => 'Period Delivered',
             'noticed_at' => 'Noticed At',
             'comments' => 'Comments',
             'status_subdea' => 'Status Subdea',
@@ -111,7 +113,11 @@ class Tickets extends \yii\db\ActiveRecord
     public function getProductName()
     {
         $product = Products::findOne(['id' => $this->product_id]);
-        return $product->name;
+        if(!empty($product)) {
+            return $product->name;
+        }else{
+            return null;
+        }
     }
 
     /**

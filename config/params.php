@@ -23,6 +23,13 @@ return [
     'STOCK_ISSUE' => 1,
     'PRODUCT_ISSUE' => 2,
     'OTHER_ISSUE' => 3,
-    
+
+    //types of sub issues
+    'Running Out' => 1,
+    'Out of Stock' => 2,
+    'Need New Product' => 3,
+    'Product Expired' => 4,
+    'Product Damaged' => 5,
+
     
 ];

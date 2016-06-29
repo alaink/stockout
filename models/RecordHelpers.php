@@ -8,6 +8,7 @@
 
 namespace app\models;
 use yii;
+use yii\helpers\ArrayHelper;
 
 class RecordHelpers
 {
@@ -52,7 +53,6 @@ class RecordHelpers
     /**
      * returns the ticket status column to fetch from
      */
-    //public function getTicketStatusCol($profile_type)
     public function getTicketStatusCol()
     {
         $profile_type = RecordHelpers::getProfileType();
@@ -70,13 +70,6 @@ class RecordHelpers
     public function getProductName()
     {
         $product = Products::findOne(['id' => product_id]);
-
-        if($product)
-        {
-            echo "amazo";
-        }else{echo "jjjj";}
-        exit(0);
-
         return $product->name;
     }
 
@@ -149,7 +142,7 @@ class RecordHelpers
      * @param $ticket_id
      * @param $action_name
      */
-    public function createHistory($ticket_id, $action_name)
+    public static function createHistory($ticket_id, $action_name)
     {
         $user_id = Yii::$app->user->identity->id;
 
@@ -161,7 +154,59 @@ class RecordHelpers
         
         $history->save();
     }
-    
-    
+
+    /**
+     * get sub issues from id of main issue
+     * @param $id
+     */
+    public static function getSubIssues($id)
+    {
+        $sub_issues = SubIssue::find()
+            ->where(['issue_id' => $id])
+            ->all();
+
+        $data = ArrayHelper::map($sub_issues, 'sub_issue_id', 'name');
+
+        return $data;
+    }
+
+//    public static function createTicketTitle($issue_id, $sub_issue, $product_id)
+    public static function createTicketTitle($issue_id, $POST_VAR, $product_id)
+    {
+        $title = '';
+
+        // append issue
+        if ($issue_id == Yii::$app->params['STOCK_ISSUE']) {
+            $title .= 'STOCK';
+        }elseif ($issue_id == Yii::$app->params['PRODUCT_ISSUE']){
+            $title .= 'PRODUCT';
+        }else{
+            $title .= 'OTHER';
+        }
+
+        
+        if($issue_id != Yii::$app->params['OTHER_ISSUE']) {
+
+            // append sub issue
+            $sub_issue = $POST_VAR['sub_issue'];
+            if ($sub_issue == Yii::$app->params['Running Out']) {
+                $title .= '-RunningOut';
+            } elseif ($sub_issue == Yii::$app->params['Out of Stock']) {
+                $title .= '-OutOfStock';
+            } elseif ($sub_issue == Yii::$app->params['Need New Product']) {
+                $title .= '-NewProduct';
+            } elseif ($sub_issue == Yii::$app->params['Product Expired']) {
+                $title .= '-Expired';
+            } elseif ($sub_issue == Yii::$app->params['Product Damaged']) {
+                $title .= '-Damaged';
+            }
+
+            // append product name
+            $product = Products::findOne(['id' => $product_id]);
+            $title .= "-" . $product->name;
+        }
+        
+        return $title;
+    }
     
 }

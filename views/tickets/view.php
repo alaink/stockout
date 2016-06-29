@@ -45,6 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             //'id',
             //'user_id',
+            'title',
             'product.name',
             //'subdea_code',
             'product_quantity',

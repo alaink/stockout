@@ -45,19 +45,27 @@ class TicketsController extends \yii\web\Controller
     {
         $model = new Tickets();
 
+        // from choose view
+        $issue_id = Yii::$app->request->get('id');
+        $sub_issues = RecordHelpers::getSubIssues($issue_id);
+
+        $POST_VAR = Yii::$app->request->post('Tickets');
         if ($model->load(Yii::$app->request->post())) 
         {
             $model->user_id = Yii::$app->user->identity->id;
             $model->created_by = $model->user_id;
-
+            $model->title = RecordHelpers::createTicketTitle($issue_id, $POST_VAR, $model->product_id);
+            
             $model->save();
             RecordHelpers::createHistory($model->id, 'create');
-            
+
             return $this->redirect(['view', 'id' => $model->id]);
         } 
         else {
             return $this->render('create', [
                 'model' => $model,
+                'issue_id' => $issue_id,
+                'sub_issues' => $sub_issues,
             ]);
         }
     }
@@ -67,27 +75,6 @@ class TicketsController extends \yii\web\Controller
         $model = new Tickets();
         $issues = ArrayHelper::map(Issue::find()->all(), 'issue_id', 'name');
 
-        $id = Yii::$app->request->get('id');
-
-        if($id != null)
-        {
-            $sub_issues = SubIssue::find()
-                ->where(['issue_id' => $id])
-                ->all();
-
-            if(!empty($sub_issues))
-            {
-                foreach ($sub_issues as $sub_issue){
-                    echo "<option value='" .$sub_issue->sub_issue_id."'>".$sub_issue->name."</option>";
-                }
-            }else{
-                echo "<option>-<option>";
-            }
-
-            return ;
-        }
-
-
         return $this->render('choose', [
             'model' => $model,
             'issues' => $issues,
@@ -96,14 +83,8 @@ class TicketsController extends \yii\web\Controller
 
     public function actionLists()
     {
-//        $model = new Tickets();
 
         $id = Yii::$app->request->get('id');
-
-//        if($id == Yii::$app->params['STOCK_ISSUE'])
-//        {
-//            $model->stock_issues = true;
-//        }
 
 
         $sub_issues = SubIssue::find()
@@ -152,9 +133,10 @@ class TicketsController extends \yii\web\Controller
     public function actionView($id)
     {
         // change status to viewed only if not viewed before hand
-        if(RecordHelpers::getCurrentTicketStatus($id) < Yii::$app->params['VIEWED_TICKET']) {
+        if (RecordHelpers::getCurrentTicketStatus($id) < Yii::$app->params['VIEWED_TICKET']) {
             RecordHelpers::changeTicketStatus($id, Yii::$app->params['VIEWED_TICKET']);
         }
+        // process this $viewed so that it never get past 5, "memory"
         
         RecordHelpers::createHistory($id, 'view');
         

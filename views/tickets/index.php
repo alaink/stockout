@@ -22,19 +22,19 @@ if($ticket_status != null){
 <!-- create ticket button for subdealer -->
 <?php if ($profile_type == Yii::$app->params['SUBDEALER'])
         {
-            echo Html::a('Create Ticket', ['/tickets/create'], ['class'=>'btn btn-primary']);
+            echo Html::a('Create a Ticket', ['/tickets/choose'], ['class'=>'btn btn-primary']);
         }
 ?>
-
-<?= Html::a('choose', ['/tickets/choose'], ['class'=>'btn btn-primary']); ?>
-
 
 <?php $form = ActiveForm::begin([
                         //'type' => ActiveForm::TYPE_INLINE,
                         'method' => 'get']) ?>
+
 <div class="form-group">
-    <?= $form->field($model, 'status_col')->dropDownList($a, ['id' => 'ticket-status', 'prompt' => 'Choose Tickets']); ?>
+    <?= $form->field($model, 'status_col')->dropDownList($a, ['id' => 'ticket-status', 'prompt' => 'Filter Tickets'])->label(false); ?>
+
 </div>
+
 <?php ActiveForm::end(); ?>
 
 <?php if (!empty($tickets)) { ?>

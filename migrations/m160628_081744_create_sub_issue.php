@@ -29,11 +29,11 @@ class m160628_081744_create_sub_issue extends Migration
         );
 
         $this->execute('SET foreign_key_checks = 0');
-        $this->insert('{{%sub_issue}}',['sub_issue_id'=>'1','issue_id'=>'1', 'name'=>'running_out']);
-        $this->insert('{{%sub_issue}}',['sub_issue_id'=>'2','issue_id'=>'1','name'=>'out_of_stock']);
-        $this->insert('{{%sub_issue}}',['sub_issue_id'=>'3','issue_id'=>'1','name'=>'need_new_product']);
-        $this->insert('{{%sub_issue}}',['sub_issue_id'=>'4','issue_id'=>'2','name'=>'product_expired']);
-        $this->insert('{{%sub_issue}}',['sub_issue_id'=>'5','issue_id'=>'2','name'=>'product_damaged']);
+        $this->insert('{{%sub_issue}}',['sub_issue_id'=>'1','issue_id'=>'1', 'name'=>'Running Out']);
+        $this->insert('{{%sub_issue}}',['sub_issue_id'=>'2','issue_id'=>'1','name'=>'Out of Stock']);
+        $this->insert('{{%sub_issue}}',['sub_issue_id'=>'3','issue_id'=>'1','name'=>'Need New Product']);
+        $this->insert('{{%sub_issue}}',['sub_issue_id'=>'4','issue_id'=>'2','name'=>'Product Expired']);
+        $this->insert('{{%sub_issue}}',['sub_issue_id'=>'5','issue_id'=>'2','name'=>'Product Damaged']);
         $this->execute('SET foreign_key_checks = 1;');
     }
 

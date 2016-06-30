@@ -9,8 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use app\models\RegistrationForm;
+use app\models\UserProfile;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
 
 /**
  * @var yii\web\View              $this
@@ -47,9 +51,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?php
                 $a= ['2' => 'SUBDEALER', '3' => 'FMCG'];
-                echo $form->field($model, 'profile_type_id')->dropDownList($a,['prompt'=>'Select Option']);
+                echo $form->field($model, 'profile_type_id')->dropDownList($a,['prompt'=>'Select Category']);
                 ?>
 
+                <?php
+                echo $form->field($model, 'from_id')->widget(Select2::classname(), [
+                    'data' => RegistrationForm::getFmcgs(),
+                    'options' => ['placeholder' => 'Select 3 FMCGs ...','multiple' => true],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ])->label('Preferred FMCGs');
+                ?>
+
+<!--                <?//= $form->field($model, 'from_id')->textInput() ?>-->
                 <?= $form->field($model, 'tel_address')->textInput() ?>
 
                 <?= $form->field($model, 'location')->textInput(['maxlength' => true]) ?>

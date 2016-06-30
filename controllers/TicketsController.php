@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 use app\models\Issue;
+use app\models\Products;
 use app\models\RecordHelpers;
 use app\models\SubIssue;
 use app\models\Tickets;
@@ -44,16 +45,25 @@ class TicketsController extends \yii\web\Controller
     public function actionCreate()
     {
         $model = new Tickets();
+        
+        $products = new Products();
 
         // from choose view
         $issue_id = Yii::$app->request->get('id');
         $sub_issues = RecordHelpers::getSubIssues($issue_id);
 
         $POST_VAR = Yii::$app->request->post('Tickets');
+        $POST_VAR2 = Yii::$app->request->post('Products');
+
+        // get products data
+        $products_bar_code = RecordHelpers::getProducts();
+
+
         if ($model->load(Yii::$app->request->post())) 
         {
             $model->user_id = Yii::$app->user->identity->id;
             $model->created_by = $model->user_id;
+            $model->product_id = RecordHelpers::retrieveProductId($POST_VAR2['bar_code']);
             $model->title = RecordHelpers::createTicketTitle($issue_id, $POST_VAR, $model->product_id);
             
             $model->save();
@@ -66,6 +76,8 @@ class TicketsController extends \yii\web\Controller
                 'model' => $model,
                 'issue_id' => $issue_id,
                 'sub_issues' => $sub_issues,
+                'products' => $products,
+                'products_bar_code' => $products_bar_code,
             ]);
         }
     }

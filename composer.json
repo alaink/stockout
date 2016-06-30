@@ -23,7 +23,9 @@
         "kartik-v/yii2-widget-datepicker": "@dev",
         "phpoffice/phpexcel": "dev-develop",
         "miloschuman/yii2-highcharts-widget": "dev-master",
-        "kartik-v/yii2-widget-depdrop": "@dev"
+        "kartik-v/yii2-widget-depdrop": "@dev",
+        "kartik-v/yii2-widget-typeahead": "*",
+        "kartik-v/yii2-widget-select2": "@dev"
 
     },
     "require-dev": {

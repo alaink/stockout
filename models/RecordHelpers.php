@@ -208,5 +208,43 @@ class RecordHelpers
         
         return $title;
     }
-    
+
+    /**
+     * return products by bar-code for user as they r creating tickets
+     * @todo find a way to avoid doing many queries
+     */
+    public function getProducts()
+    {
+        //$bar_code = $products->bar_code;
+
+        $products2 = Products::find()
+                            ->select('bar_code')->column();
+
+        $products3 = Products::find()
+                            ->select('name')->column();
+
+        $products4 = Products::find()
+            ->select('type_flavor')->column();
+
+//        $data = array_combine($products2, $products3);
+        $data = array();
+        for($i=0; $i< count($products2); $i++)
+        {
+            $data[] = $products2[$i] . " - " . $products3[$i] . " - " .$products4[$i];
+        }
+
+//        print_r($data);
+//        exit(0);
+        return $data;
+    }
+
+    public function retrieveProductId($bar_code_name)
+    {
+        $dd = explode(" ", $bar_code_name);
+        $bar_code =  $dd[0];
+
+        $product = Products::findOne(['bar_code' => $bar_code]);
+
+        return $product->id;
+    }
 }

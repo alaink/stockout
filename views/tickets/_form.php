@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+use kartik\typeahead\TypeaheadBasic;
+use kartik\typeahead\Typeahead;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Tickets */
@@ -13,9 +15,6 @@ use kartik\date\DatePicker;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <!--    <?//= $form->field($model, 'title')->textInput() ?>-->
-
-
     <?php if ($issue_id != Yii::$app->params['OTHER_ISSUE']) { ?>
 
     <?= $form->field($model, 'sub_issue')->dropDownList($sub_issues,
@@ -24,14 +23,30 @@ use kartik\date\DatePicker;
                                             ]); ?>
 
     <?php
-        
-    $a= ['12' => 'Heineken 33cl','14' => 'Amstel larger', '16' => 'Coka Cola 30cl', '17' => 'Coca Cola - Zero ',
-    '19' => 'Fanta Citron', '13' => 'Turbo King']; ?>
-        
-    <!--    <?//= $form->field($model, 'product_id')->textInput() ?>-->
-    <?= $form->field($model, 'product_id')->dropDownList($a, ['id' => 'product-id', 'prompt' => 'Choose a product']); ?>
 
-    <?php }?> <!-- END IF other issues-->
+        // @todo give another option to enter product name or bar code
+//    $a= ['12' => 'Heineken 33cl','14' => 'Amstel larger', '16' => 'Coka Cola 30cl', '17' => 'Coca Cola - Zero ',
+//    '19' => 'Fanta Citron', '13' => 'Turbo King']; ?>
+
+        <!--<?////= $form->field($model, 'product_id')->textInput() ?>-->
+        <!--<?//= $form->field($model, 'product_id')->dropDownList($a, ['id' => 'product-id', 'prompt' => 'Choose a product']); ?>    -->
+
+    <?php
+        echo $form->field($products, 'bar_code')->label('Product')
+                                                ->widget(Typeahead::classname(), [
+                                                        'options' => ['placeholder' => 'Enter bar code ...'],
+                                                        'pluginOptions' => ['highlight'=>true],
+                                                        'dataset' => [
+                                                            [
+                                                                'local' => $products_bar_code,
+                                                                'limit' => 10
+                                                            ]
+                                                        ]
+                                                    ]);
+
+        ?>
+
+    <?php }?> <!-- END IF not other issues-->
 
     <!--    stock issues-->
     <?php if ($issue_id == Yii::$app->params['STOCK_ISSUE']) {?>

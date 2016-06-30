@@ -9,11 +9,12 @@
 
 namespace app\controllers\user;
 
+use app\models\Partners;
 use Yii;
 use dektrium\user\controllers\RegisterController as BaseRegistrationController;
 use app\models\UserProfile;
 
 class RegistrationController extends BaseRegistrationController
 {
-
+    
 }

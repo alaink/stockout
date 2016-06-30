@@ -8,11 +8,12 @@
 
 namespace app\models;
 
-use app\models\UserProfile;
+use app\models\Partners;
 use Yii;
 use dektrium\user\models\RegistrationForm as BaseRegistrationForm;
 use dektrium\user\models\User;
 use app\models\RecordHelpers;
+use yii\helpers\ArrayHelper;
 
 class RegistrationForm extends BaseRegistrationForm
 {
@@ -28,6 +29,12 @@ class RegistrationForm extends BaseRegistrationForm
     // new field for user tbl
     public $user_profile_id;
 
+    // new field for partners tbl
+    public $fmcg;
+    public $from_id;
+    public $to_id;
+
+
     /**
      * @inheritdoc
      */
@@ -35,8 +42,9 @@ class RegistrationForm extends BaseRegistrationForm
     {
         $rules = parent::rules();
         $rules[] = [['profile_type_id', 'name', ], 'required'];
-        $rules[] = [['profile_type_id', 'tel_address', 'user_profile_id' ], 'integer'];
+        $rules[] = [['profile_type_id', 'tel_address', 'user_profile_id'], 'integer'];
         $rules[] = [['name', 'location','user_code'], 'string', 'max' => 255];
+        $rules[] = [['from_id'], 'safe'];
         return $rules;
     }
 
@@ -59,6 +67,10 @@ class RegistrationForm extends BaseRegistrationForm
      */
     public function loadAttributes(User $user)
     {
+//        $POST_VAR = Yii::$app->request->post('User');
+//        echo ($POST_VAR['from_id']); exit(0);
+        print_r($this->from_id) ; exit(0);
+
         /** @var UserProfile $profile */
         $profile = \Yii::createObject(UserProfile::className());
         $profile->setAttributes([
@@ -68,7 +80,7 @@ class RegistrationForm extends BaseRegistrationForm
             'tel_address' => $this->tel_address,
             'location' => $this->location,
         ]);
-        $profile->save(false);
+        $profile->save();
 
         //save user
         if(!$this->user_profile_id) {
@@ -78,12 +90,36 @@ class RegistrationForm extends BaseRegistrationForm
                 'username' => $this->username,
                 'password' => $this->password,
                 'user_profile_id' => $profile->id,
+
+
             ]);
         }else{
             return false;
         }
-        
 
+//        echo $user->id; exit(0);
+//        echo "blblbbl"; exit(0);
+        // saving to partners table
+        //if($user->id) {
+            $partners = \Yii::createObject(Partners::className());
+            $partners->setAttributes([
+                'from_id' => $this->from_id,
+                'to_id' => $profile->id,
+            ]);
+            $partners->save();
+        //}
+
+    }
+    
+    public function getFmcgs()
+    {
+        $profiles= UserProfile::find()
+            ->where(['profile_type_id' => 3])
+            -> all();
+
+        $fmcgs = ArrayHelper::map($profiles, 'id', 'name');
+
+        return $fmcgs;
     }
 
 }

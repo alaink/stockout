@@ -10,6 +10,7 @@ use Yii;
  * @property integer $id
  * @property string $name
  * @property string $fmcg_id
+ * @property string $bar_code
  *
  * @property ActionUndertaken[] $actionUndertakens
  * @property Broadcast[] $broadcasts

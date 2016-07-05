@@ -14,7 +14,7 @@ use yii\helpers\ArrayHelper;
  * @property string $user_code
  * @property integer $rating
  * @property integer $tel_address
- * @property string $location
+ * @property string $cell_id
  *
  * @property Products[] $products
  * @property ProfileType $profileType
@@ -35,12 +35,9 @@ class UserProfile extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['profile_type_id', 'name' ], 'required'],
-            [['name' ], 'required'],
-            [['profile_type_id', 'rating', 'tel_address'], 'integer'],
-            [['name', 'user_code', 'location'], 'string', 'max' => 255],
-            //[['profile_type_id', 'name', 'tel_address', 'location'], 'on' => 'create'],
-            //[[ 'name', 'tel_address', 'location'], 'on' => 'create'],
+            [['profile_type_id', 'name', 'cell_id'], 'required'],
+            [['profile_type_id', 'rating', 'tel_address', 'cell_id'], 'integer'],
+            [['name', 'user_code'], 'string', 'max' => 255],
         ];
     }
 
@@ -56,7 +53,7 @@ class UserProfile extends \yii\db\ActiveRecord
             'user_code' => 'User Code',
             'rating' => 'Rating',
             'tel_address' => 'Tel Address',
-            'location' => 'Location',
+            'cell_id' => 'Cell',
         ];
     }
 

@@ -54,20 +54,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo $form->field($model, 'profile_type_id')->dropDownList($a,['prompt'=>'Select Category']);
                 ?>
 
-                <?php
-                echo $form->field($model, 'from_id')->widget(Select2::classname(), [
-                    'data' => RegistrationForm::getFmcgs(),
-                    'options' => ['placeholder' => 'Select 3 FMCGs ...','multiple' => true],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ])->label('Preferred FMCGs');
-                ?>
+<!--                <?php
+//                echo $form->field($model, 'from_id')->widget(Select2::classname(), [
+//                    'data' => RegistrationForm::getFmcgs(),
+//                    'options' => ['placeholder' => 'Select 3 FMCGs ...','multiple' => true],
+//                    'pluginOptions' => [
+//                        'allowClear' => true
+//                    ],
+//                ])->label('Preferred FMCGs');
+//                ?>-->
 
 <!--                <?//= $form->field($model, 'from_id')->textInput() ?>-->
                 <?= $form->field($model, 'tel_address')->textInput() ?>
 
-                <?= $form->field($model, 'location')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'cell_id')->textInput(['maxlength' => true]) ?>
 
                 <?= Html::submitButton(Yii::t('user', 'Sign up'), ['class' => 'btn btn-success btn-block']) ?>
 

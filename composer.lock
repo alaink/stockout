@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "25a649e52afad8a52d77f84e7be13667",
-    "content-hash": "08c8cd244c2553e1c241bc1b5011979c",
+    "hash": "836b2b0dfa1e95d5a614734f5ccb0f1d",
+    "content-hash": "878289a8274b68f3a2d9484c18ccfbc3",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -1540,8 +1540,8 @@
         "kartik-v/yii2-widget-datepicker": 20,
         "phpoffice/phpexcel": 20,
         "miloschuman/yii2-highcharts-widget": 20,
-        "kartik-v/yii2-widget-depdrop": 20,
-        "kartik-v/yii2-widget-select2": 20
+        "kartik-v/yii2-widget-select2": 20,
+        "kartik-v/yii2-widget-depdrop": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

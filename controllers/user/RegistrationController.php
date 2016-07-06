@@ -10,6 +10,7 @@
 namespace app\controllers\user;
 
 use app\models\Partners;
+use app\models\RecordHelpers;
 use Yii;
 use dektrium\user\controllers\RegisterController as BaseRegistrationController;
 use app\models\UserProfile;

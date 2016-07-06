@@ -9,12 +9,13 @@
  * file that was distributed with this source code.
  */
 
+use app\models\RecordHelpers;
 use app\models\RegistrationForm;
-use app\models\UserProfile;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
+use kartik\depdrop\DepDrop;
 
 /**
  * @var yii\web\View              $this
@@ -54,20 +55,42 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo $form->field($model, 'profile_type_id')->dropDownList($a,['prompt'=>'Select Category']);
                 ?>
 
-<!--                <?php
-//                echo $form->field($model, 'from_id')->widget(Select2::classname(), [
-//                    'data' => RegistrationForm::getFmcgs(),
-//                    'options' => ['placeholder' => 'Select 3 FMCGs ...','multiple' => true],
-//                    'pluginOptions' => [
-//                        'allowClear' => true
-//                    ],
-//                ])->label('Preferred FMCGs');
-//                ?>-->
+                <?php
+                echo $form->field($model, 'from_id')->widget(Select2::classname(), [
+                    'data' => RegistrationForm::getFmcgs(),
+                    'options' => ['placeholder' => 'Select 3 FMCGs ...','multiple' => true],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ])->label('Preferred FMCGs');
+                ?>
 
-<!--                <?//= $form->field($model, 'from_id')->textInput() ?>-->
                 <?= $form->field($model, 'tel_address')->textInput() ?>
 
-                <?= $form->field($model, 'cell_id')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'district_id')->dropDownList(RecordHelpers::getDistricts(),
+                                                        [
+                                                            'id'=>'district-id',
+                                                            'prompt'=>'Select your District'
+                                                        ]) ?>
+
+                <?= $form->field($model, 'sector_id')->widget(DepDrop::classname(),
+                                                        [
+                                                            'options'=>['id'=>'sector-id'],
+                                                            'pluginOptions'=>[
+                                                                'depends'=>['district-id'],
+                                                                'placeholder'=>'Select sector...',
+                                                                'url'=>Url::to(['/user-profile/sector'])
+                                                            ]
+                                                        ])?>
+
+                <?= $form->field($model, 'cell_id')->widget(DepDrop::classname(),
+                                                        [
+                                                            'pluginOptions'=>[
+                                                                'depends'=>['sector-id'],
+                                                                'placeholder'=>'Select cell...',
+                                                                'url'=>Url::to(['/user-profile/cell'])
+                                                            ]
+                                                        ])?>
 
                 <?= Html::submitButton(Yii::t('user', 'Sign up'), ['class' => 'btn btn-success btn-block']) ?>
 

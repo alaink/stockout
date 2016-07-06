@@ -215,23 +215,31 @@ class RecordHelpers
      */
     public function getProducts()
     {
-        //$bar_code = $products->bar_code;
-
-        $products2 = Products::find()
+        $bar_codes = Products::find()
                             ->select('bar_code')->column();
 
-        $products3 = Products::find()
+        $names = Products::find()
                             ->select('name')->column();
 
-        $products4 = Products::find()
+        $flavors = Products::find()
             ->select('type_flavor')->column();
 
-//        $data = array_combine($products2, $products3);
         $data = array();
-        for($i=0; $i< count($products2); $i++)
+        for($i=0; $i< count($bar_codes); $i++)
         {
-            $data[] = $products2[$i] . " - " . $products3[$i] . " - " .$products4[$i];
+            $data[] = $bar_codes[$i] . " - " . $names[$i] . " - " .$flavors[$i];
         }
+
+//        ****************
+
+//        $fdata = Products::find()->where(['fmcg_id' => 17])->all();
+//
+//        $data = array();
+//        foreach ($fdata as $foo)
+//        {
+//            $data[] = $foo->bar_code . " - " . $foo->name . " - " .$foo->type_flavor;
+//        }
+
 
 //        print_r($data);
 //        exit(0);
@@ -247,4 +255,22 @@ class RecordHelpers
 
         return $product->id;
     }
+
+    public static function getDistricts()
+    {
+        return ArrayHelper::map(District::find()->orderBy('name')->all(), 'id', 'name');
+    }
+
+    public static function getSectors($district_id)
+    {
+        return Sector::find()->where(['district_id' => $district_id])->select(['id', 'name'])->orderBy('name')->asArray()->all();
+    }
+
+    public static function getCells($sector_id)
+    {
+        return Cell::find()->where(['sector_id' => $sector_id])->select(['id', 'name'])->orderBy('name')->asArray()->all();
+    }
+
+
+    
 }

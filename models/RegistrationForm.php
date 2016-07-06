@@ -24,9 +24,11 @@ class RegistrationForm extends BaseRegistrationForm
     public $name;
     public $tel_address;
     public $user_code;
-    public $district;
-    public $sector;
+    public $district_id;
+    public $sector_id;
     public $cell_id;
+    //public $location;
+
 
     // new field for user tbl
     public $user_profile_id;
@@ -43,9 +45,9 @@ class RegistrationForm extends BaseRegistrationForm
     {
         $rules = parent::rules();
         $rules[] = [['profile_type_id', 'name', 'cell_id'], 'required'];
-        $rules[] = [['profile_type_id', 'tel_address', 'user_profile_id', 'cell_id'], 'integer'];
-        $rules[] = [['name', 'location','user_code'], 'string', 'max' => 255];
-        //$rules[] = [['from_id'], 'safe'];
+        $rules[] = [['profile_type_id', 'tel_address', 'user_profile_id', 'cell_id', 'district_id', 'sector_id'], 'integer'];
+        $rules[] = [['name','user_code'], 'string', 'max' => 255];
+        $rules[] = [['from_id'], 'safe'];
         return $rules;
     }
 
@@ -59,8 +61,8 @@ class RegistrationForm extends BaseRegistrationForm
         $labels['profile_type_id'] = \Yii::t('user', 'Profile Type');
         $labels['tel_address'] = \Yii::t('user', 'Tel address');
         $labels['user_code'] = \Yii::t('user', 'User Code');
-//        $labels['district'] = \Yii::t('user', 'District');
-//        $labels['sector'] = \Yii::t('user', 'Sector');
+        $labels['district'] = \Yii::t('user', 'District');
+        $labels['sector'] = \Yii::t('user', 'Sector');
         $labels['cell_id'] = \Yii::t('user', 'Cell');
 
         return $labels;
@@ -73,8 +75,9 @@ class RegistrationForm extends BaseRegistrationForm
     {
 //        $POST_VAR = Yii::$app->request->post('User');
 //        echo ($POST_VAR['from_id']); exit(0);
-        //print_r($this->from_id) ; exit(0);
-        echo ($this->name); exit(0);
+//        print_r($this->from_id) ; exit(0);
+        //echo ($this->district_id); exit(0);
+        
 
         /** @var UserProfile $profile */
         $profile = \Yii::createObject(UserProfile::className());
@@ -101,14 +104,12 @@ class RegistrationForm extends BaseRegistrationForm
         }else{
             return false;
         }
-
-////        echo $user->id; exit(0);
-////        echo "blblbbl"; exit(0);
+        
 //        // saving to partners table
 //        //if($user->id) {
 //            $partners = \Yii::createObject(Partners::className());
 //            $partners->setAttributes([
-//                'from_id' => $this->from_id,
+//                'from_id' => $this->from_id,  //process, loop through array from_id
 //                'to_id' => $profile->id,
 //            ]);
 //            $partners->save();
@@ -116,7 +117,7 @@ class RegistrationForm extends BaseRegistrationForm
 
     }
     
-    public function getFmcgs()
+    public static function getFmcgs()
     {
         $profiles= UserProfile::find()
             ->where(['profile_type_id' => 3])

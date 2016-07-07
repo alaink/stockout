@@ -2,14 +2,12 @@
 
 use app\models\ChartHelper;
 use app\models\RecordHelpers;
-use miloschuman\highcharts\Highcharts;
-use miloschuman\highcharts\SeriesDataHelper;
 
 /* @var $this yii\web\View */
 
 $this->title = 'Stock Out';
-$data = RecordHelpers::getProductOccurrence();
-RecordHelpers::getProductOccurrence();
+$ticket_by_product = RecordHelpers::getProductOccurrence();
+$ticket_by_type = RecordHelpers::getTicketsByType();
 ?>
 
 <div class="container-fluid">
@@ -27,8 +25,18 @@ RecordHelpers::getProductOccurrence();
                 <div class="panel-heading">
                     <i class="fa fa-bar-chart-o fa-fw"></i> Tickets by product
                 </div>
-<!--                <?php //json_encode(ChartHelper::displayChart($data, 'ticket_product'));?>-->
                 <div id="ticket_product" class="panel-body" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto">
+
+                </div> <!-- panel body-->
+            </div> <!-- panel default-->
+
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Tickets by Type
+                </div>
+                <div id="ticket_type" class="panel-body" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto">
 
                 </div> <!-- panel body-->
             </div> <!-- panel default-->
@@ -197,7 +205,7 @@ $(function () {
             series: [{
                 name: \'Brands\',
                 colorByPoint: true,
-                data: ' . $data . '
+                data: ' . $ticket_by_product . '
             }],
             credits: {
               enabled: false
@@ -208,4 +216,42 @@ $(function () {
 ?>
 
 <!-- TICKET BY TYPE CHART-->
+<?php
+$this->registerJs('
 
+$(function () {
+    $(\'#ticket_type\').highcharts({
+        chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: \'pie\'
+            },
+            title: {
+                text: \'\'
+            },
+            tooltip: {
+                pointFormat: \'{series.name}: <b>{point.percentage:.1f}%</b>\'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: \'pointer\',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: \'Brands\',
+                colorByPoint: true,
+                data: ' . $ticket_by_type . '
+            }],
+            credits: {
+              enabled: false
+            },
+    });
+});
+');
+?>

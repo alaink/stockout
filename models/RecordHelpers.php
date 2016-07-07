@@ -67,9 +67,9 @@ class RecordHelpers
         return $status_col;
     }
 
-    public function getProductName()
+    public function getProductName($product_id)
     {
-        $product = Products::findOne(['id' => product_id]);
+        $product = Products::findOne(['id' => $product_id]);
         return $product->name;
     }
 
@@ -269,6 +269,35 @@ class RecordHelpers
     public static function getCells($sector_id)
     {
         return Cell::find()->where(['sector_id' => $sector_id])->select(['id', 'name'])->orderBy('name')->asArray()->all();
+    }
+
+    /**
+     * get product occurrence to display for dashboard
+     */
+    public static function getProductOccurrence()
+    {
+        $query = new yii\db\Query();
+        $products = $query
+            ->select('`product_id`')
+            ->addSelect(new yii\db\Expression('COUNT(`product_id`) AS qty'))
+            ->from('`tickets`')
+            ->groupBy('`product_id`')
+            ->all();
+
+        $foo = array();
+        foreach ($products as $row)
+        {
+            array_push($foo, ['name'=>self::getProductName($row['product_id']), 'y'=>$row['qty']]);
+        }
+//        foreach ($products as $row)
+//        {
+//            $roww[0] = self::getProductName($row['product_id']);
+//            $roww[1] = $row['qty'];
+//            array_push($foo, $roww);
+//        }
+//        print_r(json_encode($foo, JSON_NUMERIC_CHECK));  exit();
+        
+        return json_encode($foo, JSON_NUMERIC_CHECK);
     }
 
 

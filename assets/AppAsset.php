@@ -25,6 +25,8 @@ class AppAsset extends AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
-        'app\assets\SbAdmin3'
+        'app\assets\SbAdmin3',
+        'app\assets\HighChartsAsset'
+        
     ];
 }

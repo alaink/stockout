@@ -65,6 +65,7 @@ class TicketsController extends \yii\web\Controller
             $model->created_by = $model->user_id;
             $model->product_id = RecordHelpers::retrieveProductId($POST_VAR2['bar_code']);
             $model->title = RecordHelpers::createTicketTitle($issue_id, $POST_VAR, $model->product_id);
+            $model->type = $model->$issue_id;
             
             $model->save();
             RecordHelpers::createHistory($model->id, 'create');

@@ -153,70 +153,7 @@ RecordHelpers::getProductOccurrence();
 <!--                    </div>-->
 <!--                    <!-- /.list-group -->
 <!--                    <a href="#" class="btn btn-default btn-block">View All Alerts</a>-->
-                    <?php
-                    echo Highcharts::widget([
-                        'options' => [
-//                            'title' => ['text' => 'Fruit Consumption'],
-//                            'xAxis' => [
-//                                'categories' => ['Apples', 'Bananas', 'Oranges']
-//                            ],
-//                            'yAxis' => [
-//                                'title' => ['text' => 'Fruit eaten']
-//                            ],
-//                            'series' => [
-//                                ['name' => 'Jane', 'data' => [1, 0, 4]],
-//                                ['name' => 'John', 'data' => [5, 7, 3]]
-//                            ]
-                            'chart'=> [
-                                'type' => 'pie',
-                            ],
-                            'title'=> [
-                                'text'=> 'Tickets Evolvement',
-                                'y'=> 5
-                            ],
-                            'tooltip'=> [
-                                'pointFormat'=> '{series.name}: <b>{point.percentage:.1f}%</b>'
-                            ],
-                            'plotOptions'=> [
-                                'pie' => [
-                                    'dataLabels'=> [
-                                        'enabled'=> true,
-                                        'distance'=> -10,
-                                        'style'=> [
-                                            'fontWeight'=> 'bold',
-                                            'color'=> 'white',
-                                            'textShadow'=> '0px 1px 2px black'
-                                        ]
-                                    ],
-                                    'size' => 250,
-                                    'startAngle'=> -90,
-                                    'endAngle'=> 90,
-                                    'center'=> ['50%', '35%']
-                                ],
-                            ],
-                            'series'=> [[
-                                'type'=> 'pie',
-                                'name'=> 'Evolution',
-                                'innerSize'=> '50%',
-                                'data'=> [
-                                    ['New Tickets',   10.38],
-                                    ['Viewed Tickets',       56.33],
-                                    ['Pending Tickets', 24.03],
-                                    ['Resolved Tickets',    4.77],
-                                    ['Closed Tickets',     0.91],
-                                    [
-                                        'name'=> 'Tickets Evolvement',
-                                        'y'=> 0.2,
-                                        'dataLabels'=> [
-                                            'enabled'=> 'false',
-                                        ]
-                                    ]
-                                ]
-                            ]],
-                            'credits' => ['enabled' => false],
-                        ]
-                    ]);
-                    ?>
+
                 </div>
                 <!-- /.panel-body -->
             </div>

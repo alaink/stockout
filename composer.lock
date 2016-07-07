@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "836b2b0dfa1e95d5a614734f5ccb0f1d",
-    "content-hash": "878289a8274b68f3a2d9484c18ccfbc3",
+    "hash": "c1f313f4d5708ccd27b8f81134807071",
+    "content-hash": "bcf91bd028458d4700529429fe4ef6ef",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -525,12 +525,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
-                "reference": "07c1463d9243f4312a4b655378e8dcb6235ce2eb"
+                "reference": "4ccb7262716f405f51720956a453a61a1b48dd53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/07c1463d9243f4312a4b655378e8dcb6235ce2eb",
-                "reference": "07c1463d9243f4312a4b655378e8dcb6235ce2eb",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/4ccb7262716f405f51720956a453a61a1b48dd53",
+                "reference": "4ccb7262716f405f51720956a453a61a1b48dd53",
                 "shasum": ""
             },
             "require": {
@@ -571,7 +571,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-06-29 16:38:21"
+            "time": "2016-07-01 11:15:25"
         },
         {
             "name": "kartik-v/yii2-widget-depdrop",
@@ -722,54 +722,6 @@
                 "yii2"
             ],
             "time": "2015-06-28 18:05:41"
-        },
-        {
-            "name": "miloschuman/yii2-highcharts-widget",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/miloschuman/yii2-highcharts.git",
-                "reference": "6951fef6cc72273f8e4278154eb756416d5caab4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/miloschuman/yii2-highcharts/zipball/6951fef6cc72273f8e4278154eb756416d5caab4",
-                "reference": "6951fef6cc72273f8e4278154eb756416d5caab4",
-                "shasum": ""
-            },
-            "require": {
-                "yiisoft/yii2": "*"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.4"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "miloschuman\\highcharts\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Milo Schuman",
-                    "email": "miloschuman@gmail.com"
-                }
-            ],
-            "description": "Highcharts widget for Yii 2 Framework.",
-            "homepage": "https://github.com/miloschuman/yii2-highcharts",
-            "keywords": [
-                "extension",
-                "highcharts",
-                "highmaps",
-                "highstock",
-                "widget",
-                "yii2"
-            ],
-            "time": "2016-05-26 17:42:51"
         },
         {
             "name": "phpoffice/phpexcel",
@@ -1539,7 +1491,6 @@
         "c006/yii2-migration-utility": 20,
         "kartik-v/yii2-widget-datepicker": 20,
         "phpoffice/phpexcel": 20,
-        "miloschuman/yii2-highcharts-widget": 20,
         "kartik-v/yii2-widget-select2": 20,
         "kartik-v/yii2-widget-depdrop": 20
     },

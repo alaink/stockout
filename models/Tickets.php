@@ -24,6 +24,7 @@ use yii\db\Expression;
  * @property integer $updated_by
  * @property string $updated_at
  * @property string $title
+ * @property string $type
  *
  * @property Products $product
  * @property User $user
@@ -52,8 +53,8 @@ class Tickets extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'title'], 'required'],
-            [['user_id', 'product_id', 'product_quantity', 'status_subdea', 'status_fmcg', 'created_by', 'updated_by'], 'integer'],
+            [['user_id', 'title', 'type'], 'required'],
+            [['user_id', 'product_id', 'product_quantity', 'status_subdea', 'status_fmcg', 'created_by', 'updated_by', 'type'], 'integer'],
             [['response_time_preference', 'noticed_at', 'created_at', 'updated_at','period_delivered'], 'safe'],
             [['comments'], 'string'],
             [['subdea_code', 'title'], 'string', 'max' => 255],
@@ -98,7 +99,8 @@ class Tickets extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_by' => 'Updated By',
             'updated_at' => 'Updated At',
-            'title' => 'Title'
+            'title' => 'Title',
+            'type' => 'Type'
         ];
     }
 

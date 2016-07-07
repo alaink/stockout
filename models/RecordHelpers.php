@@ -300,6 +300,34 @@ class RecordHelpers
         return json_encode($foo, JSON_NUMERIC_CHECK);
     }
 
+    /**
+     * return the tickets by their type (stock, product, other) for dashboard graph
+     */
+    public static function getTicketsByType()
+    {
+        $query = new yii\db\Query();
+        $tickets = $query
+            ->select('`type`')
+            ->addSelect(new yii\db\Expression('COUNT(`type`) AS qty'))
+            ->from('`tickets`')
+            ->groupBy('`type`')
+            ->all();
+
+        $data = array();
+        foreach ($tickets as $row)
+        {
+            array_push($data, ['name'=>self::getIssueName($row['type']), 'y'=>$row['qty']]);
+        }
+
+        print_r(json_encode($data, JSON_NUMERIC_CHECK));  exit();
+        return json_encode($data, JSON_NUMERIC_CHECK);
+    }
+
+    public static function getIssueName($id)
+    {
+        $issue = Issue::findOne(['id' => $id]);
+        return $issue->name;
+    }
 
     
 }

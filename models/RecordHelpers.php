@@ -314,10 +314,13 @@ class RecordHelpers
     {
         $query = new yii\db\Query();
         $tickets = $query
-            ->select('`type`')
-            ->addSelect(new yii\db\Expression('COUNT(`type`) AS qty'))
-            ->from('`tickets`')
-            ->groupBy('`type`')
+            ->select('`tickets`.`type`')
+            ->addSelect(new yii\db\Expression('COUNT(`tickets`.`type`) AS qty'))
+            ->addSelect('`products`.`fmcg_id`')
+            ->from('`tickets`, `products`')
+            ->where('`products`.`id` = `tickets`.`product_id`')
+            ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id)
+            ->groupBy('`tickets`.`type`')
             ->all();
 
         $data = array();

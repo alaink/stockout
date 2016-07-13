@@ -6,14 +6,14 @@ use  \yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Tickets */
 
-$this->title = 'Resolve Ticket: ' . $tickets->title;
+$this->title = 'Resolve Ticket ';// . $tickets->title;
 $this->params['breadcrumbs'][] = ['label' => 'Tickets', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
 <div class="tickets-resolve">
-    
+
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?php $form = ActiveForm::begin(); ?>
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <?php ActiveForm::end(); ?>
-    
+
 
 </div>
 

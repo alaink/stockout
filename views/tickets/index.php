@@ -68,7 +68,7 @@ if($ticket_status != null){
                 <td><?php echo $ticket->response_time_preference ?></td>
                 <td><?php echo Html::a('', ['/tickets/view?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-eye-open', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'View']) . "        ";
                           echo Html::a('', ['/tickets/update?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-pencil', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'To In Progress']) . "        ";
-                          echo Html::a('', ['/tickets/resolve?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-ok', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'Resolve']);?></td>
+                          echo Html::a('', ['/action-undertaken/resolve?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-ok', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'Resolve']);?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

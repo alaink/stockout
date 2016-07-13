@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tickets-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3><?= Html::encode($this->title) ?></h3>
 
     <p>
         <?php //change button as either in progress or not
@@ -29,13 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
 
         <?php //display this button only for unresolved tickets
-                if($currentTicketStatus == Yii::$app->params['RESOLVED_TICKET']) {
-                    echo Html::a('Resolved', ['action-undertaken/resolve', 'id' => $model->id], [
-                        'class' => 'btn btn-info disabled']);
-                } else {
-                    echo Html::a('Resolve', ['action-undertaken/resolve', 'id' => $model->id], [
-                        'class' => 'btn btn-success']);
-                }
+        if($currentTicketStatus == Yii::$app->params['RESOLVED_TICKET']) {
+            echo Html::a('Resolved', ['action-undertaken/resolve', 'id' => $model->id], [
+                'class' => 'btn btn-info disabled']);
+        } else {
+            echo Html::a('Resolve', ['action-undertaken/resolve', 'id' => $model->id], [
+                'class' => 'btn btn-success']);
+        }
         ?>
 
     </p>

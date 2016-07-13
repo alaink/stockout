@@ -105,7 +105,7 @@ class ChartHelpers
          SELECT yearweek(`created_at`) AS `date`, SUM(CASE WHEN `type` = 1 THEN 1 ELSE 0 END) AS `type_1`,
                 SUM(CASE WHEN `type` = 2 THEN 1 ELSE 0 END) AS `type_2`,
                 SUM(CASE WHEN `type` = 3 THEN 1 ELSE 0 END) AS `type_3`
-         FROM `tickets` GROUP BY `date` ORDER BY `date` 
+         FROM `tickets` GROUP BY `date` ORDER BY `date`
          * */
 
         $query = new yii\db\Query();
@@ -141,5 +141,58 @@ class ChartHelpers
         }
 
         return $stock . ';' . $products . ';' . $other . ';' . $weeks;
+    }
+
+    public static function statusTicketsByRegionQuery()
+    {
+        /*
+         SELECT          
+             `cell`.`district_id`,
+             SUM(CASE WHEN `tickets`.`status_fmcg` = 0 THEN 1 ELSE 0 END) AS `opened`,
+             SUM(CASE WHEN `tickets`.`status_fmcg` = 2 THEN 1 ELSE 0 END) AS `pending`,
+             SUM(CASE WHEN `tickets`.`status_fmcg` = 4 THEN 1 ELSE 0 END) AS `resolved`
+        FROM 	`tickets`,
+                `products`,
+                `user`,
+                `user_profile`,
+                `cell`
+                
+        WHERE 	`products`.`id` = `tickets`.`product_id` 
+            AND `products`.`fmcg_id`= 17 
+            AND `user`.`id` = `tickets`.`user_id`
+            AND `user`.`user_profile_id` = `user_profile`.`id`
+            AND `cell`.`id` = `user_profile`.`cell_id`
+            
+        GROUP BY `cell`.`district_id`
+        ORDER BY `cell`.`district_id`
+         * */
+
+        $connection = Yii::$app->getDb();
+        $command = $connection->createCommand('
+            SELECT          
+             `cell`.`district_id`,
+             SUM(CASE WHEN `tickets`.`status_fmcg` = 0 THEN 1 ELSE 0 END) AS `opened`,
+             SUM(CASE WHEN `tickets`.`status_fmcg` = 2 THEN 1 ELSE 0 END) AS `pending`,
+             SUM(CASE WHEN `tickets`.`status_fmcg` = 4 THEN 1 ELSE 0 END) AS `resolved`
+        FROM 	`tickets`,
+                `products`,
+                `user`,
+                `user_profile`,
+                `cell`
+                
+        WHERE 	`products`.`id` = `tickets`.`product_id` 
+            AND `products`.`fmcg_id`= 17 
+            AND `user`.`id` = `tickets`.`user_id`
+            AND `user`.`user_profile_id` = `user_profile`.`id`
+            AND `cell`.`id` = `user_profile`.`cell_id`
+            
+        GROUP BY `cell`.`district_id`
+        ORDER BY `cell`.`district_id`
+            ');
+
+        $result = $command->queryAll();
+
+        
+        print_r($result);
     }
 }

@@ -10,7 +10,7 @@ use yii\helpers\Html;
 $this->title = 'Stock Out';
 $ticket_by_product = ChartHelpers::getProductOccurrence();
 $ticket_by_type = ChartHelpers::getTicketsByType();
-//ChartHelpers::weeklyTicketsByTypeData();
+ChartHelpers::statusTicketsByRegionQuery();
 ?>
 
     <div class="container-fluid">

@@ -11,7 +11,7 @@ $this->title = 'Stock Out';
 $ticket_by_product = ChartHelpers::getProductOccurrence();
 $ticket_by_type = ChartHelpers::getTicketsByType();
 //print_r(ChartHelpers::statusTicketsByRegionData());
-//RecordHelpers::watever();
+RecordHelpers::watever();
 ?>
 
     <div class="container-fluid">

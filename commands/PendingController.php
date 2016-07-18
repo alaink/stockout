@@ -42,13 +42,17 @@ class PendingController extends Controller
         foreach ($tickets as $row)
         {
             $now = time();
-            $created_at = $row['created_at'];
+            $created_at = strtotime($row['created_at']);
             $diffDays = ($now - $created_at) / 60 / 60 / 24;
             if($diffDays >= 2)
             {
                 //RecordHelpers::changeTicketStatus($row['id'], Yii::$app->params['PENDING_TICKET']);
+                //$row['status_fmcg'] = Yii::$app->params['PENDING_TICKET'];
 
-                $row['status_fmcg'] = Yii::$app->params['PENDING_TICKET'];
+                $ticket = Tickets::findOne(['id' => $row['id']]);
+
+                $ticket->status_fmcg = Yii::$app->params['PENDING_TICKET'];
+                $ticket->save();
             }
         }
     }

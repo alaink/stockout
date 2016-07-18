@@ -11,6 +11,11 @@ $config = [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'app\commands',
     'components' => [
+        'user' => [
+            'class' => 'yii\web\User',
+            'identityClass' => 'app\models\User',
+            //'enableAutoLogin' => true,
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
@@ -23,6 +28,9 @@ $config = [
             ],
         ],
         'db' => $db,
+        'session' => [ // for use session in console application
+            'class' => 'yii\web\Session'
+        ],
     ],
     'params' => $params,
     /*

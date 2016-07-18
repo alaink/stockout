@@ -7,6 +7,7 @@ use app\models\RecordHelpers;
 use app\models\SubIssue;
 use app\models\Tickets;
 use Yii;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
 class TicketsController extends \yii\web\Controller
@@ -23,14 +24,24 @@ class TicketsController extends \yii\web\Controller
 
         if($ticket_status != null)
         {
-            $tickets = Tickets::find()
-                ->where([$status_col => $ticket_status,
-                    'user_id' => $user_id])
+            $query = new Query;
+
+            $tickets = $query
+                ->select('`tickets`.*')
+                ->from('`tickets`, `products`')
+                ->where('`products`.`id` = `tickets`.`product_id`')
+                ->andWhere('`tickets`.' . $status_col . ' = ' . $ticket_status)
+                ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id)
                 ->all();
         }
-        else{
-            $tickets = Tickets::find()
-                ->where(['user_id' => $user_id])
+        else{ // display all
+            $query = new Query;
+
+            $tickets = $query
+                ->select('`tickets`.*')
+                ->from('`tickets`, `products`')
+                ->where('`products`.`id` = `tickets`.`product_id`')
+                ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id)
                 ->all();
         }
 

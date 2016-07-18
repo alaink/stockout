@@ -8,6 +8,7 @@
 
 namespace app\models;
 use yii;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
 class RecordHelpers
@@ -53,9 +54,9 @@ class RecordHelpers
     /**
      * returns the ticket status column to fetch from
      */
-    public function getTicketStatusCol()
+    public static function getTicketStatusCol()
     {
-        $profile_type = RecordHelpers::getProfileType();
+        $profile_type = self::getProfileType();
         
         
         if($profile_type == Yii::$app->params['SUBDEALER']){
@@ -67,7 +68,7 @@ class RecordHelpers
         return $status_col;
     }
 
-    public function getProductName($product_id)
+    public static function getProductName($product_id)
     {
         $product = Products::findOne(['id' => $product_id]);
         return $product->name;
@@ -77,10 +78,11 @@ class RecordHelpers
      * returns the profile type of a user
      * @return int
      */
-    public function getProfileType()
+    public static function getProfileType()
     {
-        $user = User::findOne(Yii::$app->user->identity->id);
-        $user_profile = UserProfile::findOne(['id' => $user->user_profile_id]);
+//        $user = User::findOne(Yii::$app->user->identity->id);
+//        $user_profile = UserProfile::findOne(['id' => $user->user_profile_id]);
+        $user_profile = UserProfile::findOne(Yii::$app->user->identity->user_profile_id);
         $profile_type = $user_profile->profile_type_id;
         
         return $profile_type;
@@ -90,13 +92,10 @@ class RecordHelpers
      * @param $id of the model
      * @param $newStatus    
      */
-    public function changeTicketStatus($id, $newStatus)
+    public static function changeTicketStatus($id, $newStatus)
     {
-        // user's profile type to either change status_fmcg or status_subdea
-        $profile_type =  RecordHelpers::getProfileType();
-
-        //$status_col = RecordHelpers::getTicketStatusCol($profile_type);
-        $status_col = RecordHelpers::getTicketStatusCol();
+        //get either status_fmcg or status_subdealers
+        $status_col = self::getTicketStatusCol();
 
         $ticket = Tickets::findOne(['id' => $id]);
 
@@ -129,7 +128,7 @@ class RecordHelpers
 
     public function getCurrentTicketStatus($id)
     {
-        $status_col = RecordHelpers::getTicketStatusCol();
+        $status_col = self::getTicketStatusCol();
 
         $ticket = Tickets::findOne(['id' => $id]);
         $currentTicketStatus = $ticket->$status_col;
@@ -271,7 +270,28 @@ class RecordHelpers
         return Cell::find()->where(['sector_id' => $sector_id])->select(['id', 'name'])->orderBy('name')->asArray()->all();
     }
 
-    
+    public static function watever()
+    {
+//        $tickets = Tickets::find()
+//            ->select('id', 'created_at', 'status_fmcg')
+//            ->where(('status_fmcg = 1'))
+//            ->orWhere('status_fmcg = 3')
+//            ->all();
+
+        $query = new Query();
+//        @todo do this even for subdealers
+        $tickets = $query
+            ->select('`id`, `created_at`, `status_fmcg`')
+            ->from('`tickets`')
+            ->where(('`status_fmcg` = 1 OR `status_fmcg` = 3'))
+            ->all();
+
+        foreach ($tickets as $row)
+        {
+            echo ($row['status_fmcg']) . '<br/>';
+        }
+
+    }
 
     
 }

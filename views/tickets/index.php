@@ -1,5 +1,6 @@
 <?php
 
+use app\models\RecordHelpers;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use \app\models\Tickets;
@@ -56,19 +57,20 @@ if($ticket_status != null){
         <tbody>
         <?php foreach ($tickets as $ticket) : ?>
             <tr>
-                <td><?php echo $ticket->id ?></td>
-                <td><?php echo $ticket->title ?></td>
-                <td><?php echo $ticket->getProductName() ?></td>
-                <td><?php echo $ticket->comments ?></td>
-                <td><?php echo $ticket->product_quantity ?></td>
-<!--                <td>--><?php //echo $ticket->subdea_code ?><!--</td>-->
-<!--                <td>--><?php //echo $ticket->status_fmcg ?><!--</td>-->
-                <td><?php echo Tickets::printStatus($ticket->status_fmcg) ?></td>
-                <td><?php echo Tickets::printStatus($ticket->status_subdea) ?></td>
-                <td><?php echo $ticket->response_time_preference ?></td>
-                <td><?php echo Html::a('', ['/tickets/view?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-eye-open', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'View']) . "        ";
-                          echo Html::a('', ['/tickets/update?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-pencil', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'To In Progress']) . "        ";
-                          echo Html::a('', ['/action-undertaken/resolve?id=' . $ticket->id], ['class'=>'glyphicon glyphicon-ok', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'Resolve']);?></td>
+<!--                <td>--><?php //echo $ticket->id ?><!--</td>-->
+                <td><?php echo $ticket['id']?></td>
+                <td><?php echo $ticket['title'] ?></td>
+                <td><?php echo RecordHelpers::getProductName($ticket['product_id']) ?></td>
+                <td><?php echo $ticket['comments'] ?></td>
+                <td><?php echo $ticket['product_quantity'] ?></td>
+                <!--                <td>--><?php //echo $ticket->subdea_code ?><!--</td>-->
+                <!--                <td>--><?php //echo $ticket->status_fmcg ?><!--</td>-->
+                <td><?php echo Tickets::printStatus($ticket['status_fmcg']) ?></td>
+                <td><?php echo Tickets::printStatus($ticket['status_subdea']) ?></td>
+                <td><?php echo $ticket['response_time_preference'] ?></td>
+                <td><?php echo Html::a('', ['/tickets/view?id=' . $ticket['id']], ['class'=>'glyphicon glyphicon-eye-open', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'View']) . "        ";
+                    echo Html::a('', ['/tickets/update?id=' . $ticket['id']], ['class'=>'glyphicon glyphicon-pencil', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'To In Progress']) . "        ";
+                    echo Html::a('', ['/action-undertaken/resolve?id=' . $ticket['id']], ['class'=>'glyphicon glyphicon-ok', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'Resolve']);?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

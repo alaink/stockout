@@ -47,8 +47,6 @@ class PendingController extends Controller
             if($diffDays >= 2)
             {
                 //RecordHelpers::changeTicketStatus($row['id'], Yii::$app->params['PENDING_TICKET']);
-                //$row['status_fmcg'] = Yii::$app->params['PENDING_TICKET'];
-
                 $ticket = Tickets::findOne(['id' => $row['id']]);
 
                 $ticket->status_fmcg = Yii::$app->params['PENDING_TICKET'];

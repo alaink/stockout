@@ -10,7 +10,8 @@ use yii\helpers\Html;
 $this->title = 'Stock Out';
 $ticket_by_product = ChartHelpers::getProductOccurrence();
 $ticket_by_type = ChartHelpers::getTicketsByType();
-//print_r(ChartHelpers::statusTicketsByRegionData());
+$ticket_status_by_region = ChartHelpers::statusTicketsByRegionData();
+(ChartHelpers::statusTicketsByRegionData());
 RecordHelpers::watever();
 ?>
 
@@ -313,9 +314,9 @@ $this->registerJs('
         xAxis: {
             categories: 
                         [
-                        \'Gasabo\', \'Kicukiro\',\'Nyarugenge\',\'Nyanza\',\'Gisagara\',\'Nyaruguru\',
-                        \'Huye\',\'Nyamagabe\',\'Ruhango\',\'Muhanga\',\'Kamonyi\',\'Ngororero\',
-                        \'Nyamasheke\',\'Rusizi\',\'Nyabihu\',\'Rubavu\',\'Rutsiro\',\'Karongi\',
+                        \'Nyarugenge\', \'Gasabo\',\'Kicukiro\',\'Nyanza\',\'Gisagara\',\'Nyaruguru\',
+                        \'Huye\',\'Nyamagabe\',\'Ruhango\',\'Muhanga\',\'Kamonyi\',\'Karongi\',
+                        \'Rutsiro\',\'Rubavu\',\'Nyabihu\',\'Ngororero\',\'Rusizi\',\'Nyamasheke\',
                         \'Rulindo\',\'Gakenke\',\'Musanze\',\'Burera\',\'Gicumbi\',\'Rwamagana\',
                         \'Nyagatare\',\'Gatsibo\',\'Kayonza\',\'Kirehe\',\'Ngoma\',\'Bugesera\'
                         ],
@@ -348,25 +349,26 @@ $this->registerJs('
                 borderWidth: 0
             }
         },
-        series: [{
-            name: \'Opened\',
-            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4,
-                    84.5, 105.0, 104.3, 91.2, 83.5, 49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 135.6, 148.5, 216.4, 54.4],
-            color: \'#ffa366\'
-
-        }, {
-            name: \'Resolved\',
-            data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3,
-                    176.0, 135.6, 148.5, 216.4, 194.1, 105.0, 104.3, 91.2, 83.5, 49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4],
-            color: \'#66ff33\'
-
-        }, {
-            name: \'Pending\',
-            data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2, 
-                    83.6, 78.8, 98.5, 93.4, 106.0, 105.0, 104.3, 91.2, 83.5, 49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4],
-            color: \'#ff1a1a\'
-
-        }],
+//        series: [{
+//            name: \'Opened\',
+//            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4,
+//                    84.5, 105.0, 104.3, 91.2, 83.5, 49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 135.6, 148.5, 216.4, 54.4],
+//            color: \'#ffa366\'
+//
+//        }, {
+//            name: \'Resolved\',
+//            data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3,
+//                    176.0, 135.6, 148.5, 216.4, 194.1, 105.0, 104.3, 91.2, 83.5, 49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4],
+//            color: \'#66ff33\'
+//
+//        }, {
+//            name: \'Pending\',
+//            data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2, 
+//                    83.6, 78.8, 98.5, 93.4, 106.0, 105.0, 104.3, 91.2, 83.5, 49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4],
+//            color: \'#ff1a1a\'
+//
+//        }],
+        series: ' . ChartHelpers::statusTicketsByRegionData() . ',
         credits: {
               enabled: false
             },

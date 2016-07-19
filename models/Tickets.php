@@ -163,7 +163,7 @@ class Tickets extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function printStatus($status)
+    public static function printStatus($status)
     {
         if($status == Yii::$app->params['NEW_TICKET']){
             return "New";

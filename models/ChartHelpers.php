@@ -105,7 +105,7 @@ class ChartHelpers
          SELECT yearweek(`created_at`) AS `weekno`, SUM(CASE WHEN `type` = 1 THEN 1 ELSE 0 END) AS `type_1`,
                 SUM(CASE WHEN `type` = 2 THEN 1 ELSE 0 END) AS `type_2`,
                 SUM(CASE WHEN `type` = 3 THEN 1 ELSE 0 END) AS `type_3`
-         FROM `tickets` GROUP BY `date` ORDER BY `weekno`
+         FROM `tickets` GROUP BY `weekno` ORDER BY `weekno`
          * */
 
         $query = new yii\db\Query();
@@ -168,7 +168,7 @@ class ChartHelpers
         {
             while($week<= max($weeks))
             {
-                echo $week . ' - ' . $row['weekno'] . ' - ' . $row['type_2'] . '<br/>';
+                //echo $week . ' - ' . $row['weekno'] . ' - ' . $row['type_2'] . '<br/>';
                 if ($row['weekno'] == $week)
                 {
                     array_push($stock, $row['type_1']);
@@ -188,7 +188,7 @@ class ChartHelpers
 
             }
         }
-        return($other );
+        print_r($other );
     }
 
     public static function statusTicketsByRegionQuery()
@@ -240,61 +240,71 @@ class ChartHelpers
 
         $result = $command->queryAll();
 
-        
         return $result;
+    }
+
+    public static function distributeData()
+    {
+        $tickets = self::statusTicketsByRegionQuery();
+        $unformated_districts = array();
+        $unformated_opened = array();
+        $unformated_pending = array();
+        $unformated_resolved = array();
+        $result = array();
+
+        foreach ($tickets as $row)
+        {
+            array_push($unformated_districts, $row['district_id']);
+            array_push($unformated_opened, $row['opened']);
+            array_push($unformated_pending, $row['pending']);
+            array_push($unformated_resolved, $row['resolved']);
+        }
+
+        array_push($result, $unformated_districts);
+        array_push($result, $unformated_opened);
+        array_push($result, $unformated_pending);
+        array_push($result, $unformated_resolved);
+        return ( $result);
     }
 
     public static function statusTicketsByRegionData()
     {
-        $tickets = self::statusTicketsByRegionQuery();
+        $data = self::distributeData();
+        
+        $unformated_districts = $data[0];
+        $unformated_opened = $data[1];
+        $unformated_pending = $data[2];
+        $unformated_resolved = $data[3];
 
-        $opened = array();
-        $pending = array();
-        $resolved = array();
-
-
-        // 30 districts
+        $final_opened = array();
+        $final_pending = array();
+        $final_resolved = array();
+        
         for($i = 1; $i <= 30; $i++)
         {
-            foreach ($tickets as $row)
+            if(in_array($i, $unformated_districts))
             {
-//                //if($i > 1){$row = next($tickets);}
-                echo $i . ' - ' . $row['district_id'] . '<br/>';
-                if($i == $row['district_id'])
-                {
-                    array_push($opened, $row['opened']);
-                    array_push($pending, $row['pending']);
-                    array_push($resolved, $row['resolved']);
-                }
-                else{
-                    array_push($opened, 0);
-                    array_push($pending, 0);
-                    array_push($resolved, 0);
-                }
-               // break;
-
-                if($i == $row['district_id']) :
-                    array_push($opened, $row['opened']);
-//                    array_push($pending, $row['pending']);
-//                    array_push($resolved, $row['resolved']);
-                endif;
-
-                if($i != $row['district_id']) :
-                    array_push($opened, 0);
-//                    array_push($pending, 0);
-//                    array_push($resolved, 0);
-                endif;
-
+                $key = array_search($i, $unformated_districts);
+                array_push($final_opened, $unformated_opened[$key]);
+                array_push($final_pending, $unformated_pending[$key]);
+                array_push($final_resolved, $unformated_resolved[$key]);
             }
-            //continue;
-
+            else{
+                array_push($final_opened, 0);
+                array_push($final_pending, 0);
+                array_push($final_resolved, 0);
+            }
         }
 
-//        print_r($opened);
-        print_r($pending);
-//        print_r($resolved);
+        // final formatting
+        $result = array();
+        array_push($result, ["name"=>"Opened", "data"=>$final_opened, 'color'=>'#ffa366']);
+        array_push($result, ['name'=>'Resolved', 'data'=>$final_resolved, 'color'=>'#66ff33']);
+        array_push($result, ['name'=>'Pending', 'data'=>$final_pending, 'color'=>'#ff1a1a']);
 
-        
-        
+        return(json_encode($result, JSON_NUMERIC_CHECK));
     }
+
+
+
 }

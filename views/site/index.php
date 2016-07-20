@@ -8,9 +8,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 
 $this->title = 'Stock Out';
-$ticket_by_product = ChartHelpers::getProductOccurrence();
 $ticket_by_type = ChartHelpers::getTicketsByType();
-
 ?>
 
     <div class="container-fluid">
@@ -35,14 +33,14 @@ $ticket_by_type = ChartHelpers::getTicketsByType();
                     </div> <!-- panel default-->
 
                 </div>
+
                 <div class="col-lg-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-bar-chart-o fa-fw"></i><b> Tickets by product</b>
                         </div>
-                        <div id="ticket_product" class="panel-body" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto">
-
-                        </div> <!-- panel body-->
+                        <div id="ticket_product" class="panel-body" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                        <?php $this->registerJs($ticketByProductChart, \yii\web\View::POS_END);?>
                     </div> <!-- panel default-->
 
                 </div>
@@ -121,57 +119,6 @@ $ticket_by_type = ChartHelpers::getTicketsByType();
 
     </div>
     <!-- /.container-fluid -->
-
-    <!-- TICKET BY PRODUCT CHART-->
-<?php
-$this->registerJs('
-
-$(function () {
-    $(\'#ticket_product\').highcharts({
-        chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: \'pie\'
-            },
-            title: {
-                text: \'\'
-            },
-            tooltip: {
-                pointFormat: \'{series.name}: <b>{point.percentage:.1f}%</b>\'
-            },
-            legend: {
-                labelFormat: \'{name} - {percentage:.1f}%\',
-                layout: \'vertical\',
-                align: \'right\',
-                verticalAlign: \'middle\',
-                borderWidth: 0
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: \'pointer\',
-                    dataLabels: {
-                        enabled: false
-                    },
-                    showInLegend: true
-                }
-            },
-            series: [{
-                name: \'Brands\',
-                colorByPoint: true,
-                data: ' . $ticket_by_product . ',
-                dataLabels: {
-                    //enabled: true
-                }
-            }],
-            credits: {
-              enabled: false
-            },
-    });
-});
-');
-?>
 
     <!-- TICKET BY TYPE CHART-->
 <?php

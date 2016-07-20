@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\ChartHelpers;
+use app\models\DrawCharts;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -49,7 +51,16 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $ticketByProduct = ChartHelpers::getProductOccurrence();
+        $ticketByProductChart = DrawCharts::pieChart($ticketByProduct, 'ticket_product');
+        
+        
+        return $this->render('index'
+            ,[
+            'ticketByProductChart' => $ticketByProductChart,
+//            'ticketByProduct' => $ticketByProduct
+        ]
+        );
     }
 
     public function actionLogin()

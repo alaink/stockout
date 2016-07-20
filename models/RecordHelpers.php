@@ -240,7 +240,7 @@ class RecordHelpers
 //        }
 
 
-//        print_r($data);
+//        print_r(json_encode($data));
 //        exit(0);
         return $data;
     }

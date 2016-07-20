@@ -170,7 +170,7 @@ class RecordHelpers
     }
 
 //    public static function createTicketTitle($issue_id, $sub_issue, $product_id)
-    public static function createTicketTitle($issue_id, $POST_VAR, $product_id)
+    public static function createTicketTitle($issue_id, $POST_VAR)
     {
         $title = '';
 
@@ -200,9 +200,9 @@ class RecordHelpers
                 $title .= '-Damaged';
             }
 
-            // append product name
-            $product = Products::findOne(['id' => $product_id]);
-            $title .= "-" . $product->name;
+//            // append product name
+//            $product = Products::findOne(['id' => $product_id]);
+//            $title .= "-" . $product->name;
         }
         
         return $title;
@@ -269,39 +269,5 @@ class RecordHelpers
     {
         return Cell::find()->where(['sector_id' => $sector_id])->select(['id', 'name'])->orderBy('name')->asArray()->all();
     }
-
-    public static function watever()
-    {
-//        $tickets = Tickets::find()
-//            ->select('id', 'created_at', 'status_fmcg')
-//            ->where(('status_fmcg = 1'))
-//            ->orWhere('status_fmcg = 3')
-//            ->all();
-
-        $query = new Query();
-//        @todo do this even for subdealers
-        $tickets = $query
-            ->select('`id`, `created_at`, `status_fmcg`')
-            ->from('`tickets`')
-            ->where(('`status_fmcg` = 1 OR `status_fmcg` = 3'))
-            ->all();
-
-        foreach ($tickets as $row)
-        {
-            $now = time();
-            $created_at = strtotime($row['created_at']);
-            $diffDays = ($now - $created_at) / 60 / 60 / 24;
-            if($diffDays >= 2)
-            {
-                //RecordHelpers::changeTicketStatus($row['id'], Yii::$app->params['PENDING_TICKET']);
-
-//                $row['status_fmcg'] = Yii::$app->params['PENDING_TICKET'];
-                echo $now . ' - '. $created_at . ' - ' . $diffDays . '<br/>';
-            }
-
-        }
-
-    }
-
-    
+        
 }

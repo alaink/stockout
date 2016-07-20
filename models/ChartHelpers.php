@@ -122,7 +122,11 @@ class ChartHelpers
         
         return $tickets;
     }
-    
+
+    /**
+     * get the range of weeks that the tickets in the database fall into
+     * @return array
+     */
     public static function getCurrentWeeksRange()
     {
         $tickets = self::weeklyTicketsByTypeQuery();
@@ -135,26 +139,21 @@ class ChartHelpers
         return $weeks;
     }
 
-//    public static function weeklyTicketsByTypeData()
-//    {
-//        $tickets = self::weeklyTicketsByTypeQuery();
-//
-//        $stock = array();
-//        $products = array();
-//        $other = array();
-//        $weeks = array();
-//
-//        foreach ($tickets as $row)
-//        {
-//            array_push($stock, $row['type_1']);
-//            array_push($products, $row['type_2']);
-//            array_push($other, $row['type_3']);
-//            array_push($weeks, $row['weekno']);
-//        }
-//
-//        return $stock . ';' . $products . ';' . $other . ';' . $weeks;
-//    }
+    public static function formatWeeks()
+    {
+        $weeks = self::getCurrentWeeksRange();
+        $final_weeks = array();
 
+        for ($week = min($weeks); $week<= max($weeks); $week++)
+        {
+            array_push($final_weeks, (string)$week);
+        }
+        return $final_weeks;
+    }
+
+    /**
+     * fill the weeks data into 3 types of tickets, with a week-span of tickets available
+     */
     public static function weeklyTicketsByTypeData()
     {
         $weeks = self::getCurrentWeeksRange();
@@ -162,6 +161,7 @@ class ChartHelpers
         $stock = array();
         $product = array();
         $other = array();
+        $weeks_final = array();
 
         $week = min($weeks);
         foreach ($tickets as $row)
@@ -169,8 +169,7 @@ class ChartHelpers
             while($week<= max($weeks))
             {
                 //echo $week . ' - ' . $row['weekno'] . ' - ' . $row['type_2'] . '<br/>';
-                if ($row['weekno'] == $week)
-                {
+                if ($row['weekno'] == $week) {
                     array_push($stock, $row['type_1']);
                     array_push($product, $row['type_2']);
                     array_push($other, $row['type_3']);
@@ -185,10 +184,13 @@ class ChartHelpers
                     array_push($other, 0);
                     $week++;
                 }
-
             }
         }
-        print_r($other );
+        $data = array();
+        array_push($data, ["name"=>"Other", "data"=>$other]);
+        array_push($data, ["name"=>"Product", "data"=>$product]);
+        array_push($data, ["name"=>"Stock", "data"=>$stock]);
+        return(json_encode($data, JSON_NUMERIC_CHECK));
     }
 
     public static function statusTicketsByRegionQuery()

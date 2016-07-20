@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // nothing to display
         }
         else {
-            echo Html::a('Change to >> In Progress', ['update', 'id' => $model->id], ['class' => 'btn btn-warning']);
+            echo Html::a('Set to In Progress', ['update', 'id' => $model->id], ['class' => 'btn btn-warning']);
         }
         ?>
 

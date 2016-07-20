@@ -10,9 +10,7 @@ use yii\helpers\Html;
 $this->title = 'Stock Out';
 $ticket_by_product = ChartHelpers::getProductOccurrence();
 $ticket_by_type = ChartHelpers::getTicketsByType();
-$ticket_status_by_region = ChartHelpers::statusTicketsByRegionData();
-(ChartHelpers::statusTicketsByRegionData());
-RecordHelpers::watever();
+
 ?>
 
     <div class="container-fluid">
@@ -349,25 +347,6 @@ $this->registerJs('
                 borderWidth: 0
             }
         },
-//        series: [{
-//            name: \'Opened\',
-//            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4,
-//                    84.5, 105.0, 104.3, 91.2, 83.5, 49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 135.6, 148.5, 216.4, 54.4],
-//            color: \'#ffa366\'
-//
-//        }, {
-//            name: \'Resolved\',
-//            data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3,
-//                    176.0, 135.6, 148.5, 216.4, 194.1, 105.0, 104.3, 91.2, 83.5, 49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4],
-//            color: \'#66ff33\'
-//
-//        }, {
-//            name: \'Pending\',
-//            data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2, 
-//                    83.6, 78.8, 98.5, 93.4, 106.0, 105.0, 104.3, 91.2, 83.5, 49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4],
-//            color: \'#ff1a1a\'
-//
-//        }],
         series: ' . ChartHelpers::statusTicketsByRegionData() . ',
         credits: {
               enabled: false
@@ -389,12 +368,10 @@ $this->registerJs('
             text: \'\'
         },
         xAxis: {
-            categories: [
-                        \'week 1\', \'week 2\', \'week 3\', \'week 4\', \'week 5\',\'week 6\', \'week 7\',
-                        \'week 8\', \'week 9\', \'week 10\', \'week 11\', \'week 12\',\'week 13\', \'week 14\',
-                        \'week 15\', \'week 16\', \'week 17\', \'week 18\', \'week 19\',\'week 20\', \'week 21\',
-                        \'week 22\', \'week 23\', \'week 24\', \'week 25\'                        
-                        ],
+            categories: [' . join(ChartHelpers::formatWeeks(), ",") . '],
+            title: {
+                text: \'Weeks\'
+            },
             labels: {
                 rotation: -45,
                 style: {
@@ -443,19 +420,7 @@ $this->registerJs('
                 }
             }
         },
-        series: [{
-            name: \'Other issues\',
-            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4,
-                    83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3, 71.5]
-        }, {
-            name: \'Product Issues\',
-            data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3, 
-                    49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4, 59.6]
-        }, {
-            name: \'Stock Issues\',
-            data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2,
-                    83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3, 84.5]
-        }],
+        series: ' . ChartHelpers::weeklyTicketsByTypeData() . ',
         credits: {
               enabled: false
             },
@@ -474,12 +439,10 @@ $this->registerJs('
             x: -20 //center
         },
         xAxis: {
-            categories: [
-                        \'week 1\', \'week 2\', \'week 3\', \'week 4\', \'week 5\',\'week 6\', \'week 7\',
-                        \'week 8\', \'week 9\', \'week 10\', \'week 11\', \'week 12\',\'week 13\', \'week 14\',
-                        \'week 15\', \'week 16\', \'week 17\', \'week 18\', \'week 19\',\'week 20\', \'week 21\',
-                        \'week 22\', \'week 23\', \'week 24\', \'week 25\'                        
-                        ],
+            categories: [' . join(ChartHelpers::formatWeeks(), ",") . '],
+            title: {
+                text: \'Weeks\'
+            },
             labels: {
                 rotation: -45,
                 style: {
@@ -507,19 +470,7 @@ $this->registerJs('
             verticalAlign: \'middle\',
             borderWidth: 0
         },
-        series: [{
-            name: \'Other issues\',
-            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4,
-                    83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3, 71.5]
-        }, {
-            name: \'Product Issues\',
-            data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3, 
-                    49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4, 59.6]
-        }, {
-            name: \'Stock Issues\',
-            data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2,
-                    83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3, 84.5]
-        }],
+        series: ' . ChartHelpers::weeklyTicketsByTypeData() . ',
         credits: {
               enabled: false
             },

@@ -66,7 +66,7 @@ class TicketsController extends \yii\web\Controller
         $POST_VAR = Yii::$app->request->post('Tickets');
         $POST_VAR2 = Yii::$app->request->post('Products');
 
-        // get products data
+        // get products data concatenated with their bar code
         $products_bar_code = RecordHelpers::getProducts();
 
 
@@ -74,8 +74,10 @@ class TicketsController extends \yii\web\Controller
         {
             $model->user_id = Yii::$app->user->identity->id;
             $model->created_by = $model->user_id;
-            $model->product_id = RecordHelpers::retrieveProductId($POST_VAR2['bar_code']);
-            $model->title = RecordHelpers::createTicketTitle($issue_id, $POST_VAR, $model->product_id);
+            if($issue_id != Yii::$app->params['OTHER_ISSUE']) {
+                $model->product_id = RecordHelpers::retrieveProductId($POST_VAR2['bar_code']);
+            }
+            $model->title = RecordHelpers::createTicketTitle($issue_id, $POST_VAR);
             $model->type = $issue_id;
             
             $model->save();

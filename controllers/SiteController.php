@@ -20,19 +20,29 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'only' => ['login', 'logout', 'index', 'contact', 'about'],
                 'rules' => [
+//                    [
+//                        'actions' => ['login', 'logout', 'index', 'contact', 'about'],
+//                        'allow' => true,
+//                        'roles' => ['@'],
+//                    ],
                     [
-                        'actions' => ['login', 'logout', 'index', 'contact', 'about'],
                         'allow' => true,
+                        'actions' => ['login', 'signup'],
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['logout', 'index', 'contact', 'about'],
                         'roles' => ['@'],
                     ],
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
+//            'verbs' => [
+//                'class' => VerbFilter::className(),
+//                'actions' => [
+//                    'logout' => ['post'],
+//                ],
+//            ],
         ];
     }
 
@@ -54,13 +64,25 @@ class SiteController extends Controller
         $ticketByProduct = ChartHelpers::getProductOccurrence();
         $ticketByProductChart = DrawCharts::pieChart($ticketByProduct, 'ticket_product');
         
+        $ticketByType = ChartHelpers::getTicketsByType();
+        $ticketByTypeChart = DrawCharts::pieChart($ticketByType, 'ticket_type');
+
+        $statusTicketByRegion = ChartHelpers::statusTicketsByRegionData();
+        $statusTicketByRegionChart = DrawCharts::basicColumn($statusTicketByRegion, 'status-ticket-region');
         
-        return $this->render('index'
-            ,[
+        $weeks = ChartHelpers::formatWeeks();
+        $weeklyTicket = ChartHelpers::weeklyTicketsByTypeData();
+        $weeklyTicketStackedChart = DrawCharts::stackedColumn($weeks, $weeklyTicket, 'weekly-ticket-stacked');
+        $weeklyTicketLineChart = DrawCharts::basicLine($weeks, $weeklyTicket, 'weekly-ticket-basic-line');
+        
+        
+        return $this->render('index',[
             'ticketByProductChart' => $ticketByProductChart,
-//            'ticketByProduct' => $ticketByProduct
-        ]
-        );
+            'ticketByTypeChart' => $ticketByTypeChart,
+            'statusTicketByRegionChart' => $statusTicketByRegionChart,
+            'weeklyTicketStackedChart' => $weeklyTicketStackedChart,
+            'weeklyTicketLineChart' => $weeklyTicketLineChart
+        ]);
     }
 
     public function actionLogin()

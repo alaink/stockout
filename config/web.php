@@ -83,6 +83,11 @@ $config = [
             'class' => '\kartik\grid\Module'
         ],
     ],
+    'controllerMap'       => [
+        'migrate' => [
+            'class' => 'dmstr\console\controllers\MigrateController'
+        ],
+    ],
 
 //    'controllerMap' => [
 //        'registration' => [

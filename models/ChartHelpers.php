@@ -23,9 +23,10 @@ class ChartHelpers
      */
     public static function getProductOccurrence()
     {
-
-//        SELECT `tickets`.`product_id`, COUNT(`tickets`.`product_id`) AS qty, `products`.`fmcg_id` FROM `tickets`, `products`
-// WHERE `products`.`id` = `tickets`.`product_id` AND `products`.`fmcg_id`= 17 GROUP BY `product_id`
+        /**
+       SELECT `tickets`.`product_id`, COUNT(`tickets`.`product_id`) AS qty, `products`.`fmcg_id` FROM `tickets`, `products`
+       WHERE `products`.`id` = `tickets`.`product_id` AND `products`.`fmcg_id`= 17 GROUP BY `product_id`
+        **/
         $query = new yii\db\Query();
         $products = $query
             ->select('`tickets`.`product_id`')
@@ -144,11 +145,13 @@ class ChartHelpers
         $weeks = self::getCurrentWeeksRange();
         $final_weeks = array();
 
-        for ($week = min($weeks); $week<= max($weeks); $week++)
-        {
-            array_push($final_weeks, (string)$week);
+        if($weeks){
+            for ($week = min($weeks); $week<= max($weeks); $week++)
+            {
+                array_push($final_weeks, (string)$week);
+            }
         }
-        return $final_weeks;
+        return join($final_weeks, ",");
     }
 
     /**
@@ -161,31 +164,33 @@ class ChartHelpers
         $stock = array();
         $product = array();
         $other = array();
-        $weeks_final = array();
 
-        $week = min($weeks);
-        foreach ($tickets as $row)
-        {
-            while($week<= max($weeks))
+        if($weeks){
+            $week = min($weeks);
+            foreach ($tickets as $row)
             {
-                //echo $week . ' - ' . $row['weekno'] . ' - ' . $row['type_2'] . '<br/>';
-                if ($row['weekno'] == $week) {
-                    array_push($stock, $row['type_1']);
-                    array_push($product, $row['type_2']);
-                    array_push($other, $row['type_3']);
+                while($week<= max($weeks))
+                {
+                    //echo $week . ' - ' . $row['weekno'] . ' - ' . $row['type_2'] . '<br/>';
+                    if ($row['weekno'] == $week) {
+                        array_push($stock, $row['type_1']);
+                        array_push($product, $row['type_2']);
+                        array_push($other, $row['type_3']);
 
-                    $week++;
-                    break;
+                        $week++;
+                        break;
 
-                }
-                else{
-                    array_push($stock, 0);
-                    array_push($product, 0);
-                    array_push($other, 0);
-                    $week++;
+                    }
+                    else{
+                        array_push($stock, 0);
+                        array_push($product, 0);
+                        array_push($other, 0);
+                        $week++;
+                    }
                 }
             }
         }
+
         $data = array();
         array_push($data, ["name"=>"Other", "data"=>$other]);
         array_push($data, ["name"=>"Product", "data"=>$product]);

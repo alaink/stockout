@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles adding locations to table `user_profile`.
  */
-class m160705_081018_add_cell_id_to_user_profile extends Migration
+class m160705_093237_add_cell_id_to_user_profile extends Migration
 {
     /**
      * @inheritdoc

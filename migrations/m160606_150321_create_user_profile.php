@@ -17,8 +17,8 @@ class m160606_150321_create_user_profile extends Migration
             0 => 'PRIMARY KEY (`id`)',
             'profile_type_id' => 'INT(11) NOT NULL',
             'name' => 'VARCHAR(255) NOT NULL',
-            'user_code' => 'VARCHAR(255) NOT NULL',
-            'rating' => 'INT(11) NOT NULL',
+            'user_code' => 'VARCHAR(255) NULL',
+            'rating' => 'INT(11) NULL',
             'tel_address' => 'VARCHAR(30) NULL',
             'location' => 'VARCHAR(255) NULL',
         ]);

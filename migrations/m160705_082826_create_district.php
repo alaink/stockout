@@ -14,20 +14,20 @@ class m160705_082826_create_district extends Migration
     {
         $this->createTable('district', [
             'id' => $this->primaryKey(),
-            `province_id`  => 'INT(11) NOT NULL',
-            `name`=> 'VARCHAR(75) NOT NULL',
+            'province_id'  => 'INT(11) NOT NULL',
+            'name'=> 'VARCHAR(75) NOT NULL',
         ]);
-        
+
         $this->createIndex(
-            'idx-user_profile-province_id',
-            'user_profile',
+            'idx-district-province_id',
+            'district',
             'province_id'
         );
 
         // add foreign key for table `user_profile`
         $this->addForeignKey(
-            'fk-user_profile-province_id',
-            'user_profile',
+            'fk-district-province_id',
+            'district',
             'province_id',
             'province',
             'id',
@@ -74,13 +74,13 @@ class m160705_082826_create_district extends Migration
     public function down()
     {
         $this->dropForeignKey(
-            'fk-user_profile-province_id',
-            'user_profile'
+            'fk-district-province_id',
+            'district'
         );
 
         $this->dropIndex(
-            'idx-user_profile-province_id',
-            'user_profile'
+            'idx-district-province_id',
+            'district'
         );
         $this->dropTable('district');
     }

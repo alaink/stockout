@@ -7,6 +7,7 @@ use app\models\RecordHelpers;
 use app\models\SubIssue;
 use app\models\Tickets;
 use Yii;
+use yii\data\Pagination;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
@@ -33,6 +34,11 @@ class TicketsController extends \yii\web\Controller
                 ->andWhere('`tickets`.' . $status_col . ' = ' . $ticket_status)
                 ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id)
                 ->all();
+            $pages = new Pagination(['defaultPageSize' => 15,'totalCount' => count($tickets)]);
+            $models = $query->offset($pages->offset)
+                ->limit($pages->limit)
+                ->all();
+
         }
         else{ // display all
             $query = new Query;
@@ -43,10 +49,15 @@ class TicketsController extends \yii\web\Controller
                 ->where('`products`.`id` = `tickets`.`product_id`')
                 ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id)
                 ->all();
+            $pages = new Pagination(['defaultPageSize' => 15,'totalCount' => count($tickets)]);
+            $models = $query->offset($pages->offset)
+                ->limit($pages->limit)
+                ->all();
         }
 
         return $this->render('index', [
-            'tickets' => $tickets,
+            'tickets' => $models,
+            'pages' => $pages,
             'model' => $model,
             'profile_type' => $profile_type,
             'ticket_status' => $ticket_status

@@ -32,7 +32,7 @@ class SiteController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['logout', 'index', 'contact', 'about'],
+                        'actions' => ['index' ,'logout', 'contact', 'about'],
                         'roles' => ['@'],
                     ],
                 ],

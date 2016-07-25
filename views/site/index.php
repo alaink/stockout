@@ -11,6 +11,7 @@ $this->title = 'Stock Out';
 ?>
 
     <div class="container-fluid">
+        <?php if((!Yii::$app->user->isGuest )): ?>
 
         <div class="row">
             <div class="col-lg-12">
@@ -116,6 +117,7 @@ $this->title = 'Stock Out';
             </div> <!-- row -->
         <?php endif;?>
 
+        <?php endif;?> <!-- checking guest-->
     </div>
     <!-- /.container-fluid -->
 
@@ -196,52 +198,3 @@ $this->registerJs('
 ');
 ?>
 
-    <!-- WEEKLY TICKET - BASIC LINE -->
-<?php
-$this->registerJs('
-    $(function () {
-    $(\'#weekly-ticket-basic-line\').highcharts({
-        title: {
-            text: \'\',
-            x: -20 //center
-        },
-        xAxis: {
-            categories: [' . ChartHelpers::formatWeeks() . '],
-            title: {
-                text: \'Weeks\'
-            },
-            labels: {
-                rotation: -45,
-                style: {
-                    fontSize: \'10px\',
-                    fontFamily: \'Verdana, sans-serif\'
-                }
-            }
-        },
-        yAxis: {
-            title: {
-                text: \'Issues\'
-            },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: \'#808080\'
-            }]
-        },
-        tooltip: {
-            valueSuffix: \'\'
-        },
-        legend: {
-            layout: \'vertical\',
-            align: \'right\',
-            verticalAlign: \'middle\',
-            borderWidth: 0
-        },
-        series: ' . ChartHelpers::weeklyTicketsByTypeData() . ',
-        credits: {
-              enabled: false
-            },
-    });
-});
-');
-?>

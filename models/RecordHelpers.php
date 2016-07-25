@@ -82,6 +82,7 @@ class RecordHelpers
     {
 //        $user = User::findOne(Yii::$app->user->identity->id);
 //        $user_profile = UserProfile::findOne(['id' => $user->user_profile_id]);
+        
         $user_profile = UserProfile::findOne(Yii::$app->user->identity->user_profile_id);
         $profile_type = $user_profile->profile_type_id;
         

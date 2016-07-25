@@ -1,9 +1,11 @@
 <?php
 
 use app\models\RecordHelpers;
+use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use \app\models\Tickets;
+use yii\widgets\LinkPager;
 
 /* @var $this yii\web\View */
 ?>
@@ -20,34 +22,58 @@ if($ticket_status != null){
 
 <h1><?= Html::encode($this->title) ?></h1>
 
+
 <!-- create ticket button for subdealer -->
 <?php if ($profile_type == Yii::$app->params['SUBDEALER'])
-        {
-            echo Html::a('Create a Ticket', ['/tickets/choose'], ['class'=>'btn btn-primary']);
-        }
+{
+    echo Html::a('Create a Ticket', ['/tickets/choose'], ['class'=>'btn btn-primary']);
+}
 ?>
 
-<?php $form = ActiveForm::begin([
-                        //'type' => ActiveForm::TYPE_INLINE,
-                        'method' => 'get']) ?>
-
+<?php $form = ActiveForm::begin(['method' => 'get']) ?>
 <div class="form-group">
-    <?= $form->field($model, 'status_col')->dropDownList($a, ['id' => 'ticket-status', 'prompt' => 'Filter Tickets'])->label(false); ?>
-
+    <?= $form->field($model, 'status_col')->dropDownList($a, [
+                                            'id' => 'ticket-status',
+                                            'prompt' => 'Filter Tickets'])->label(''); ?>
 </div>
 
 <?php ActiveForm::end(); ?>
 
+<!--<?//= GridView::widget([
+//    'dataProvider' => $tickets,
+//    'columns' => [
+//        ['class' => 'yii\grid\SerialColumn'],
+//
+//        'id',
+//        'title',
+//        'product_id',
+//        'comments',
+//        'product_quantity',
+//        'status_fmcg',
+//        'status_subdea',
+//        'response_time_preference',
+//        // 'noticed_at',
+//
+//
+//        'status_fmcg',
+//        // 'created_by',
+//        // 'created_at',
+//        // 'updated_by',
+//        // 'updated_at',
+//
+//        ['class' => 'yii\grid\ActionColumn'],
+//    ],
+//]); ?> -->
+
 <?php if (!empty($tickets)) { ?>
-    <table class="table table-bordered table-hover">
+    <table class="table table-striped table-reflow">
         <thead>
         <tr>
-            <th>N.</th>
+            <th>#</th>
             <th>Title</th>
             <th>Product name</th>
             <th>Comments</th>
             <th>Product Quantity</th>
-<!--            <th>Subdea Code</th>-->
             <th>Status on FMCG</th>
             <th>Status on Subdealer</th>
             <th>Preferred response time</th>
@@ -57,14 +83,11 @@ if($ticket_status != null){
         <tbody>
         <?php foreach ($tickets as $ticket) : ?>
             <tr>
-<!--                <td>--><?php //echo $ticket->id ?><!--</td>-->
-                <td><?php echo $ticket['id']?></td>
+                <th scope="row"><?php echo $ticket['id']?></th>
                 <td><?php echo $ticket['title'] ?></td>
                 <td><?php echo RecordHelpers::getProductName($ticket['product_id']) ?></td>
                 <td><?php echo $ticket['comments'] ?></td>
                 <td><?php echo $ticket['product_quantity'] ?></td>
-                <!--                <td>--><?php //echo $ticket->subdea_code ?><!--</td>-->
-                <!--                <td>--><?php //echo $ticket->status_fmcg ?><!--</td>-->
                 <td><?php echo Tickets::printStatus($ticket['status_fmcg']) ?></td>
                 <td><?php echo Tickets::printStatus($ticket['status_subdea']) ?></td>
                 <td><?php echo $ticket['response_time_preference'] ?></td>
@@ -75,10 +98,15 @@ if($ticket_status != null){
         <?php endforeach; ?>
         </tbody>
     </table>
-<?php
+    <?php
 }else{
     echo "No Tickets to display";
-}; ?>
+};
+?>
+
+<?php echo LinkPager::widget(['pagination' => $pages,]); ?>
+
+
 
 
 <?php

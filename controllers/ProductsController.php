@@ -5,10 +5,28 @@ namespace app\controllers;
 use app\models\UploadForm;
 use Yii;
 use app\models\Products;
+use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 
 class ProductsController extends \yii\web\Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     /**
      * uploads a products's file
      * @return string|\yii\web\Response

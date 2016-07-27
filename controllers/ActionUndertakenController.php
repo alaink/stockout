@@ -12,10 +12,27 @@ use Yii;
 use app\models\ActionUndertaken;
 use app\models\Tickets;
 use app\models\RecordHelpers;
+use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 
 class ActionUndertakenController extends \yii\web\Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['resolve'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['resolve'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
     /**
      * open  a view to resolve a ticket
      * @param $id

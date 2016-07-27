@@ -9,10 +9,28 @@ use app\models\Tickets;
 use Yii;
 use yii\data\Pagination;
 use yii\db\Query;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 
 class TicketsController extends \yii\web\Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'create', 'choose', 'list', 'update', 'view'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'create', 'choose', 'list', 'update', 'view'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $profile_type =  RecordHelpers::getProfileType();

@@ -30,9 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
         <div class="panel panel-default">
+
             <div class="panel-heading">
                 <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
             </div>
+
             <div class="panel-body">
                 <?php $form = ActiveForm::begin([
                     'id'                     => 'registration-form',
@@ -52,18 +54,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?php
                 $a= ['2' => 'SUBDEALER', '3' => 'FMCG'];
-                echo $form->field($model, 'profile_type_id')->dropDownList($a,['prompt'=>'Select Category']);
+                echo $form->field($model, 'profile_type_id')->dropDownList($a,['id' => 'profileType','prompt'=>'Select Category']);
                 ?>
 
-                <?php
-                echo $form->field($model, 'from_id')->widget(Select2::classname(), [
-                    'data' => RegistrationForm::getFmcgs(),
-                    'options' => ['placeholder' => 'Select 3 FMCGs ...','multiple' => true],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ])->label('Preferred FMCGs');
-                ?>
+                <div id="preferredFmcg" style="display: none">
+                    <?php
+                    echo $form->field($model, 'from_id')->widget(Select2::classname(), [
+
+                        'data' => RegistrationForm::getFmcgs(),
+                        'options' => ['placeholder' => 'Select FMCGs ...','multiple' => true],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ])->label('Preferred FMCGs');
+                    ?>
+                </div>
+
 
                 <?= $form->field($model, 'tel_address')->textInput() ?>
 
@@ -102,4 +108,21 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
     </div>
 </div>
+
+<?php
+$this->registerJs(
+"document.onreadystatechange = function () {
+     if (document.readyState === 'interactive') {
+          var droplist = $('#profileType');
+          droplist.change(function(e){
+            if (droplist.val() == 2) {
+              $('#preferredFmcg').show();
+            }else{
+                $('#preferredFmcg').hide();
+            }
+          })
+      }
+};
+", \yii\web\View::POS_HEAD);
+?>
 

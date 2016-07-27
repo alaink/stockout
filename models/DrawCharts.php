@@ -61,11 +61,11 @@ class DrawCharts
         });";
         
         
-//        if($data[0] !='' || $data[1] !=''):
+        if($data != '[]'):
             return implode("\n", $js);
-//        else:
-//            return 'no data';
-//        endif;
+        else:
+            return 'no data';
+        endif;
     }
 
     public static function basicColumn($data, $container=null)
@@ -198,7 +198,12 @@ class DrawCharts
             });
         });";
 
-        return implode("\n", $js);
+        $decodedData = json_decode($data, true);
+        if($decodedData[0]['data'] != null and $decodedData[1]['data'] != null and $decodedData[2]['data'] != null):
+            return implode("\n", $js);
+        else:
+            return 'no data';
+        endif;
     }
 
     public static function basicLine($period, $data, $container=null)

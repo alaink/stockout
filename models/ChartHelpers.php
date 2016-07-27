@@ -43,14 +43,6 @@ class ChartHelpers
         {
             array_push($foo, ['name'=>RecordHelpers::getProductName($row['product_id']), 'y'=>$row['qty']]);
         }
-//        foreach ($products as $roww)
-//        {
-//            $roww[0] = self::getProductName($row['product_id']);
-//            $roww[1] = $row['qty'];
-//            array_push($foo, $roww);
-//        }
-//        print_r(json_encode($foo, JSON_NUMERIC_CHECK));  exit();
-
         return json_encode($foo, JSON_NUMERIC_CHECK);
     }
 
@@ -112,11 +104,13 @@ class ChartHelpers
         $query = new yii\db\Query();
 
         $tickets = $query
-            ->select('YEARWEEK(`created_at`) AS weekno')
-            ->addSelect(new yii\db\Expression(' SUM(CASE WHEN `type` = 1 THEN 1 ELSE 0 END) AS type_1'))
-            ->addSelect(new yii\db\Expression(' SUM(CASE WHEN `type` = 2 THEN 1 ELSE 0 END) AS type_2'))
-            ->addSelect(new yii\db\Expression(' SUM(CASE WHEN `type` = 3 THEN 1 ELSE 0 END) AS type_3'))
-            ->from('`tickets`')
+            ->select('YEARWEEK(`tickets`.`created_at`) AS weekno')
+            ->addSelect(new yii\db\Expression(' SUM(CASE WHEN `tickets`.`type` = 1 THEN 1 ELSE 0 END) AS type_1'))
+            ->addSelect(new yii\db\Expression(' SUM(CASE WHEN `tickets`.`type` = 2 THEN 1 ELSE 0 END) AS type_2'))
+            ->addSelect(new yii\db\Expression(' SUM(CASE WHEN `tickets`.`type` = 3 THEN 1 ELSE 0 END) AS type_3'))
+            ->from('`tickets`, `products`')
+            ->where('`products`.`id` = `tickets`.`product_id`')
+            ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id)
             ->groupBy('weekno')
             ->orderBy('weekno')
             ->all();
@@ -236,7 +230,7 @@ class ChartHelpers
                 `cell`
                 
         WHERE 	`products`.`id` = `tickets`.`product_id` 
-            AND `products`.`fmcg_id`= 17 
+            AND `products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id . '  
             AND `user`.`id` = `tickets`.`user_id`
             AND `user`.`user_profile_id` = `user_profile`.`id`
             AND `cell`.`id` = `user_profile`.`cell_id`

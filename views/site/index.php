@@ -39,8 +39,15 @@ $this->title = 'Stock Out';
                         <div class="panel-heading">
                             <i class="fa fa-bar-chart-o fa-fw"></i><b> Tickets by product</b>
                         </div>
-                        <div id="ticket_product" class="panel-body" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
-                        <?php $this->registerJs($ticketByProductChart, \yii\web\View::POS_END);?>
+                        <?php if ($ticketByProductChart != 'no data'): ?>
+                            <div id="ticket_product" class="panel-body" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                            <?php $this->registerJs($ticketByProductChart, \yii\web\View::POS_END);?>
+                        <?php else: ?>
+                            <div class="alert alert-info">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                No data
+                            </div>
+                        <?php endif;?>
                     </div> <!-- panel default-->
 
                 </div>
@@ -66,9 +73,15 @@ $this->title = 'Stock Out';
                         <div class="panel-heading">
                             <i class="fa fa-bar-chart-o fa-fw" ></i><b> Tickets by Type</b>
                         </div>
-                        <div id="ticket_type" class="panel-body" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto">
-                        </div> <!-- panel body-->
-                        <?php $this->registerJs($ticketByTypeChart, \yii\web\View::POS_END);?>
+                        <?php if ($ticketByTypeChart != 'no data'): ?>
+                            <div id="ticket_type" class="panel-body" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div> <!-- panel body-->
+                            <?php $this->registerJs($ticketByTypeChart, \yii\web\View::POS_END);?>
+                        <?php else: ?>
+                            <div class="alert alert-info">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                No data
+                            </div>
+                        <?php endif;?>
                     </div> <!-- panel default-->
 
                 </div>
@@ -94,9 +107,15 @@ $this->title = 'Stock Out';
                         <div class="panel-heading">
                             <i class="fa fa-bar-chart-o fa-fw"></i><b> Weekly Ticket - Stacked</b>
                         </div>
-                        <div id="weekly-ticket-stacked" class="panel-body" style="min-width: 310px; height: 400px; max-width: 100%; margin: 0 auto">
-                        </div> <!-- panel body-->
-                        <?php $this->registerJs($weeklyTicketStackedChart, \yii\web\View::POS_END);?>
+                        <?php if ($weeklyTicketStackedChart != 'no data'): ?>
+                            <div id="weekly-ticket-stacked" class="panel-body" style="min-width: 310px; height: 400px; max-width: 100%; margin: 0 auto"></div> <!-- panel body-->
+                            <?php $this->registerJs($weeklyTicketStackedChart, \yii\web\View::POS_END);?>
+                        <?php else: ?>
+                            <div class="alert alert-info">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                No data
+                            </div>
+                        <?php endif;?>
                     </div> <!-- panel default-->
 
                 </div>
@@ -108,9 +127,15 @@ $this->title = 'Stock Out';
                         <div class="panel-heading">
                             <i class="fa fa-bar-chart-o fa-fw"></i><b> Weekly Ticket - Basic line</b>
                         </div>
-                        <div id="weekly-ticket-basic-line" class="panel-body" style="min-width: 310px; height: 400px; max-width: 100%; margin: 0 auto">
-                        </div> <!-- panel body-->
-                        <?php $this->registerJs($weeklyTicketLineChart, \yii\web\View::POS_END);?>
+                        <?php if ($weeklyTicketStackedChart != 'no data'): ?>
+                            <div id="weekly-ticket-basic-line" class="panel-body" style="min-width: 310px; height: 400px; max-width: 100%; margin: 0 auto"></div> <!-- panel body-->
+                            <?php $this->registerJs($weeklyTicketLineChart, \yii\web\View::POS_END);?>
+                        <?php else: ?>
+                            <div class="alert alert-info">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                No data
+                            </div>
+                        <?php endif;?>
                     </div> <!-- panel default-->
 
                 </div>

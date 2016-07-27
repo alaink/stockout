@@ -20,11 +20,6 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'only' => ['login', 'logout', 'index', 'contact', 'about'],
                 'rules' => [
-//                    [
-//                        'actions' => ['login', 'logout', 'index', 'contact', 'about'],
-//                        'allow' => true,
-//                        'roles' => ['@'],
-//                    ],
                     [
                         'allow' => true,
                         'actions' => ['login', 'signup'],
@@ -37,12 +32,6 @@ class SiteController extends Controller
                     ],
                 ],
             ],
-//            'verbs' => [
-//                'class' => VerbFilter::className(),
-//                'actions' => [
-//                    'logout' => ['post'],
-//                ],
-//            ],
         ];
     }
 
@@ -77,6 +66,7 @@ class SiteController extends Controller
         
         
         return $this->render('index',[
+            'statusTicketByRegion' => $statusTicketByRegion,
             'ticketByProductChart' => $ticketByProductChart,
             'ticketByTypeChart' => $ticketByTypeChart,
             'statusTicketByRegionChart' => $statusTicketByRegionChart,

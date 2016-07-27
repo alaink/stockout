@@ -27,8 +27,6 @@ class RegistrationForm extends BaseRegistrationForm
     public $district_id;
     public $sector_id;
     public $cell_id;
-    //public $location;
-
 
     // new field for user tbl
     public $user_profile_id;
@@ -90,7 +88,7 @@ class RegistrationForm extends BaseRegistrationForm
         ]);
         $profile->save();
 
-        //save user
+        //save user if there is no other person with that user profile id
         if(!$this->user_profile_id) {
 
             $user->setAttributes([
@@ -98,8 +96,6 @@ class RegistrationForm extends BaseRegistrationForm
                 'username' => $this->username,
                 'password' => $this->password,
                 'user_profile_id' => $profile->id,
-
-
             ]);
         }else{
             return false;

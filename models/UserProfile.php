@@ -77,4 +77,6 @@ class UserProfile extends \yii\db\ActiveRecord
         }
     }
     
+    
+    
 }

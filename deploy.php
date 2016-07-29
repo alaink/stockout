@@ -1,8 +1,8 @@
 <?php
 
-// All Deployer recipes are based on `recipe/common.php`.
-require 'deployer/recipe/yii2-app-basic.php';
-require_once "deployer/recipe/common.php";
+require 'vendor/deployer/deployer/recipe/yii2-app-basic.php';
+require_once 'vendor/deployer/deployer/recipe/common.php';
+require 'vendor/deployer/deployer/recipe/composer.php';
 
 set('default_stage', 'staging');
 set('repository', 'git@github.com:alaink/stockout.git');
@@ -14,12 +14,6 @@ server('stockout', 'stockout.wiredin.rw')
     ->pemFile('~/.ssh/StockoutDevServer.pem')
     ->stage('staging')
     ->env('deploy_path', '/var/www/vhosts/stockout.wiredin.rw/html/web');
-
-// Specify the repository from which to download your project's code.
-// The server needs to have git installed for this to work.
-// If you're not using a forward agent, then the server has to be able to clone
-// your project from this repository.
-
 
 set('copy_dirs', [
     'assets',
@@ -36,12 +30,13 @@ set('copy_dirs', [
     'web',
     '.bowerrc',
     '.htaccess',
+    'composer.json',
+    'composer.lock',
     'LICENSE.md',
     'requirements.php',
     'yii',
     'yii.bat',
-    'composer.json',
-    'composer.lock',
+    'vendor.zip',
 ]);
 
 set('shared_dirs', [
@@ -49,6 +44,9 @@ set('shared_dirs', [
     'web/assets',
 ]);
 
+set('shared_files', [
+    'config/db.php'
+]);
 
 task('deploy:started', function() {
     writeln('<info>Deploying...</info>');
@@ -73,15 +71,20 @@ task('deploy:writable_dirs', function() {
     $deployPath = env('deploy_path');
     cd($deployPath);
 
-    set('writable_dirs', get('shared_dirs'));
+//    set('writable_dirs', get('shared_dirs'));
+    set('writable_dirs', ['web/assets', 'runtime']);
 })->desc('Set writable dirs');
 
-task('deploy:composer', function() {
-    $deployPath = env('deploy_path');
-    cd($deployPath);
+//task('deploy:composer', function() {
+//    $deployPath = env('deploy_path');
+//    cd($deployPath . '/release');
+//
+//    run("composer update --no-dev --prefer-dist --optimize-autoloader");
+//})->desc('Run composer');
 
-    run("composer update --no-dev --prefer-dist --optimize-autoloader");
-})->desc('Run composer');
+task('deploy:unzip_vendor', function(){
+    run('php {{release_path}}/yii migrate up --interactive=0');
+})->desc('Unzip vendor.zip');
 
 task('deploy:run_migrations', function () {
     run('php {{release_path}}/yii migrate up --migrationPath=@vendor/dektrium/yii2-user/migrations --interactive=0');
@@ -93,8 +96,10 @@ task('deploy:staging', [
     'deploy:release',
     'deploy:upload',
     'deploy:writable_dirs',
-    'deploy:composer',
+//    'deploy:vendors',
+//    'deploy:composer',
     'deploy:run_migrations',
+    'deploy:symlink',
 ])->desc('Deploy application to staging.');
 
 

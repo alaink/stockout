@@ -8,11 +8,9 @@
 
 namespace app\models;
 
-use app\models\Partners;
 use Yii;
 use dektrium\user\models\RegistrationForm as BaseRegistrationForm;
 use dektrium\user\models\User;
-use app\models\RecordHelpers;
 use yii\helpers\ArrayHelper;
 
 class RegistrationForm extends BaseRegistrationForm
@@ -32,7 +30,6 @@ class RegistrationForm extends BaseRegistrationForm
     public $user_profile_id;
 
     // new field for partners tbl
-    public $fmcg;
     public $from_id;
     public $to_id;
 
@@ -73,7 +70,7 @@ class RegistrationForm extends BaseRegistrationForm
     {
 //        $POST_VAR = Yii::$app->request->post('User');
 //        echo ($POST_VAR['from_id']); exit(0);
-//        print_r($this->from_id) ; exit(0);
+//        print_r($this->from_id) ;
         //echo ($this->district_id); exit(0);
         
 
@@ -101,15 +98,11 @@ class RegistrationForm extends BaseRegistrationForm
             return false;
         }
         
-//        // saving to partners table
-//        //if($user->id) {
-//            $partners = \Yii::createObject(Partners::className());
-//            $partners->setAttributes([
-//                'from_id' => $this->from_id,  //process, loop through array from_id
-//                'to_id' => $profile->id,
-//            ]);
-//            $partners->save();
-//        //}
+        // saving to partners table a subdealer with her/his fmcgs
+        if($this->profile_type_id == Yii::$app->params['SUBDEALER'])
+        {
+            Partners::savePartners($this->from_id, $profile->id);
+        }
 
     }
     

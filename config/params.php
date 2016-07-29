@@ -1,10 +1,6 @@
 <?php
 
 return [
-
-    "yii.migrations"=> [
-        "@dektrium/user/migrations",
-    ],
     
     'adminEmail' => 'admin@example.com',
     'NEW_TICKET' => 0,

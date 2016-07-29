@@ -1,5 +1,6 @@
 <?php
 
+use app\models\RecordHelpers;
 use yii\helpers\Url;
 
 ?>
@@ -59,11 +60,22 @@ use yii\helpers\Url;
                     <a href=<?php echo Yii::$app->urlManager->createUrl(['tickets/'])?> >
                         <i class="fa fa-dashboard fa-fw"></i> Tickets</a>
                 </li>
-                <!-- UPLOAD PRODUCTS FILE -->
-                <li>
-                    <a href=<?php echo Yii::$app->urlManager->createUrl(['products/'])?> >
-                        <i class="fa fa-dashboard fa-fw"></i> Upload more products</a>
-                </li>
+
+                <?php if (RecordHelpers::getProfileType() == Yii::$app->params['FMCG']){ ?>
+
+                    <!-- VALIDATE SUBDEALER-->
+                    <li>
+                        <a href=<?php echo Yii::$app->urlManager->createUrl(['validate/'])?> >
+                            <i class="fa fa-dashboard fa-fw"></i> Validate subdealers</a>
+                    </li>
+
+                    <!-- UPLOAD PRODUCTS FILE -->
+                    <li>
+                        <a href=<?php echo Yii::$app->urlManager->createUrl(['products/'])?> >
+                    <i class="fa fa-dashboard fa-fw"></i> Upload more products</a>
+                    </li>
+                <?php } ?>
+
             </ul>
         </div>
         <!-- /.sidebar-collapse -->

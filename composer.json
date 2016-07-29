@@ -25,7 +25,6 @@
         "kartik-v/yii2-widget-typeahead": "*",
         "kartik-v/yii2-widget-select2": "@dev",
         "kartik-v/yii2-widget-depdrop": "@dev",
-        "dmstr/yii2-migrate-command": "*",
         "deployer/deployer": "~3.0"
 
     },

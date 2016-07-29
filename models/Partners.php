@@ -43,4 +43,29 @@ class Partners extends \yii\db\ActiveRecord
             'to_id' => 'To ID',
         ];
     }
+
+    public static function savePartners($FMCGs, $to_id)
+    {
+        foreach ($FMCGs as $fmcg)
+        {
+            $model = new Partners();
+            
+            $model->from_id = $fmcg;
+            $model->to_id = $to_id;
+            $model->confirmed = 0;
+
+            $model->save();
+        }
+    }
+
+    public static function showUnconfirmedSubdealers()
+    {
+        $subdealers = Partners::find()
+                        ->select('to_id')
+                        ->where(['confirmed' => 0])
+                        ->andWhere(['from_id' => Yii::$app->user->identity->user_profile_id])
+                        ->all();
+        
+        return $subdealers;
+    }
 }

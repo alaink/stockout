@@ -83,21 +83,6 @@ $config = [
             'class' => '\kartik\grid\Module'
         ],
     ],
-    'controllerMap'       => [
-        'migrate' => [
-            'class' => 'dmstr\console\controllers\MigrateController'
-        ],
-    ],
-
-//    'controllerMap' => [
-//        'registration' => [
-//            'class' => \dektrium\user\controllers\RegistrationController::className(),
-//            'on ' . \dektrium\user\controllers\RegistrationController::EVENT_AFTER_REGISTER => function ($e) {
-//                Yii::$app->response->redirect(array('/user/security/login'))->send();
-//                Yii::$app->end();
-//            }
-//        ],
-//    ],
 ];
 
 if (YII_ENV_DEV) {

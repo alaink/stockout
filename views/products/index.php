@@ -8,7 +8,12 @@ use yii\widgets\ActiveForm;
 
 <div class="products-form">
 
-    <h1>Products Upload Form</h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Products Upload Form</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
 
     <!-- displaying success flash info if set   -->
     <div class="'row">

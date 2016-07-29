@@ -270,5 +270,17 @@ class RecordHelpers
     {
         return Cell::find()->where(['sector_id' => $sector_id])->select(['id', 'name'])->orderBy('name')->asArray()->all();
     }
-        
+
+    public static function getProfile($id)
+    {
+        $query = new yii\db\Query();
+
+        $name = $query
+            ->select('`name`, `tel_address`')
+            ->from('`user_profile`')
+            ->where('`id` = ' . $id)
+            ->one();
+
+        return $name;
+    }
 }

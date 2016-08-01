@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                     echo $form->field($model, 'from_id')->widget(Select2::classname(), [
 
-                        'data' => RegistrationForm::getFmcgs(),
+                        'data' => RecordHelpers::getFmcgs(),
                         'options' => ['placeholder' => 'Select FMCGs ...','multiple' => true],
                         'pluginOptions' => [
                             'allowClear' => true

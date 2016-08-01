@@ -66,7 +66,7 @@ class RegistrationForm extends BaseRegistrationForm
     /**
      * @inheritdoc
      */
-    public function loadAttributes(User $user)
+    protected function loadAttributes(User $user)
     {
 //        $POST_VAR = Yii::$app->request->post('User');
 //        echo ($POST_VAR['from_id']); exit(0);
@@ -106,15 +106,4 @@ class RegistrationForm extends BaseRegistrationForm
 
     }
     
-    public static function getFmcgs()
-    {
-        $profiles= UserProfile::find()
-            ->where(['profile_type_id' => 3])
-            -> all();
-
-        $fmcgs = ArrayHelper::map($profiles, 'id', 'name');
-
-        return $fmcgs;
-    }
-
 }

@@ -22,21 +22,38 @@ if($ticket_status != null){
 
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header"><?= Html::encode($this->title) ?></h1>
+        <?php if($profile_type == Yii::$app->params['SUBDEALER']){ ?>
+            <h1 class="page-header">View Tickets by FMCG</h1>
+        <?php }else { ?>
+            <h1 class="page-header"><?= Html::encode($this->title) ?></h1>
+        <?php } ?>
     </div>
     <!-- /.col-lg-12 -->
 </div>
 
 
-<!-- create ticket button for subdealer -->
-<?php if ($profile_type == Yii::$app->params['SUBDEALER'])
-{
-    echo Html::a('Create a Ticket', ['/tickets/choose'], ['class'=>'btn btn-primary']);
-}
-?>
-
 <?php $form = ActiveForm::begin(['method' => 'get']) ?>
 <div class="form-group">
+    
+    <!-- create ticket button for subdealer -->
+    <?php if ($profile_type == Yii::$app->params['SUBDEALER']): ?>
+
+        <?= Html::a('Create a Ticket', ['/tickets/choose'], ['class'=>'btn btn-primary']); ?>
+
+        <?= $form->field($model, 'fmcg')->dropDownList($myFMCG, [
+                                            'id' => 'fmcg-select',
+                                            'prompt' => 'Choose FMCG'])->label(''); ?>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <h3 class="page-header"><?= Html::encode($this->title) ?></h3>
+            </div>
+        </div>
+
+    <?php endif; ?>
+
+<!-- <?php //$form = ActiveForm::begin(['method' => 'get']) ?> -->
+<!--<div class="form-group">-->
     <?= $form->field($model, 'status_col')->dropDownList($a, [
                                             'id' => 'ticket-status',
                                             'prompt' => 'Filter Tickets'])->label(''); ?>
@@ -117,11 +134,19 @@ if($ticket_status != null){
 <?php
 $this->registerJs(
     '$(document).ready(function(){
+    
+        $("#fmcg-select").change(function(){
+            var e = document.getElementById("fmcg-select");
+            var strSel = e.options[e.selectedIndex].value;
+            window.location.href="' . Yii::$app->urlManager->createUrl('tickets/?fmcgSelected=') . '" + strSel;
+        });
+    
         $("#ticket-status").change(function(){
             var e = document.getElementById("ticket-status");
             var strSel = e.options[e.selectedIndex].value;
             window.location.href="' . Yii::$app->urlManager->createUrl('tickets/?status=') . '" + strSel;
         });
+        
         });', \yii\web\View::POS_READY);
 ?>
 

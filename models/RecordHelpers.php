@@ -283,4 +283,75 @@ class RecordHelpers
 
         return $name;
     }
+
+    public static function getFmcgs()
+    {
+        $profiles= UserProfile::find()
+            ->where(['profile_type_id' => 3])
+            -> all();
+
+        $fmcgs = ArrayHelper::map($profiles, 'id', 'name');
+
+        return $fmcgs;
+    }
+
+    // get all the fmcgs that approved logged-in subdealer
+    public static function getMyFmcgs()
+    {
+        /*
+         SELECT `partners`.`from_id`, `user_profile`.`name` 
+        FROM `partners`, `user_profile` 
+        WHERE `partners`.`to_id` = 21 AND `partners`.`confirmed` = 1 AND `partners`.`from_id` = `user_profile`.`id`
+         */
+        $query = new yii\db\Query();
+
+        $myFMCGs = $query
+            ->select('`partners`.`from_id`, `user_profile`.`name`')
+            ->from('`partners`, `user_profile` ')
+            ->where('`partners`.`to_id` = ' . Yii::$app->user->identity->user_profile_id)
+            ->andWhere('`partners`.`confirmed` = 1')
+            ->andWhere('`partners`.`from_id` = `user_profile`.`id`')
+            ->all();
+
+        $myFMCGs = ArrayHelper::map($myFMCGs, 'from_id', 'name');
+
+        return $myFMCGs;
+    }
+
+    public static function ticketsByFmcgByDistrict($fmcg)
+    {
+        $query = new yii\db\Query();
+
+        $currentUserDistrict = $query
+            ->select(' `cell`.`district_id`')
+            ->from('`user_profile`, `cell`')
+            ->where('`user_profile`.`id` =' . Yii::$app->user->identity->user_profile_id)
+            ->andWhere('`user_profile`.`cell_id` = `cell`.`id`')
+            ->one();
+
+        /*
+         SELECT `tickets`.*
+        FROM `tickets`, `user`, `user_profile`, `cell`, `products`
+        WHERE `tickets`.`user_id` = `user`.`id`
+            AND `user`.`user_profile_id` = `user_profile`.`id`
+            AND `user_profile`.`cell_id` = `cell`.`id`
+            AND `cell`.`district_id` = 1
+            AND `tickets`.`product_id` = `products`.`id`
+            AND `products`.`fmcg_id` = 17
+         */
+
+        $tickets = $query
+            ->select('`tickets`.*')
+            ->from('`tickets`, `user`, `user_profile`, `cell`, `products` ')
+            ->where('`tickets`.`product_id` = `products`.`id`')
+            ->andWhere('`products`.`fmcg_id` = ' . $fmcg)
+            ->andWhere('`tickets`.`user_id` = `user`.`id`')
+            ->andWhere('`user`.`user_profile_id` = `user_profile`.`id`')
+            ->andWhere('`user_profile`.`cell_id` = `cell`.`id`')
+            ->andWhere('`cell`.`district_id` = ' . $currentUserDistrict['district_id'])
+            ->all();
+
+        return $tickets;
+
+    }
 }

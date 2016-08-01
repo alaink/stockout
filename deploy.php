@@ -75,6 +75,11 @@ task('deploy:writable_dirs', function() {
     set('writable_dirs', ['web/assets', 'runtime']);
 })->desc('Set writable dirs');
 
+task('deploy:set_web_assets_writable', function(){
+    $deployPath = env('deploy_path');
+    cd($deployPath);
+    run('chmod -R 777 {{release_path}}/web/assets');
+});
 //task('deploy:composer', function() {
 //    $deployPath = env('deploy_path');
 //    cd($deployPath . '/release');
@@ -83,7 +88,9 @@ task('deploy:writable_dirs', function() {
 //})->desc('Run composer');
 
 task('deploy:unzip_vendor', function(){
-    run('php {{release_path}}/yii migrate up --interactive=0');
+//    $deployPath = env('deploy_path');
+//    cd($deployPath);
+    run('unzip {{release_path}}/vendor.zip {{release_path}}'); // pbm with destination folder
 })->desc('Unzip vendor.zip');
 
 task('deploy:run_migrations', function () {
@@ -98,7 +105,9 @@ task('deploy:staging', [
     'deploy:writable_dirs',
 //    'deploy:vendors',
 //    'deploy:composer',
+    //'deploy:unzip_vendor',
     'deploy:run_migrations',
+    'deploy:set_web_assets_writable',
     'deploy:symlink',
 ])->desc('Deploy application to staging.');
 

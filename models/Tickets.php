@@ -33,6 +33,7 @@ class Tickets extends \yii\db\ActiveRecord
 {
     
     public $status_col;
+    public $fmcg;
     public $issue;
     public $sub_issue;
 

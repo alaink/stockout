@@ -257,4 +257,64 @@ class DrawCharts
         return implode("\n", $js);
     }
 
+    public static function rotatedLColumn($data, $container=null)
+    {
+        $js = [];
+        $js[] = "$(function () {
+            $('#".$container."').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    type: 'category',
+                    labels: {
+                        rotation: -45,
+                        style: {
+                            fontSize: '10px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Retailers (hundreds)'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: 'Retailers in 2016: <b>{point.y:.1f} hundreds</b>'
+                },
+                series: [{
+                    name: 'District',
+                    data: [
+                        " . $data . "
+                    ],
+                    dataLabels: {
+                        enabled: true,
+                        rotation: -90,
+                        color: '#FFFFFF',
+                        align: 'right',
+                        format: '{point.y:.0f}', // one decimal
+                        y: 10, // 10 pixels down from the top
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                }],
+                credits: {
+                      enabled: false
+                    },
+            });
+        });";
+
+        return implode("\n", $js);
+    }
+
 }

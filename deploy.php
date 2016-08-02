@@ -75,11 +75,13 @@ task('deploy:writable_dirs', function() {
     set('writable_dirs', ['web/assets', 'runtime']);
 })->desc('Set writable dirs');
 
-task('deploy:set_web_assets_writable', function(){
+task('deploy:set_dirs_writable', function(){
     $deployPath = env('deploy_path');
     cd($deployPath);
     run('chmod -R 777 {{release_path}}/web/assets');
+    run('chmod -R 777 {{release_path}}/runtime');
 });
+
 //task('deploy:composer', function() {
 //    $deployPath = env('deploy_path');
 //    cd($deployPath . '/release');
@@ -107,7 +109,7 @@ task('deploy:staging', [
 //    'deploy:composer',
     //'deploy:unzip_vendor',
     'deploy:run_migrations',
-    'deploy:set_web_assets_writable',
+    'deploy:set_dirs_writable',
     'deploy:symlink',
 ])->desc('Deploy application to staging.');
 

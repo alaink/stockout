@@ -55,6 +55,9 @@ class SiteController extends Controller
         $ticketByType = ChartHelpers::getTicketsByType();
         $ticketByTypeChart = DrawCharts::pieChart($ticketByType, 'ticket_type');
 
+        $retailersByRegion = ChartHelpers::RetailersByRegionData();
+        $retailersByRegionChart = DrawCharts::rotatedLColumn($retailersByRegion, 'retailer-region');
+
         $statusTicketByRegion = ChartHelpers::statusTicketsByRegionData();
         $statusTicketByRegionChart = DrawCharts::basicColumn($statusTicketByRegion, 'status-ticket-region');
         
@@ -65,9 +68,9 @@ class SiteController extends Controller
         
         
         return $this->render('index',[
-            'statusTicketByRegion' => $statusTicketByRegion,
             'ticketByProductChart' => $ticketByProductChart,
             'ticketByTypeChart' => $ticketByTypeChart,
+            'retailersByRegionChart' => $retailersByRegionChart,
             'statusTicketByRegionChart' => $statusTicketByRegionChart,
             'weeklyTicketStackedChart' => $weeklyTicketStackedChart,
             'weeklyTicketLineChart' => $weeklyTicketLineChart

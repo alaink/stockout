@@ -306,6 +306,66 @@ class ChartHelpers
         return(json_encode($result, JSON_NUMERIC_CHECK));
     }
 
+    public static function retailersByRegionQuery()
+    {
+        $query = new yii\db\Query();
+
+        $retailers = $query
+            ->select('COUNT(`user_profile`.`id`) AS "retailers"')
+            ->addSelect('`cell`.`district_id` AS "districtID" ')
+            ->from('`user_profile`, `cell`')
+            ->where('`user_profile`.`cell_id` = `cell`.`id`')
+            ->groupBy('districtID')
+            ->orderBy('districtID')
+            ->all();
+
+        return $retailers;
+    }
+
+    public static function distributeRetailersByRegionData()
+    {
+        $retailers = self::retailersByRegionQuery();
+        $districts = [];
+        $halfRetailers = [];
+
+        foreach ($retailers as $row)
+        {
+            array_push($districts, $row['districtID']);
+            array_push($halfRetailers, $row['retailers']);
+        }
+        $unformattedRetailersByRegion = [];
+        array_push($unformattedRetailersByRegion, $districts);
+        array_push($unformattedRetailersByRegion, $halfRetailers);
+        
+        return $unformattedRetailersByRegion;
+    }
+
+    public static function RetailersByRegionData()
+    {
+        $retailers_region = self::distributeRetailersByRegionData();
+        $districts = $retailers_region[0];
+        $retailers = $retailers_region[1];
+        $data = [];
+        
+        // 30 districts
+        for($i = 1; $i <= 30; $i++)
+        {
+            if(in_array($i, $districts))
+            {
+                $key = array_search($i, $districts);
+                $name = RecordHelpers::getDistrictName($districts[$key]);
+                $row = "['". $name . "', " . $retailers[$key] . "]";
+                array_push($data, $row);
+            }
+            else{
+                $row = "['". RecordHelpers::getDistrictName($i) . "', 0]" ;
+                array_push($data, $row);
+            }
+        }
+//        return $data;
+        return join($data, ",");
+    }
+
 
 
 }

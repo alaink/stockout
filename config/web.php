@@ -33,7 +33,7 @@ $config = [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.gmail.com',
                 'username' => 'stockoutapp@gmail.com',
-                'password' => 'soapp2016',
+                'password' => 'STOCKOUTsoapp@2016',
                 'port' => '587',
                 'encryption' => 'tls',
             ],

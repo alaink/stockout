@@ -354,4 +354,12 @@ class RecordHelpers
         return $tickets;
 
     }
+    
+    public static function getDistrictName($id)
+    {
+        $query = new yii\db\Query();
+        $districtName = $query->select('name')->from('district')->where('`id` = ' .$id)->one();
+        
+        return $districtName['name'];
+    }
 }

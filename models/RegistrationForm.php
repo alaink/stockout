@@ -10,7 +10,7 @@ namespace app\models;
 
 use Yii;
 use dektrium\user\models\RegistrationForm as BaseRegistrationForm;
-use dektrium\user\models\User;
+//use dektrium\user\models\User;
 use yii\helpers\ArrayHelper;
 
 class RegistrationForm extends BaseRegistrationForm
@@ -66,7 +66,7 @@ class RegistrationForm extends BaseRegistrationForm
     /**
      * @inheritdoc
      */
-    protected function loadAttributes(User $user)
+    protected function loadAttributes(\dektrium\user\models\User $user)
     {
 //        $POST_VAR = Yii::$app->request->post('User');
 //        echo ($POST_VAR['from_id']); exit(0);

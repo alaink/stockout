@@ -41,17 +41,21 @@ class TicketsController extends \yii\web\Controller
         $ticket_status = Yii::$app->request->get('status');
         $model = new Tickets();
 
+//        @todo change this logik to the one we talked about
+        // this only prints all tickets from all fmcgs enrolled to
         if($profile_type == Yii::$app->params['SUBDEALER'])
         {
             // fmcgs to give subdealer to chose
             $myFMCG = RecordHelpers::getMyFmcgs();
-            $deepTickets = new Tickets();
 
-            // get fmcg from user
-            $fmcgSelected = Yii::$app->request->get('fmcgSelected');
-            if($fmcgSelected != null) {
-                $deepTickets = RecordHelpers::ticketsByFmcgByDistrict($fmcgSelected);
-            }
+            // where clause concatinating all fmcgs
+            $where = self::extractWhere($myFMCG);
+
+//            // get fmcg from user
+//            $fmcgSelected = Yii::$app->request->get('fmcgSelected');
+//            if($fmcgSelected != null) {
+//                $deepTickets = RecordHelpers::ticketsByFmcgByDistrict($fmcgSelected);
+//            }
 
             // user selected a status of tickets
             if($ticket_status != null)
@@ -63,7 +67,8 @@ class TicketsController extends \yii\web\Controller
                     ->from('`tickets`, `products`')
                     ->where('`products`.`id` = `tickets`.`product_id`')
                     ->andWhere('`tickets`.' . $status_col . ' = ' . $ticket_status)
-                    ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id)
+//                    ->andWhere('`products`.`fmcg_id` in ' . self::extractKeys($myFMCG))
+                    ->andWhere($where)
                     ->all();
                 $pages = new Pagination(['defaultPageSize' => 15,'totalCount' => count($tickets)]);
                 $models = $query->offset($pages->offset)
@@ -72,7 +77,7 @@ class TicketsController extends \yii\web\Controller
 
             }
             else{ // display all
-                $query = new Query;
+//                $query = new Query;
 
 //                $tickets = $deepTickets;
 //                $pages = new Pagination(['defaultPageSize' => 15,'totalCount' => count($tickets)]);
@@ -80,6 +85,20 @@ class TicketsController extends \yii\web\Controller
 //                $models = $tickets->offset($pages->offset)
 //                    ->limit($pages->limit)
 //                    ->all();
+
+                $query = new Query;
+
+                $tickets = $query
+                    ->select('`tickets`.*')
+                    ->from('`tickets`, `products`')
+                    ->where('`products`.`id` = `tickets`.`product_id`')
+//                    ->andWhere('`products`.`fmcg_id` in ' . array_keys($myFMCG))
+                    ->andWhere($where)
+                    ->all();
+                $pages = new Pagination(['defaultPageSize' => 12,'totalCount' => count($tickets)]);
+                $models = $query->offset($pages->offset)
+                    ->limit($pages->limit)
+                    ->all();
             }
 
             return $this->render('index', [
@@ -89,7 +108,7 @@ class TicketsController extends \yii\web\Controller
                 'profile_type' => $profile_type,
                 'ticket_status' => $ticket_status,
                 'myFMCG' => $myFMCG,
-                'deepTickets' => $deepTickets
+//                'deepTickets' => $deepTickets
             ]);
         }
         else // user is an FMCG
@@ -143,47 +162,6 @@ class TicketsController extends \yii\web\Controller
                 'ticket_status' => $ticket_status,
             ]);
         }
-
-//        if($ticket_status != null)
-//        {
-//            $query = new Query;
-//
-//            $tickets = $query
-//                ->select('`tickets`.*')
-//                ->from('`tickets`, `products`')
-//                ->where('`products`.`id` = `tickets`.`product_id`')
-//                ->andWhere('`tickets`.' . $status_col . ' = ' . $ticket_status)
-//                ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id)
-//                ->all();
-//            $pages = new Pagination(['defaultPageSize' => 15,'totalCount' => count($tickets)]);
-//            $models = $query->offset($pages->offset)
-//                ->limit($pages->limit)
-//                ->all();
-//
-//        }
-//        else{ // display all
-//            $query = new Query;
-//
-//            $tickets = $query
-//                ->select('`tickets`.*')
-//                ->from('`tickets`, `products`')
-//                ->where('`products`.`id` = `tickets`.`product_id`')
-//                ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id)
-//                ->all();
-//            $pages = new Pagination(['defaultPageSize' => 15,'totalCount' => count($tickets)]);
-//            $models = $query->offset($pages->offset)
-//                ->limit($pages->limit)
-//                ->all();
-//        }
-//
-//        return $this->render('index', [
-//            'tickets' => $models,
-//            'pages' => $pages,
-//            'model' => $model,
-//            'profile_type' => $profile_type,
-//            'ticket_status' => $ticket_status,
-//            'myFMCG' => $myFMCG
-//        ]);
     }
 
     public function actionCreate()
@@ -324,5 +302,16 @@ class TicketsController extends \yii\web\Controller
         }
     }
 
+    public function extractWhere($fmcgs)
+    {
+        $where = '';
+        foreach ($fmcgs as $key => $fmcg)
+        {
+            $where .= '`products`.`fmcg_id` = ' . $key . ' OR';
+        }
+
+        $where = chop($where," OR ");
+        return $where;
+    }
 
 }

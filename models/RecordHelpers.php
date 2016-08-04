@@ -314,7 +314,7 @@ class RecordHelpers
             ->all();
 
         $myFMCGs = ArrayHelper::map($myFMCGs, 'from_id', 'name');
-
+        
         return $myFMCGs;
     }
 

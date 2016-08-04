@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Exception;
 use Yii;
 
 /**
@@ -88,10 +89,52 @@ class Products extends \yii\db\ActiveRecord
         return $this->hasMany(Tickets::className(), ['product_id' => 'id']);
     }
 
+//    public static function importExcel($inputFile)
+//    {
+//        //$inputFile = '../uploadedFiles/products_file.xlsx';
+//
+//        // read the file
+//        try{
+//            $inputFileType = \PHPExcel_IOFactory::identify($inputFile);
+//            $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
+//            $objPHPExcel = $objReader->load($inputFile);
+//        }catch (Exception $e)
+//        {
+//            die('Error');
+//        }
+//
+//        // read through the file
+//        $sheet = $objPHPExcel->getSheet(0);
+//        $highestRow = $sheet->getHighestRow();
+//        $highestColumn = $sheet->getHighestColumn();
+//
+//        // loop through rows from the file
+//        for($row = 1; $row <= $highestRow; $row++)
+//        {
+//            $rowData = $sheet->rangeToArray('A'.$row.':'.$highestColumn.$row, NULL, TRUE, FALSE);
+//
+//            // skip file header
+//            if ($row == 1)
+//            {
+//                continue;
+//            }
+//
+//            // create database records
+//            $product = new Products();
+//            $product->id = NULL;
+//            $product->name = $rowData[0][3];  // BRAND
+//            $product->fmcg_id = Yii::$app->user->identity->user_profile_id;
+//            $product->category = $rowData[0][1];
+//            $product->product = $rowData[0][2];
+//            $product->type_flavor = $rowData[0][4];
+//            $product->size = $rowData[0][5];
+//            $product->bar_code = $rowData[0][6];
+//            $product->save();
+//        }
+//    }
+
     public static function importExcel($inputFile)
     {
-        //$inputFile = '../uploadedFiles/products_file.xlsx';
-
         // read the file
         try{
             $inputFileType = \PHPExcel_IOFactory::identify($inputFile);
@@ -99,7 +142,7 @@ class Products extends \yii\db\ActiveRecord
             $objPHPExcel = $objReader->load($inputFile);
         }catch (Exception $e)
         {
-            die('Error');
+            die('Error while loading input file');
         }
 
         // read through the file
@@ -121,13 +164,11 @@ class Products extends \yii\db\ActiveRecord
             // create database records
             $product = new Products();
             $product->id = NULL;
-            $product->name = $rowData[0][3];  // BRAND
+            $product->name = $rowData[0][3];  // DESIGNATION
             $product->fmcg_id = Yii::$app->user->identity->user_profile_id;
             $product->category = $rowData[0][1];
-            $product->product = $rowData[0][2];
-            $product->type_flavor = $rowData[0][4];
-            $product->size = $rowData[0][5];
-            $product->bar_code = $rowData[0][6];
+            $product->bar_code = $rowData[0][2];
+            $product->rrp = $rowData[0][4];
             $product->save();
         }
     }

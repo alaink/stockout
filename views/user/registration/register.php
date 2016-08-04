@@ -27,6 +27,10 @@ $this->title = Yii::t('user', 'Sign up');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<div class="row col-md-4 col-md-offset-4" style="margin-top: 5px; width: 500px">
+    <img src="<?= yii\helpers\Url::to('@web/images/stocout_essai.png') ?>" style='margin: auto;display: block;width: 50%;margin-left: 20%; margin-bottom: 5px;'
+         alt="<?php echo Yii::$app->name ?>" title="<?php echo Yii::$app->name ?>">
+</div>
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
         <div class="panel panel-default">
@@ -42,19 +46,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     'enableClientValidation' => false,
                 ]); ?>
 
-                <?= $form->field($model, 'email') ?>
+                <?= $form->field($model, 'email')->label(false)->textInput(array('placeholder' => 'Email')); ?>
 
-                <?= $form->field($model, 'username') ?>
+                <?= $form->field($model, 'username')->label(false)->textInput(array('placeholder' => 'Username')); ?>
 
                 <?php if ($module->enableGeneratingPassword == false): ?>
-                    <?= $form->field($model, 'password')->passwordInput() ?>
+                    <?= $form->field($model, 'password')->passwordInput()->label(false)->textInput(array('placeholder' => 'Password')); ?>
                 <?php endif ?>
 
-                <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label(false)->textInput(array('placeholder' => 'Name')); ?>
 
                 <?php
                 $a= ['2' => 'SUBDEALER', '3' => 'FMCG'];
-                echo $form->field($model, 'profile_type_id')->dropDownList($a,['id' => 'profileType','prompt'=>'Select Category']);
+                echo $form->field($model, 'profile_type_id')->dropDownList($a,['id' => 'profileType','prompt'=>'Select Profile Type'])->label(false);
                 ?>
 
                 <div id="preferredFmcg" style="display: none">
@@ -71,13 +75,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
 
-                <?= $form->field($model, 'tel_address')->textInput() ?>
+                <?= $form->field($model, 'tel_address')->label(false)->textInput(array('placeholder' => 'Telephone Number'));  ?>
 
                 <?= $form->field($model, 'district_id')->dropDownList(RecordHelpers::getDistricts(),
                                                         [
                                                             'id'=>'district-id',
                                                             'prompt'=>'Select your District'
-                                                        ]) ?>
+                                                        ])->label(false) ?>
 
                 <?= $form->field($model, 'sector_id')->widget(DepDrop::classname(),
                                                         [
@@ -87,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 'placeholder'=>'Select sector...',
                                                                 'url'=>Url::to(['/user-profile/sector'])
                                                             ]
-                                                        ])?>
+                                                        ])->label(false)?>
 
                 <?= $form->field($model, 'cell_id')->widget(DepDrop::classname(),
                                                         [
@@ -96,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 'placeholder'=>'Select cell...',
                                                                 'url'=>Url::to(['/user-profile/cell'])
                                                             ]
-                                                        ])?>
+                                                        ])->label(false)?>
 
                 <?= Html::submitButton(Yii::t('user', 'Sign up'), ['class' => 'btn btn-success btn-block']) ?>
 

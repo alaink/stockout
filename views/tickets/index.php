@@ -41,9 +41,9 @@ if($ticket_status != null){
 
 <!--        <?//= Html::a('Create a Ticket', ['/tickets/choose'], ['class'=>'btn btn-primary']); ?>-->
 
-        <?= $form->field($model, 'fmcg')->dropDownList($myFMCG, [
+        <!-- <?= $form->field($model, 'fmcg')->dropDownList($myFMCG, [
                                             'id' => 'fmcg-select',
-                                            'prompt' => 'Choose FMCG'])->label('Select FMCG'); ?>
+                                            'prompt' => 'Choose FMCG'])->label('Select FMCG'); ?> -->
 
         <div class="row">
             <div class="col-lg-3">

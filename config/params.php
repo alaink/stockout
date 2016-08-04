@@ -32,5 +32,11 @@ return [
     'Product Expired' => 4,
     'Product Damaged' => 5,
 
+    //confirmed used
+    'pending' => 0,
+    'confirmed' => 1,
+    'rejected' => 3,
+    'retailer' => 2,    // dont need confirmation
+
     
 ];

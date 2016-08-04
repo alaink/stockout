@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\ChartHelpers;
 use app\models\DrawCharts;
+use app\models\RecordHelpers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -49,32 +50,36 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $ticketByProduct = ChartHelpers::getProductOccurrence();
-        $ticketByProductChart = DrawCharts::pieChart($ticketByProduct, 'ticket_product');
-        
-        $ticketByType = ChartHelpers::getTicketsByType();
-        $ticketByTypeChart = DrawCharts::pieChart($ticketByType, 'ticket_type');
-
-        $retailersByRegion = ChartHelpers::RetailersByRegionData();
-        $retailersByRegionChart = DrawCharts::rotatedLColumn($retailersByRegion, 'retailer-region');
-
-        $statusTicketByRegion = ChartHelpers::statusTicketsByRegionData();
-        $statusTicketByRegionChart = DrawCharts::basicColumn($statusTicketByRegion, 'status-ticket-region');
-        
-        $weeks = ChartHelpers::formatWeeks();
-        $weeklyTicket = ChartHelpers::weeklyTicketsByTypeData();
-        $weeklyTicketStackedChart = DrawCharts::stackedColumn($weeks, $weeklyTicket, 'weekly-ticket-stacked');
-        $weeklyTicketLineChart = DrawCharts::basicLine($weeks, $weeklyTicket, 'weekly-ticket-basic-line');
-        
-        
-        return $this->render('index',[
-            'ticketByProductChart' => $ticketByProductChart,
-            'ticketByTypeChart' => $ticketByTypeChart,
-            'retailersByRegionChart' => $retailersByRegionChart,
-            'statusTicketByRegionChart' => $statusTicketByRegionChart,
-            'weeklyTicketStackedChart' => $weeklyTicketStackedChart,
-            'weeklyTicketLineChart' => $weeklyTicketLineChart
-        ]);
+        if(RecordHelpers::getProfileType() == Yii::$app->params['FMCG']):
+            $ticketByProduct = ChartHelpers::getProductOccurrence();
+            $ticketByProductChart = DrawCharts::pieChart($ticketByProduct, 'ticket_product');
+            
+            $ticketByType = ChartHelpers::getTicketsByType();
+            $ticketByTypeChart = DrawCharts::pieChart($ticketByType, 'ticket_type');
+    
+            $retailersByRegion = ChartHelpers::RetailersByRegionData();
+            $retailersByRegionChart = DrawCharts::rotatedLColumn($retailersByRegion, 'retailer-region');
+    
+            $statusTicketByRegion = ChartHelpers::statusTicketsByRegionData();
+            $statusTicketByRegionChart = DrawCharts::basicColumn($statusTicketByRegion, 'status-ticket-region');
+            
+            $weeks = ChartHelpers::formatWeeks();
+            $weeklyTicket = ChartHelpers::weeklyTicketsByTypeData();
+            $weeklyTicketStackedChart = DrawCharts::stackedColumn($weeks, $weeklyTicket, 'weekly-ticket-stacked');
+            $weeklyTicketLineChart = DrawCharts::basicLine($weeks, $weeklyTicket, 'weekly-ticket-basic-line');
+            
+            
+            return $this->render('index',[
+                'ticketByProductChart' => $ticketByProductChart,
+                'ticketByTypeChart' => $ticketByTypeChart,
+                'retailersByRegionChart' => $retailersByRegionChart,
+                'statusTicketByRegionChart' => $statusTicketByRegionChart,
+                'weeklyTicketStackedChart' => $weeklyTicketStackedChart,
+                'weeklyTicketLineChart' => $weeklyTicketLineChart
+            ]);
+        else: // subdealers don't have a dashboard
+            $this->redirect(array('tickets/index'));
+        endif;
     }
 
     public function actionLogin()

@@ -4,7 +4,7 @@ $params = require(__DIR__ . '/params.php');
 
 $config = [
     'id' => 'basic',
-    'name' => 'Stock Out',
+    'name' => 'StoCout',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [

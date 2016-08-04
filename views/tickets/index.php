@@ -8,6 +8,7 @@ use \app\models\Tickets;
 use yii\widgets\LinkPager;
 
 /* @var $this yii\web\View */
+
 ?>
 <?php
 $a= ['0' => 'New Tickets','1' => 'Viewed Tickets', '2' => 'Pending Tickets', '3' => 'In Progress Tickets',
@@ -38,11 +39,11 @@ if($ticket_status != null){
     <!-- create ticket button for subdealer -->
     <?php if ($profile_type == Yii::$app->params['SUBDEALER']): ?>
 
-        <?= Html::a('Create a Ticket', ['/tickets/choose'], ['class'=>'btn btn-primary']); ?>
+<!--        <?//= Html::a('Create a Ticket', ['/tickets/choose'], ['class'=>'btn btn-primary']); ?>-->
 
         <?= $form->field($model, 'fmcg')->dropDownList($myFMCG, [
                                             'id' => 'fmcg-select',
-                                            'prompt' => 'Choose FMCG'])->label(''); ?>
+                                            'prompt' => 'Choose FMCG'])->label('Select FMCG'); ?>
 
         <div class="row">
             <div class="col-lg-3">
@@ -96,8 +97,7 @@ if($ticket_status != null){
             <th>Product name</th>
             <th>Comments</th>
             <th>Product Quantity</th>
-            <th>Status on FMCG</th>
-            <th>Status on Subdealer</th>
+            <th>Ticket Status</th>
             <th>Preferred response time</th>
             <th>Action</th>
         </tr>
@@ -110,8 +110,8 @@ if($ticket_status != null){
                 <td><?php echo RecordHelpers::getProductName($ticket['product_id']) ?></td>
                 <td><?php echo $ticket['comments'] ?></td>
                 <td><?php echo $ticket['product_quantity'] ?></td>
-                <td><?php echo Tickets::printStatus($ticket['status_fmcg']) ?></td>
-                <td><?php echo Tickets::printStatus($ticket['status_subdea']) ?></td>
+                <td><?php if($profile_type == Yii::$app->params['FMCG']) {echo Tickets::printStatus($ticket['status_fmcg']);}
+                          else { echo Tickets::printStatus($ticket['status_subdea']); } ?></td>
                 <td><?php echo $ticket['response_time_preference'] ?></td>
                 <td><?php echo Html::a('', ['/tickets/view?id=' . $ticket['id']], ['class'=>'glyphicon glyphicon-eye-open', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'View']) . "        ";
                     echo Html::a('', ['/tickets/update?id=' . $ticket['id']], ['class'=>'glyphicon glyphicon-pencil', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'To In Progress']) . "        ";

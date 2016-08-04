@@ -56,8 +56,8 @@ class RegistrationForm extends BaseRegistrationForm
         $labels['profile_type_id'] = \Yii::t('user', 'Profile Type');
         $labels['tel_address'] = \Yii::t('user', 'Tel address');
         $labels['user_code'] = \Yii::t('user', 'User Code');
-        $labels['district'] = \Yii::t('user', 'District');
-        $labels['sector'] = \Yii::t('user', 'Sector');
+        $labels['district_id'] = \Yii::t('user', 'District');
+        $labels['sector_id'] = \Yii::t('user', 'Sector');
         $labels['cell_id'] = \Yii::t('user', 'Cell');
 
         return $labels;

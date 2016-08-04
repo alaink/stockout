@@ -275,13 +275,13 @@ class RecordHelpers
     {
         $query = new yii\db\Query();
 
-        $name = $query
-            ->select('`name`, `tel_address`')
+        $profile = $query
+            ->select('`name`, `tel_address`, `cell_id`')
             ->from('`user_profile`')
             ->where('`id` = ' . $id)
             ->one();
 
-        return $name;
+        return $profile;
     }
 
     public static function getFmcgs()
@@ -357,9 +357,17 @@ class RecordHelpers
     
     public static function getDistrictName($id)
     {
-        $query = new yii\db\Query();
-        $districtName = $query->select('name')->from('district')->where('`id` = ' .$id)->one();
-        
-        return $districtName['name'];
+        $district = District::find()->select('name')->where(['id' => $id])->one();
+
+        return $district->name;
     }
+
+    public static function getSectorName($id)
+    {
+        $sector = Sector::find()->select('name')->where(['id' => $id])->one();
+
+        return $sector->name;
+    }
+
+    
 }

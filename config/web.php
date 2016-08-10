@@ -68,6 +68,7 @@ $config = [
     'modules' => [
         'user' => [
             'class' => 'dektrium\user\Module',
+            'enableConfirmation' => false,
             'controllerMap' => [
                 'register' => 'app\controllers\user\RegisterController'
             ],

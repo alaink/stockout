@@ -7,11 +7,13 @@ use app\models\RecordHelpers;
 use app\models\SubIssue;
 use app\models\Tickets;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
 
 class TicketsController extends \yii\web\Controller
 {
@@ -35,139 +37,51 @@ class TicketsController extends \yii\web\Controller
     public function actionIndex()
     {
         $profile_type =  RecordHelpers::getProfileType();
-        $status_col = RecordHelpers::getTicketStatusCol();
-
-        // get ticket status from user
-        $ticket_status = Yii::$app->request->get('status');
         $model = new Tickets();
+        $tickets = new Tickets();
+        $fmcgSelected = '';
+        $message = '';
 
-//        @todo change this logik to the one we talked about
-        // this only prints all tickets from all fmcgs enrolled to
-        if($profile_type == Yii::$app->params['SUBDEALER'])
-        {
-            // fmcgs to give subdealer to chose
-            $myFMCG = RecordHelpers::getMyFmcgs();
+        $ticket_status = Yii::$app->request->get('status');
 
-            // where clause concatinating all fmcgs
-            $where = self::extractWhere($myFMCG);
+        if($profile_type == Yii::$app->params['SUBDEALER']):
+            // get fmcg from user from navigation panel
+            $fmcgSelected = Yii::$app->request->get('fmcgSelected');
 
-//            // get fmcg from user
-//            $fmcgSelected = Yii::$app->request->get('fmcgSelected');
-//            if($fmcgSelected != null) {
-//                $deepTickets = RecordHelpers::ticketsByFmcgByDistrict($fmcgSelected);
-//            }
+            if($fmcgSelected != null or $ticket_status != null):
+                $tickets = RecordHelpers::ticketsByFmcgByDistrict($fmcgSelected, $ticket_status);
+            else: 
+                $message = "Select an FMCG to view his tickets!";
+            endif;
+        
+        else: // user is an FMCG
+            if($ticket_status != null):
+                $tickets = RecordHelpers::ticketsForFmcg($ticket_status);
+            else: // display all
+                $tickets = RecordHelpers::ticketsForFmcg($ticket_status);
+            endif;
+            
+        endif;
 
-            // user selected a status of tickets
-            if($ticket_status != null)
-            {
-                $query = new Query;
+        $dataProvider = new ActiveDataProvider([
+            'query' => $tickets,
+            'pagination' => ['pageSize' =>15],
+        ]);
 
-                $tickets = $query
-                    ->select('`tickets`.*')
-                    ->from('`tickets`, `products`')
-                    ->where('`products`.`id` = `tickets`.`product_id`')
-                    ->andWhere('`tickets`.' . $status_col . ' = ' . $ticket_status)
-//                    ->andWhere('`products`.`fmcg_id` in ' . self::extractKeys($myFMCG))
-                    ->andWhere($where)
-                    ->all();
-                $pages = new Pagination(['defaultPageSize' => 15,'totalCount' => count($tickets)]);
-                $models = $query->offset($pages->offset)
-                    ->limit($pages->limit)
-                    ->all();
-
-            }
-            else{ // display all
-//                $query = new Query;
-
-//                $tickets = $deepTickets;
-//                $pages = new Pagination(['defaultPageSize' => 15,'totalCount' => count($tickets)]);
-////                $models = $query->offset($pages->offset)
-//                $models = $tickets->offset($pages->offset)
-//                    ->limit($pages->limit)
-//                    ->all();
-
-                $query = new Query;
-
-                $tickets = $query
-                    ->select('`tickets`.*')
-                    ->from('`tickets`, `products`')
-                    ->where('`products`.`id` = `tickets`.`product_id`')
-//                    ->andWhere('`products`.`fmcg_id` in ' . array_keys($myFMCG))
-                    ->andWhere($where)
-                    ->all();
-                $pages = new Pagination(['defaultPageSize' => 12,'totalCount' => count($tickets)]);
-                $models = $query->offset($pages->offset)
-                    ->limit($pages->limit)
-                    ->all();
-            }
-
-            return $this->render('index', [
-                'tickets' => $models,
-                'pages' => $pages,
-                'model' => $model,
-                'profile_type' => $profile_type,
-                'ticket_status' => $ticket_status,
-                'myFMCG' => $myFMCG,
-//                'deepTickets' => $deepTickets
-            ]);
-        }
-        else // user is an FMCG
-        {
-            if($ticket_status != null)
-            {
-                $query = new Query;
-
-                $tickets = $query
-                    ->select('`tickets`.*')
-                    ->from('`tickets`, `products`')
-                    ->where('`products`.`id` = `tickets`.`product_id`')
-                    ->andWhere('`tickets`.' . $status_col . ' = ' . $ticket_status)
-                    ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id)
-                    ->all();
-                $pages = new Pagination(['defaultPageSize' => 12,'totalCount' => count($tickets)]);
-                $models = $query->offset($pages->offset)
-                    ->limit($pages->limit)
-                    ->all();
-
-            }
-            else{ // display all
-                $query = new Query;
-
-                $tickets = $query
-                    ->select('`tickets`.*')
-                    ->from('`tickets`, `products`')
-                    ->where('`products`.`id` = `tickets`.`product_id`')
-                    ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id)
-                    ->all();
-                $pages = new Pagination(['defaultPageSize' => 12,'totalCount' => count($tickets)]);
-                $models = $query->offset($pages->offset)
-                    ->limit($pages->limit)
-                    ->all();
-
-//                $provider = new ArrayDataProvider([
-//                    'allModels' => $tickets,
-//                    'pagination' => [
-//                        'pageSize' => 12,
-//                    ],
-//                ]);
-//                $models = $provider->getModels();
-
-            }
-
-            return $this->render('index', [
-                'tickets' => $models,
-                'pages' => $pages,
-                'model' => $model,
-                'profile_type' => $profile_type,
-                'ticket_status' => $ticket_status,
-            ]);
-        }
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+            'profile_type' => $profile_type,
+            'ticket_status' => $ticket_status,
+            'message' => $message,
+            'fmcgSelected' => $fmcgSelected,
+        ]);
     }
 
     public function actionCreate()
     {
         $model = new Tickets();
-        
+
         $products = new Products();
 
         // from choose view
@@ -181,7 +95,7 @@ class TicketsController extends \yii\web\Controller
         $products_bar_code = RecordHelpers::getProducts();
 
 
-        if ($model->load(Yii::$app->request->post())) 
+        if ($model->load(Yii::$app->request->post()))
         {
             $model->user_id = Yii::$app->user->identity->id;
             $model->created_by = $model->user_id;
@@ -190,12 +104,12 @@ class TicketsController extends \yii\web\Controller
             }
             $model->title = RecordHelpers::createTicketTitle($issue_id, $POST_VAR);
             $model->type = $issue_id;
-            
+
             $model->save();
             RecordHelpers::createHistory($model->id, 'create');
 
             return $this->redirect(['view', 'id' => $model->id]);
-        } 
+        }
         else {
             return $this->render('create', [
                 'model' => $model,
@@ -220,10 +134,8 @@ class TicketsController extends \yii\web\Controller
 
     public function actionLists()
     {
-
         $id = Yii::$app->request->get('id');
-
-
+        
         $sub_issues = SubIssue::find()
             ->where(['issue_id' => $id])
             ->all();
@@ -237,8 +149,7 @@ class TicketsController extends \yii\web\Controller
             echo "<option>-<option>";
         }
     }
-
-
+    
     /**
      * change ticket status to in progress
      * @param $id
@@ -274,9 +185,9 @@ class TicketsController extends \yii\web\Controller
             RecordHelpers::changeTicketStatus($id, Yii::$app->params['VIEWED_TICKET']);
         }
         // process this $viewed so that it never get past 5, "memory"
-        
+
         RecordHelpers::createHistory($id, 'view');
-        
+
         $currentTicketStatus  = RecordHelpers::getCurrentTicketStatus($id);
 
         return $this->render('view', [
@@ -284,8 +195,7 @@ class TicketsController extends \yii\web\Controller
             'currentTicketStatus' => $currentTicketStatus
         ]);
     }
-        
-
+    
     /**
      * Finds the Tickets model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -300,18 +210,6 @@ class TicketsController extends \yii\web\Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
-
-    public function extractWhere($fmcgs)
-    {
-        $where = '';
-        foreach ($fmcgs as $key => $fmcg)
-        {
-            $where .= '`products`.`fmcg_id` = ' . $key . ' OR';
-        }
-
-        $where = chop($where," OR ");
-        return $where;
     }
 
 }

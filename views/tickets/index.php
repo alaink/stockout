@@ -5,10 +5,8 @@ use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use \app\models\Tickets;
-use yii\widgets\LinkPager;
 
 /* @var $this yii\web\View */
-
 ?>
 <?php
 $a= ['0' => 'New Tickets','1' => 'Viewed Tickets', '2' => 'Pending Tickets', '3' => 'In Progress Tickets',
@@ -24,7 +22,7 @@ if($ticket_status != null){
 <div class="row">
     <div class="col-lg-12">
         <?php if($profile_type == Yii::$app->params['SUBDEALER']){ ?>
-            <h1 class="page-header">View Tickets by FMCG</h1>
+            <!--            <h1 class="page-header">View Tickets by FMCG</h1>-->
         <?php }else { ?>
             <h1 class="page-header"><?= Html::encode($this->title) ?></h1>
         <?php } ?>
@@ -35,15 +33,11 @@ if($ticket_status != null){
 
 <?php $form = ActiveForm::begin(['method' => 'get']) ?>
 <div class="form-group">
-    
+
     <!-- create ticket button for subdealer -->
     <?php if ($profile_type == Yii::$app->params['SUBDEALER']): ?>
 
-<!--        <?//= Html::a('Create a Ticket', ['/tickets/choose'], ['class'=>'btn btn-primary']); ?>-->
-
-        <!-- <?= $form->field($model, 'fmcg')->dropDownList($myFMCG, [
-                                            'id' => 'fmcg-select',
-                                            'prompt' => 'Choose FMCG'])->label('Select FMCG'); ?> -->
+        <!--        <?//= Html::a('Create a Ticket', ['/tickets/choose'], ['class'=>'btn btn-primary']); ?>-->
 
         <div class="row">
             <div class="col-lg-3">
@@ -53,94 +47,99 @@ if($ticket_status != null){
 
     <?php endif; ?>
 
-<!-- <?php //$form = ActiveForm::begin(['method' => 'get']) ?> -->
-<!--<div class="form-group">-->
+    <!-- <?php //$form = ActiveForm::begin(['method' => 'get']) ?> -->
+    <!--<div class="form-group">-->
     <?= $form->field($model, 'status_col')->dropDownList($a, [
-                                            'id' => 'ticket-status',
-                                            'prompt' => 'Filter Tickets'])->label(''); ?>
+        'id' => 'ticket-status',
+        'prompt' => 'Filter Tickets'])->label(''); ?>
 </div>
 
 <?php ActiveForm::end(); ?>
 
-<!--<?//= GridView::widget([
-//    'dataProvider' => $tickets,
-//    'columns' => [
-//        ['class' => 'yii\grid\SerialColumn'],
-//
-//        'id',
-//        'title',
-//        'product_id',
-//        'comments',
-//        'product_quantity',
-//        'status_fmcg',
-//        'status_subdea',
-//        'response_time_preference',
-//        // 'noticed_at',
-//
-//
-//        'status_fmcg',
-//        // 'created_by',
-//        // 'created_at',
-//        // 'updated_by',
-//        // 'updated_at',
-//
-//        ['class' => 'yii\grid\ActionColumn'],
-//    ],
-//]); ?> -->
+<?php if ($profile_type == Yii::$app->params['FMCG'] or $message == null): ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            'id:integer:#',
+            'title',
+            [
+                'attribute'=>'product_id',
+                'label' => 'Product',
+                'value' => function($model)
+                {
+                    return RecordHelpers::getProductName($model['product_id']);
+                    //return $model['product_id'] ? RecordHelpers::getProductName($model['product_id']) : '- no product -';
+                },
+            ],
+            [
+                'attribute'=>'comments',
+                'contentOptions'=>['style'=>'max-width: 100px;']
+            ],
+            //             'comments:ntext',
+            'product_quantity',
+            [
+                'label' => 'Ticket Status',
+                'value' => function($model)
+                {
+                    //@todo Always view tickets by status of fmcg as clients said only fmcg can resolve tickets. Change if clients want otherwise
+//                    if(RecordHelpers::getProfileType() == Yii::$app->params['FMCG'])
+//                    {
+                    return Tickets::printStatus($model['status_fmcg']);
+//                    }
+//                    else
+//                    {
+//                        return Tickets::printStatus($model['status_subdea']);
+//                    }
+                },
+            ],
+            'response_time_preference:date:Preferred response time',
+            // 'created_at',
+            // 'period_delivered',
 
-<?php if (!empty($tickets)) { ?>
-    <table class="table table-striped table-reflow">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Product name</th>
-            <th>Comments</th>
-            <th>Product Quantity</th>
-            <th>Ticket Status</th>
-            <th>Preferred response time</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($tickets as $ticket) : ?>
-            <tr>
-                <th scope="row"><?php echo $ticket['id']?></th>
-                <td><?php echo $ticket['title'] ?></td>
-                <td><?php echo RecordHelpers::getProductName($ticket['product_id']) ?></td>
-                <td><?php echo $ticket['comments'] ?></td>
-                <td><?php echo $ticket['product_quantity'] ?></td>
-                <td><?php if($profile_type == Yii::$app->params['FMCG']) {echo Tickets::printStatus($ticket['status_fmcg']);}
-                          else { echo Tickets::printStatus($ticket['status_subdea']); } ?></td>
-                <td><?php echo $ticket['response_time_preference'] ?></td>
-                <td><?php echo Html::a('', ['/tickets/view?id=' . $ticket['id']], ['class'=>'glyphicon glyphicon-eye-open', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'View']) . "        ";
-                    echo Html::a('', ['/tickets/update?id=' . $ticket['id']], ['class'=>'glyphicon glyphicon-pencil', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'To In Progress']) . "        ";
-                    echo Html::a('', ['/action-undertaken/resolve?id=' . $ticket['id']], ['class'=>'glyphicon glyphicon-ok', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'Resolve']);?></td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-    <?php
-}else{
-    echo "No Tickets to display";
-};
-?>
-
-<?php echo LinkPager::widget(['pagination' => $pages,]); ?>
-
-
-
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {resolve}',
+                'buttons' => [
+                    'view' => function ($model, $dataProvider) {
+                        return Html::a('',
+                            Yii::$app->request->baseUrl .'/tickets/view/?id =' . $dataProvider['id'],
+                            [
+                                'class' => 'glyphicon glyphicon-eye-open',
+                                'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'View'
+                            ]);
+                    },
+                    'update' => function ($model, $dataProvider) {
+                        return Html::a('',
+                            ['/tickets/update', 'id' => $dataProvider['id']],
+                            [
+                                'class' => 'glyphicon glyphicon-pencil',
+                                'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'To In Progress'
+                            ]);
+                    },
+                    'resolve' => function ($model, $dataProvider) {
+                        return Html::a('',
+                            ['/action-undertaken/resolve', 'id' => $dataProvider['id']],
+                            [
+                                'class' => 'glyphicon glyphicon-ok',
+                                'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'Resolve',
+                            ]);
+                    },
+                ],
+            ],
+        ],
+    ]); ?>
+<?php else: ?>
+    <div class="alert alert-info">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <?= $message ?>
+    </div>
+<?php endif; ?>
 
 <?php
-$this->registerJs(
-    '$(document).ready(function(){
-    
-        $("#fmcg-select").change(function(){
-            var e = document.getElementById("fmcg-select");
-            var strSel = e.options[e.selectedIndex].value;
-            window.location.href="' . Yii::$app->urlManager->createUrl('tickets/?fmcgSelected=') . '" + strSel;
-        });
-    
+if($profile_type == Yii::$app->params['FMCG']):
+    $this->registerJs(
+        '$(document).ready(function(){
+       
         $("#ticket-status").change(function(){
             var e = document.getElementById("ticket-status");
             var strSel = e.options[e.selectedIndex].value;
@@ -148,5 +147,17 @@ $this->registerJs(
         });
         
         });', \yii\web\View::POS_READY);
+else:
+    $this->registerJs(
+        '$(document).ready(function(){
+
+        $("#ticket-status").change(function(){
+            var e = document.getElementById("ticket-status");
+            var strSel = e.options[e.selectedIndex].value;
+            window.location.href="' . Yii::$app->urlManager->createUrl('tickets/?fmcgSelected=') . $fmcgSelected . '&status='. '" + strSel;
+        });
+
+        });', \yii\web\View::POS_READY);
+endif;
 ?>
 

@@ -46,7 +46,7 @@ class RecordHelpers
         }
 
         $code = $initialCode . '-' . trim(strtoupper(substr($name,0,4)));
-        
+
         return $code;
 
     }
@@ -57,8 +57,8 @@ class RecordHelpers
     public static function getTicketStatusCol()
     {
         $profile_type = self::getProfileType();
-        
-        
+
+
         if($profile_type == Yii::$app->params['SUBDEALER']){
             $status_col = 'status_subdea';
         }else{
@@ -82,16 +82,16 @@ class RecordHelpers
     {
 //        $user = User::findOne(Yii::$app->user->identity->id);
 //        $user_profile = UserProfile::findOne(['id' => $user->user_profile_id]);
-        
+
         $user_profile = UserProfile::findOne(Yii::$app->user->identity->user_profile_id);
         $profile_type = $user_profile->profile_type_id;
-        
+
         return $profile_type;
     }
 
     /**
      * @param $id of the model
-     * @param $newStatus    
+     * @param $newStatus
      */
     public static function changeTicketStatus($id, $newStatus)
     {
@@ -127,13 +127,13 @@ class RecordHelpers
         }
     }
 
-    public function getCurrentTicketStatus($id)
+    public static function getCurrentTicketStatus($id)
     {
         $status_col = self::getTicketStatusCol();
 
         $ticket = Tickets::findOne(['id' => $id]);
         $currentTicketStatus = $ticket->$status_col;
-        
+
         return $currentTicketStatus;
     }
 
@@ -151,7 +151,7 @@ class RecordHelpers
         $history->user_id = $user_id;
         $history->action_made = $action_name;
         $history->ticket_id = $ticket_id;
-        
+
         $history->save();
     }
 
@@ -184,7 +184,7 @@ class RecordHelpers
             $title .= 'OTHER';
         }
 
-        
+
         if($issue_id != Yii::$app->params['OTHER_ISSUE']) {
 
             // append sub issue
@@ -205,7 +205,7 @@ class RecordHelpers
 //            $product = Products::findOne(['id' => $product_id]);
 //            $title .= "-" . $product->name;
         }
-        
+
         return $title;
     }
 
@@ -213,13 +213,13 @@ class RecordHelpers
      * return products by bar-code for user as they r creating tickets
      * @todo find a way to avoid doing many queries
      */
-    public function getProducts()
+    public static function getProducts()
     {
         $bar_codes = Products::find()
-                            ->select('bar_code')->column();
+            ->select('bar_code')->column();
 
         $names = Products::find()
-                            ->select('name')->column();
+            ->select('name')->column();
 
         $flavors = Products::find()
             ->select('type_flavor')->column();
@@ -246,7 +246,7 @@ class RecordHelpers
         return $data;
     }
 
-    public function retrieveProductId($bar_code_name)
+    public static function retrieveProductId($bar_code_name)
     {
         $dd = explode(" ", $bar_code_name);
         $bar_code =  $dd[0];
@@ -314,11 +314,11 @@ class RecordHelpers
             ->all();
 
         $myFMCGs = ArrayHelper::map($myFMCGs, 'from_id', 'name');
-        
+
         return $myFMCGs;
     }
 
-    public static function ticketsByFmcgByDistrict($fmcg)
+    public static function ticketsByFmcgByDistrict($fmcg, $ticketStatus)
     {
         $query = new yii\db\Query();
 
@@ -339,22 +339,56 @@ class RecordHelpers
             AND `tickets`.`product_id` = `products`.`id`
             AND `products`.`fmcg_id` = 17
          */
-
-        $tickets = $query
-            ->select('`tickets`.*')
-            ->from('`tickets`, `user`, `user_profile`, `cell`, `products` ')
-            ->where('`tickets`.`product_id` = `products`.`id`')
-            ->andWhere('`products`.`fmcg_id` = ' . $fmcg)
-            ->andWhere('`tickets`.`user_id` = `user`.`id`')
-            ->andWhere('`user`.`user_profile_id` = `user_profile`.`id`')
-            ->andWhere('`user_profile`.`cell_id` = `cell`.`id`')
-            ->andWhere('`cell`.`district_id` = ' . $currentUserDistrict['district_id'])
-            ->all();
+        if($ticketStatus == null):
+            $tickets = $query
+                ->select('`tickets`.*')
+                ->from('`tickets`, `user`, `user_profile`, `cell`, `products` ')
+                ->where('`tickets`.`product_id` = `products`.`id`')
+                ->andWhere('`products`.`fmcg_id` = ' . $fmcg)
+                ->andWhere('`tickets`.`user_id` = `user`.`id`')
+                ->andWhere('`user`.`user_profile_id` = `user_profile`.`id`')
+                ->andWhere('`user_profile`.`cell_id` = `cell`.`id`')
+                ->andWhere('`cell`.`district_id` = ' . $currentUserDistrict['district_id']);
+        //->all();
+        else:
+            $tickets = $query
+                ->select('`tickets`.*')
+                ->from('`tickets`, `user`, `user_profile`, `cell`, `products` ')
+                ->where('`tickets`.`product_id` = `products`.`id`')
+                ->andWhere('`products`.`fmcg_id` = ' . $fmcg)
+                ->andWhere('`tickets`.`status_fmcg` = ' . $ticketStatus)    // get the status from the actual fmcg
+                ->andWhere('`tickets`.`user_id` = `user`.`id`')
+                ->andWhere('`user`.`user_profile_id` = `user_profile`.`id`')
+                ->andWhere('`user_profile`.`cell_id` = `cell`.`id`')
+                ->andWhere('`cell`.`district_id` = ' . $currentUserDistrict['district_id']);
+            //->all();
+        endif;
 
         return $tickets;
-
     }
-    
+
+    public static function ticketsForFmcg($ticketStatus)
+    {
+        $query = new yii\db\Query();
+
+        if($ticketStatus == null):
+            $tickets = $query
+                ->select('`tickets`.*')
+                ->from('`tickets`, `products`')
+                ->where('`products`.`id` = `tickets`.`product_id`')
+                ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id);
+        else:
+            $tickets = $query
+                ->select('`tickets`.*')
+                ->from('`tickets`, `products`')
+                ->where('`products`.`id` = `tickets`.`product_id`')
+                ->andWhere('`tickets`.`status_fmcg` = ' . $ticketStatus)
+                ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id);
+        endif;
+
+        return $tickets;
+    }
+
     public static function getDistrictName($id)
     {
         $district = District::find()->select('name')->where(['id' => $id])->one();
@@ -369,5 +403,5 @@ class RecordHelpers
         return $sector->name;
     }
 
-    
+
 }

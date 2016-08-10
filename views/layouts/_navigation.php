@@ -21,7 +21,7 @@ $profileType = RecordHelpers::getProfileType();
         <a class="brand brand-name navbar-left" href=<?php echo Yii::$app->getHomeUrl() ?>>
             <!--<?= Html::img('@web/images/stocout _logo_final.png', ['alt'=>'some', 'class'=>'thing',  'style'=>"max-width: 15%; max-height: 15%;"]);?></a>-->
             <img src="<?= yii\helpers\Url::to('@web/images/stocout_essai.png') ?>" style='margin-top: -5px; width: 128px;'
-                alt="<?php echo Yii::$app->name ?>" title="<?php echo Yii::$app->name ?>"></a>
+                 alt="<?php echo Yii::$app->name ?>" title="<?php echo Yii::$app->name ?>"></a>
     </div>
     <!-- /.navbar-header -->
 
@@ -50,15 +50,27 @@ $profileType = RecordHelpers::getProfileType();
             <ul class="nav" id="side-menu" >
 
                 <?php if ($profileType == Yii::$app->params['FMCG']): ?>
-                <li>
-                    <a href=<?php echo Yii::$app->getHomeUrl() ?>><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                </li>
+                    <li>
+                        <a href=<?php echo Yii::$app->getHomeUrl() ?>><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    </li>
                 <?php endif; ?>
 
                 <li>
                     <a href=<?php echo Yii::$app->urlManager->createUrl(['tickets/'])?> >
                         <i class="fa fa-dashboard fa-fw"></i> Tickets</a>
                 </li>
+
+                <?php if ($profileType == Yii::$app->params['SUBDEALER']): ?>
+                    <?php
+                    $myFMCG = RecordHelpers::getMyFmcgs();
+                    foreach ($myFMCG as $key => $fmcg):
+                        ?>
+                        <li style="margin-left: 5%">
+                            <a href=<?php echo Yii::$app->urlManager->createUrl(['tickets/index', 'fmcgSelected' => $key])?> >
+                                <i class="fa fa-building-o fa-fw"></i> <?= $fmcg?></a>
+                        </li>
+                    <?php endforeach;?>
+                <?php endif; ?>
 
                 <?php if ($profileType == Yii::$app->params['FMCG']){ ?>
 

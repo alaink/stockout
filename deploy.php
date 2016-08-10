@@ -67,18 +67,19 @@ task('deploy:upload', function() {
     }
 })->desc('Uploading files');
 
-task('deploy:writable_dirs', function() {
-    $deployPath = env('deploy_path');
-    cd($deployPath);
-
-//    set('writable_dirs', get('shared_dirs'));
-    set('writable_dirs', ['web/assets', 'runtime']);
-})->desc('Set writable dirs');
+//task('deploy:writable_dirs', function() {
+//    $deployPath = env('deploy_path');
+//    cd($deployPath);
+//
+////    set('writable_dirs', get('shared_dirs'));
+//    set('writable_dirs', ['web/assets', 'runtime']);
+//})->desc('Set writable dirs');
 
 task('deploy:set_dirs_writable', function(){
     $deployPath = env('deploy_path');
     cd($deployPath);
     run('chmod -R 777 {{release_path}}/web/assets');
+    run('chmod -R 777 {{release_path}}/web/uploads');
     run('chmod -R 777 {{release_path}}/runtime');
 });
 
@@ -104,10 +105,10 @@ task('deploy:staging', [
     'deploy:prepare',
     'deploy:release',
     'deploy:upload',
-    'deploy:writable_dirs',
+//    'deploy:writable_dirs',
 //    'deploy:vendors',
 //    'deploy:composer',
-    //'deploy:unzip_vendor',
+    //'deploy:unzip_vendor',  //needs to be uncommented
     'deploy:run_migrations',
     'deploy:set_dirs_writable',
     'deploy:symlink',

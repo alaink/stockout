@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'username')->label(false)->textInput(array('placeholder' => 'Username')); ?>
 
                 <?php if ($module->enableGeneratingPassword == false): ?>
-                    <?= $form->field($model, 'password')->passwordInput()->label(false)->textInput(array('placeholder' => 'Password')); ?>
+                    <?= $form->field($model, 'password')->passwordInput(); ?>
                 <?php endif ?>
 
                 <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label(false)->textInput(array('placeholder' => 'Name')); ?>

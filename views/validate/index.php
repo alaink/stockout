@@ -7,6 +7,7 @@
  */
 
 use app\models\Partners;
+use yii\grid\GridView;
 use yii\helpers\Html;
 
 $this->title = 'Validate Subdealers';
@@ -18,7 +19,8 @@ $this->title = 'Validate Subdealers';
     </div>
 </div>
 
-<table class="table table-striped table-reflow">
+<?php if ($subdealers != null): ?>
+    <table class="table table-striped table-reflow">
     <thead>
     <tr>
         <th>Subdealer</th>
@@ -41,5 +43,10 @@ $this->title = 'Validate Subdealers';
     <?php endforeach; ?>
     </tbody>
 </table>
+<?php else: ?>
+    <div class="alert alert-info">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>No subdealers to validate!
+    </div>
+<?php endif;?>
 
 

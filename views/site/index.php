@@ -7,7 +7,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 
-$this->title = 'Stock Out';
+$this->title = 'stoCout';
 ?>
 
 <div class="container-fluid">
@@ -25,18 +25,6 @@ $this->title = 'Stock Out';
             <div class="col-lg-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <i class="fa fa-bar-chart-o fa-fw"></i><b> Retailers by Region / Map</b>
-                    </div>
-                    <div id="carte" class="panel-body" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto">
-                        <?= Html::img('@web/images/carte.png', ['alt'=>'some', 'class'=>'thing',  'style'=>"max-width: 100%; max-height: 100%;"]);?>
-                    </div> <!-- panel body-->
-                </div> <!-- panel default-->
-
-            </div>
-
-            <div class="col-lg-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
                         <i class="fa fa-bar-chart-o fa-fw"></i><b> Tickets by product</b>
                     </div>
                     <?php if ($ticketByProductChart != 'no data'): ?>
@@ -51,23 +39,7 @@ $this->title = 'Stock Out';
                 </div> <!-- panel default-->
 
             </div>
-        </div> <!-- row -->
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <i class="fa fa-bar-chart-o fa-fw"></i><b> Retailers by Region / Chart </b>
-                    </div>
-                    <div id="retailer-region" class="panel-body" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
-                    <?php $this->registerJs($retailersByRegionChart, \yii\web\View::POS_END);?>
-                </div> <!-- panel default-->
-
-            </div>
-        </div> <!-- row -->
-
-        <div class="row">
-            <div class="col-lg-12" >
+            <div class="col-lg-6">
                 <div class="panel panel-default span4 offset4">
                     <div class="panel-heading">
                         <i class="fa fa-bar-chart-o fa-fw" ></i><b> Tickets by Type</b>
@@ -81,6 +53,18 @@ $this->title = 'Stock Out';
                             No data
                         </div>
                     <?php endif;?>
+                </div>
+            </div>
+        </div> <!-- row -->
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i><b> Retailers by Region / Chart </b>
+                    </div>
+                    <div id="retailer-region" class="panel-body" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+                    <?php $this->registerJs($retailersByRegionChart, \yii\web\View::POS_END);?>
                 </div> <!-- panel default-->
 
             </div>
@@ -135,6 +119,20 @@ $this->title = 'Stock Out';
                             No data
                         </div>
                     <?php endif;?>
+                </div> <!-- panel default-->
+
+            </div>
+        </div> <!-- row -->
+
+        <div class="row">
+            <div class="col-lg-12" >
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i><b> Retailers by Region / Map</b>
+                    </div>
+                    <div id="carte" class="panel-body" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto">
+                        <?= Html::img('@web/images/carte.png', ['alt'=>'some', 'class'=>'thing',  'style'=>"max-width: 100%; max-height: 100%;"]);?>
+                    </div> <!-- panel body-->
                 </div> <!-- panel default-->
 
             </div>

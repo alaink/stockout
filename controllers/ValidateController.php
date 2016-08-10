@@ -13,6 +13,8 @@ use app\models\Cell;
 use app\models\Partners;
 use app\models\RecordHelpers;
 use Yii;
+use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 
 class ValidateController extends \yii\web\Controller
 {

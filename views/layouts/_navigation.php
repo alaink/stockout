@@ -33,8 +33,6 @@ $profileType = RecordHelpers::getProfileType();
             <ul class="dropdown-menu dropdown-user">
                 <li><a href="<?php echo Url::to(['/user-profile/view']) ?> "><i class="fa fa-user fa-fw"></i> Profile</a>
                 </li>
-                <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                </li>
                 <li class="divider"></li>
                 <li><a href="<?php echo Url::to(['/site/logout']) ?> " data-method="post"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                 </li>
@@ -65,7 +63,7 @@ $profileType = RecordHelpers::getProfileType();
                     $myFMCG = RecordHelpers::getMyFmcgs();
                     foreach ($myFMCG as $key => $fmcg):
                         ?>
-                        <li style="margin-left: 5%">
+                        <li style="margin-left: 8%">
                             <a href=<?php echo Yii::$app->urlManager->createUrl(['tickets/index', 'fmcgSelected' => $key])?> >
                                 <i class="fa fa-building-o fa-fw"></i> <?= $fmcg?></a>
                         </li>
@@ -83,6 +81,10 @@ $profileType = RecordHelpers::getProfileType();
                             <i class="fa fa-dashboard fa-fw"></i> Upload more products</a>
                     </li>
                 <?php } ?>
+
+                <li>
+                    <a href="<?php echo Url::to(['/user-profile/view']) ?> "><i class="fa fa-user fa-fw"></i> Profile</a>
+                </li>
 
             </ul>
         </div>

@@ -2,9 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\Partners;
 use Yii;
 use app\models\UserProfile;
-use yii\data\ActiveDataProvider;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -48,10 +48,8 @@ class UserProfileController extends Controller
      */
     public function actionIndex()
     {
-        if ($already_exists = RecordHelpers::userHas('user-profile')) {
-            return $this->render('view', [
-                'model' => $this->findModel($already_exists),
-            ]);
+        if ($already_exists = UserProfile::userHasProfile()) {
+            return $this->redirect(['view']);
         } else {
             return $this->redirect(['create']);
         }
@@ -63,14 +61,24 @@ class UserProfileController extends Controller
      */
     public function actionView()
     {
-        //if ($already_exists = RecordHelpers::userHas('user-profile')) {
-        if($already_exists = UserProfile::userHasProfile()){
+        if($already_exists = UserProfile::userHasProfile()):
+
+            $myFMCG = '';
+            if(RecordHelpers::getProfileType() == Yii::$app->params['SUBDEALER']):
+                $myFMCG = RecordHelpers::getMyFmcgs();
+            endif;
+
+            $model = $this->findModel($already_exists);
+            $model->district_id = RecordHelpers::getDistrictName(RecordHelpers::getDistrict_Sector_FromCell($model->cell_id)->district_id);
+            $model->sector_id = RecordHelpers::getSectorName(RecordHelpers::getDistrict_Sector_FromCell($model->cell_id)->sector_id);
+
             return $this->render('view', [
-                'model' => $this->findModel($already_exists),
+                'model' => $model,
+                'myFMCG' => $myFMCG,
             ]);
-        } else {
+        else:
             return $this->redirect(['create']);
-        }
+        endif;
     }
 
     /**
@@ -112,15 +120,22 @@ class UserProfileController extends Controller
     {
         if($model = UserProfile::find()->where(['id' =>
             Yii::$app->user->identity->user_profile_id])->one()) {
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-
-                // generate user_code from inputed data
-                $model->user_code =  RecordHelpers::generateCodes($model->profile_type_id, $model->name,
-                    Yii::$app->user->identity->id);
-
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) 
+            {
+                $POST_VAR = Yii::$app->request->post('UserProfile');
+                $fmcgs = $POST_VAR['from_id'];
+                Partners::updatePartners($fmcgs, Yii::$app->user->identity->user_profile_id);
                 $model->save();
                 return $this->redirect(['view']);
             } else {
+                $cell = $model->cell_id;
+                $district_id = RecordHelpers::getDistrict_Sector_FromCell($cell)->district_id;
+                $sector_id = RecordHelpers::getDistrict_Sector_FromCell($cell)->sector_id;
+                $model->district_id = $district_id;
+                $model->sector_id = $sector_id;
+                $model->from_id = array_keys(RecordHelpers::getMyFmcgs());
+                //print_r(array_keys($model->from_id));
+
                 return $this->render('update', [
                     'model' => $model,
                 ]);

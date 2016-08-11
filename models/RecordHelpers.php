@@ -30,28 +30,6 @@ class RecordHelpers
     }
 
     /**
-     * generate codes for user-code
-     * @param $type 3 first letters of a profile type
-     * @param $name of the user/company
-     * @param $userId from the login
-     */
-    public function generateCodes($type, $name)
-    {
-        if($type == Yii::$app->params['RETAILER']){
-            $initialCode = 'RET';
-        }elseif($type == Yii::$app->params['SUBDEALER']){
-            $initialCode = 'SUB';
-        }else{
-            $initialCode = 'FMCG';
-        }
-
-        $code = $initialCode . '-' . trim(strtoupper(substr($name,0,4)));
-
-        return $code;
-
-    }
-
-    /**
      * returns the ticket status column to fetch from
      */
     public static function getTicketStatusCol()
@@ -271,6 +249,11 @@ class RecordHelpers
         return Cell::find()->where(['sector_id' => $sector_id])->select(['id', 'name'])->orderBy('name')->asArray()->all();
     }
 
+    /**
+     * get user's profile from their profile's id.
+     * @param $id
+     * @return array|bool
+     */
     public static function getProfile($id)
     {
         $query = new yii\db\Query();
@@ -401,6 +384,20 @@ class RecordHelpers
         $sector = Sector::find()->select('name')->where(['id' => $id])->one();
 
         return $sector->name;
+    }
+    
+    public static function getCellName($id)
+    {
+        $cell = Cell::find()->select('name')->where(['id' => $id])->one();
+
+        return $cell->name;
+    }
+
+    public static function getDistrict_Sector_FromCell($id)
+    {
+        $location = Cell::find()->select(['district_id', 'sector_id'])->where(['id' => $id])->one();
+
+        return($location);
     }
 
 

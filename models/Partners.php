@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "partners".
@@ -67,5 +68,73 @@ class Partners extends \yii\db\ActiveRecord
                         ->all();
         
         return $subdealers;
+    }
+
+    public static function updatePartners($newFMCGs, $to_id)
+    {
+        // get all subdealer's fmcgs from db
+        $savedFMCGs = array_keys(RecordHelpers::getMyFmcgs());
+
+        // ADDING NEW FMCG
+        if(is_array($newFMCGs) and is_array($savedFMCGs)) {
+            foreach ($newFMCGs as $newFMCG) {
+                if (!in_array($newFMCG, $savedFMCGs)) {
+                    $model = new Partners();
+
+                    $model->from_id = $newFMCG;
+                    $model->to_id = $to_id;
+                    $model->confirmed = 0;
+                    $model->save();
+                }
+            }
+
+            // DELETING FMCG
+            foreach ($savedFMCGs as $savedFMCG) {
+                if (!in_array($savedFMCG, $newFMCGs)) {
+                    $model = Partners::find()->where([
+                        'from_id' => $savedFMCG, 'to_id' => $to_id])->one();
+                    $model->delete();
+                }
+            }
+        }
+//        // one new fmcg
+//        elseif (!is_array($newFMCGs) and is_array($savedFMCGs)) {
+//            // adding
+//            if (!in_array($newFMCGs, $savedFMCGs)) {
+//                $model = new Partners();
+//
+//                $model->from_id = $newFMCGs;
+//                $model->to_id = $to_id;
+//                $model->confirmed = 0;
+//                $model->save();
+//            }
+//
+//            // deleting
+//            foreach ($savedFMCGs as $savedFMCG) {
+//                echo $savedFMCG . ' ---- ' . $newFMCGs . '------' . '<br/>';
+//                if($savedFMCG != $newFMCGs)
+//                {
+//                    $model = Partners::find()->where([
+//                            'from_id' => $savedFMCG, 'to_id' => $to_id ])->one();
+//                    //$model->delete();
+//                }
+//            }
+//        }
+    }
+
+    /**
+     * Finds the UserProfile model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return UserProfile the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Partners::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }

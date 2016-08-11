@@ -87,7 +87,7 @@ class TicketsController extends \yii\web\Controller
         // from choose view
         $issue_id = Yii::$app->request->get('id');
         $sub_issues = RecordHelpers::getSubIssues($issue_id);
-
+        
         $POST_VAR = Yii::$app->request->post('Tickets');
         $POST_VAR2 = Yii::$app->request->post('Products');
 

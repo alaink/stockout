@@ -53,6 +53,7 @@ class ValidateController extends \yii\web\Controller
         $subdealer->confirmed = 1;
         $subdealer->save();
 
+        Yii::$app->session->setFlash('success', "Subdealer validated successfully!");
         return $this->redirect(['index']);
     }
 
@@ -63,14 +64,8 @@ class ValidateController extends \yii\web\Controller
         $subdealer->confirmed = 3;
         $subdealer->save();
 
+        Yii::$app->session->setFlash('success', "Subdealer rejected successfully!");
         return $this->redirect(['index']);
-    }
-
-    public static function getDistrict_Sector_FromCell($id)
-    {
-        $location = Cell::find()->select(['district_id', 'sector_id'])->where(['id' => $id])->one();
-
-        return($location);
     }
 
     public static function formatData($subdealers)
@@ -85,8 +80,8 @@ class ValidateController extends \yii\web\Controller
             $name = $profile['name'];
             $phone = $profile['tel_address'];
             $cell = $profile['cell_id'];
-            $district = self::getDistrict_Sector_FromCell($cell)->district_id;
-            $sector = self::getDistrict_Sector_FromCell($cell)->sector_id;
+            $district = RecordHelpers::getDistrict_Sector_FromCell($cell)->district_id;
+            $sector = RecordHelpers::getDistrict_Sector_FromCell($cell)->sector_id;
             $location = RecordHelpers::getDistrictName($district) . ' : ' . RecordHelpers::getSectorName($sector);
             
             $data[$i]['id'] = $id;

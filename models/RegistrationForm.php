@@ -21,7 +21,6 @@ class RegistrationForm extends BaseRegistrationForm
     public $profile_type_id;
     public $name;
     public $tel_address;
-    public $user_code;
     public $district_id;
     public $sector_id;
     public $cell_id;
@@ -41,7 +40,7 @@ class RegistrationForm extends BaseRegistrationForm
         $rules = parent::rules();
         $rules[] = [['profile_type_id', 'name', 'cell_id'], 'required'];
         $rules[] = [['profile_type_id', 'tel_address', 'user_profile_id', 'cell_id', 'district_id', 'sector_id'], 'integer'];
-        $rules[] = [['name','user_code'], 'string', 'max' => 255];
+        $rules[] = [['name'], 'string', 'max' => 255];
         $rules[] = [['from_id'], 'safe'];
         return $rules;
     }
@@ -55,7 +54,6 @@ class RegistrationForm extends BaseRegistrationForm
         $labels['name'] = \Yii::t('user', 'Name');
         $labels['profile_type_id'] = \Yii::t('user', 'Profile Type');
         $labels['tel_address'] = \Yii::t('user', 'Tel address');
-        $labels['user_code'] = \Yii::t('user', 'User Code');
         $labels['district_id'] = \Yii::t('user', 'District');
         $labels['sector_id'] = \Yii::t('user', 'Sector');
         $labels['cell_id'] = \Yii::t('user', 'Cell');
@@ -79,7 +77,6 @@ class RegistrationForm extends BaseRegistrationForm
         $profile->setAttributes([
             'name' => $this->name,
             'profile_type_id' => $this->profile_type_id,
-            'user_code' =>  RecordHelpers::generateCodes($this->profile_type_id, $this->name),
             'tel_address' => $this->tel_address,
             'cell_id' => $this->cell_id,
         ]);

@@ -11,16 +11,18 @@ use yii\helpers\ArrayHelper;
  * @property integer $id
  * @property integer $profile_type_id
  * @property string $name
- * @property string $user_code
  * @property integer $rating
  * @property integer $tel_address
  * @property string $cell_id
  *
  * @property Products[] $products
- * @property ProfileType $profileType
  */
 class UserProfile extends \yii\db\ActiveRecord
 {
+    var $district_id;
+    var $sector_id;
+    var $from_id;
+
     /**
      * @inheritdoc
      */
@@ -37,7 +39,7 @@ class UserProfile extends \yii\db\ActiveRecord
         return [
             [['profile_type_id', 'name', 'cell_id'], 'required'],
             [['profile_type_id', 'rating', 'tel_address', 'cell_id'], 'integer'],
-            [['name', 'user_code'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => 255],
         ];
     }
 
@@ -50,10 +52,11 @@ class UserProfile extends \yii\db\ActiveRecord
             'id' => 'ID',
             'profile_type_id' => 'Profile Type',
             'name' => 'Name',
-            'user_code' => 'User Code',
             'rating' => 'Rating',
-            'tel_address' => 'Tel Address',
+            'tel_address' => 'Telephone N.',
             'cell_id' => 'Cell',
+            'district_id' => 'District',
+            'sector_id' => 'Sector',
         ];
     }
 
@@ -71,6 +74,7 @@ class UserProfile extends \yii\db\ActiveRecord
             Yii::$app->user->identity->user_profile_id])->one();
         
         if($model != null) {
+//            return $model;
             return $model['id'];
         }else {
             return false;

@@ -19,6 +19,14 @@ $this->title = 'Validate Subdealers';
     </div>
 </div>
 
+<div class="'row">
+    <?php if(Yii::$app->session->hasFlash('success')):?>
+        <div class="success alert alert-success">
+            <?php echo Yii::$app->session->getFlash('success'); ?>
+        </div>
+    <?php endif; ?>
+</div>
+
 <?php if ($subdealers != null): ?>
     <table class="table table-striped table-reflow">
     <thead>
@@ -36,7 +44,7 @@ $this->title = 'Validate Subdealers';
             <td><?php echo $subdealer['phone'] ?></td>
             <td><?php echo $subdealer['location'] ; ?></td>
             <td><?php echo Html::a('', ['/validate/confirm?id=' . $subdealer['id']],
-                                    ['class'=>'glyphicon glyphicon-thumbs-up', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'Confirm']) . "              ";
+                                    ['class'=>'glyphicon glyphicon-thumbs-up', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'Validate']) . "              ";
                 echo Html::a('', ['/validate/reject?id=' . $subdealer['id']],
                                     ['class'=>'glyphicon glyphicon-thumbs-down', 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'Reject']); ?></td>
         </tr>

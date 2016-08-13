@@ -15,6 +15,12 @@ use yii\widgets\ActiveForm;
         <!-- /.col-lg-12 -->
     </div>
 
+    <div class="row " style="margin-top: 5px; width: 600px; height: 150px">
+        <h5 style='margin: auto;display: block;'><b>Excel sheet template</b> </h5>
+        <img src="<?= yii\helpers\Url::to('@web/images/product_template.png') ?>" style='margin: auto;display: block;width: 100%;margin-left: 15%'
+             alt="<?php echo Yii::$app->name ?>" title="Product template">
+    </div>
+
     <!-- displaying success flash info if set   -->
     <div class="'row">
         <?php if(Yii::$app->session->hasFlash('success')):?>
@@ -24,16 +30,18 @@ use yii\widgets\ActiveForm;
         <?php endif; ?>
     </div>
 
-    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+    <div>
+        <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-        <?= '<br /> <br />'?>
-        <?= $form->field($model, 'uploadedFile')->label('Upload Products\' file<hr />')->fileInput(['class'=>'btn btn-sm btn-primary']) ?>
+            <?= '<br /> <br />'?>
+            <?= $form->field($model, 'uploadedFile')->label('Upload Products\' file<hr />')->fileInput(['class'=>'btn btn-sm btn-primary']) ?>
 
-        <?= '<br />' ?>
+            <?= '<br />' ?>
 
-        <button>Submit</button>
+            <button>Submit</button>
 
-    <?php ActiveForm::end(); ?>
+        <?php ActiveForm::end(); ?>
+    </div>
 </div>
 
 <?php

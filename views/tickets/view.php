@@ -14,7 +14,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tickets-view">
 
-    <h3><?= Html::encode($this->title) ?></h3>
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header"><?= Html::encode($this->title) ?></h3>
+        </div>
+    </div>
 
     <p>
         <?php //change button as either in progress or not

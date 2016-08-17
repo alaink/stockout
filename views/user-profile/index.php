@@ -11,7 +11,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-profile-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><?= Html::encode($this->title) ?></h1>
+        </div>
+    </div>
 
     <p>
         <?= Html::a('Create User Profile', ['create'], ['class' => 'btn btn-success']) ?>

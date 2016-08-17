@@ -91,9 +91,9 @@ task('deploy:set_dirs_writable', function(){
 //})->desc('Run composer');
 
 task('deploy:unzip_vendor', function(){
-//    $deployPath = env('deploy_path');
-//    cd($deployPath);
-    run('unzip {{release_path}}/vendor.zip {{release_path}}'); // pbm with destination folder
+    $deployPath = env('deploy_path');
+    cd($deployPath);
+    run('unzip {{release_path}}/vendor.zip -d {{release_path}}');
 })->desc('Unzip vendor.zip');
 
 task('deploy:run_migrations', function () {
@@ -108,7 +108,7 @@ task('deploy:staging', [
 //    'deploy:writable_dirs',
 //    'deploy:vendors',
 //    'deploy:composer',
-    //'deploy:unzip_vendor',  //needs to be uncommented
+    'deploy:unzip_vendor',  
     'deploy:run_migrations',
     'deploy:set_dirs_writable',
     'deploy:symlink',

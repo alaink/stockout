@@ -1,6 +1,7 @@
 <?php
 
 use app\models\RecordHelpers;
+use app\models\User;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -53,10 +54,12 @@ $profileType = RecordHelpers::getProfileType();
                     </li>
                 <?php endif; ?>
 
-                <li>
-                    <a href=<?php echo Yii::$app->urlManager->createUrl(['tickets/'])?> >
-                        <i class="fa fa-dashboard fa-fw"></i> Tickets</a>
-                </li>
+                <?php if ($profileType == Yii::$app->params['FMCG'] or $profileType == Yii::$app->params['SUBDEALER']): ?>
+                    <li>
+                        <a href=<?php echo Yii::$app->urlManager->createUrl(['tickets/'])?> >
+                            <i class="fa fa-dashboard fa-fw"></i> Tickets</a>
+                    </li>
+                <?php endif; ?>
 
                 <?php if ($profileType == Yii::$app->params['SUBDEALER']): ?>
                     <?php
@@ -76,9 +79,18 @@ $profileType = RecordHelpers::getProfileType();
                         <a href=<?php echo Yii::$app->urlManager->createUrl(['validate/'])?> >
                             <i class="fa fa-dashboard fa-fw"></i> Validate subdealers</a>
                     </li>
+                <?php } ?>
+
+                <?php if (User::isUserAdmin(Yii::$app->user->identity->username)){ ?>
+
                     <li>
                         <a href=<?php echo Yii::$app->urlManager->createUrl(['products/'])?> >
                             <i class="fa fa-dashboard fa-fw"></i> Upload more products</a>
+                    </li>
+
+                    <li>
+                        <a href=<?php echo Yii::$app->urlManager->createUrl(['user-profile/list'])?> >
+                            <i class="	fa fa-users"></i> FMCGs registered</a>
                     </li>
                 <?php } ?>
 

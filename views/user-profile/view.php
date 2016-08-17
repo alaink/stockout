@@ -14,7 +14,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-profile-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><?= Html::encode($this->title) ?></h1>
+        </div>
+    </div>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-info']) ?>

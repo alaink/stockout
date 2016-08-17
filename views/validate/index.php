@@ -6,8 +6,6 @@
  * Time: 3:32 PM
  */
 
-use app\models\Partners;
-use yii\grid\GridView;
 use yii\helpers\Html;
 
 $this->title = 'Validate Subdealers';

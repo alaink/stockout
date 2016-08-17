@@ -2,11 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\RecordHelpers;
 use app\models\UploadForm;
 use Yii;
 use app\models\Products;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
+use app\models\User;
 
 class ProductsController extends \yii\web\Controller
 {
@@ -21,6 +23,9 @@ class ProductsController extends \yii\web\Controller
                         'allow' => true,
                         'actions' => ['index'],
                         'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return User::isUserAdmin(Yii::$app->user->identity->username);
+                        }
                     ],
                 ],
             ],
@@ -34,15 +39,20 @@ class ProductsController extends \yii\web\Controller
     public function actionIndex()
     {
         $model = new UploadForm();
+        $productsModel = new Products();
+        $allFMCGs = RecordHelpers::getFmcgs();
 
         if (Yii::$app->request->isPost) {
             $model->uploadedFile = UploadedFile::getInstance($model, 'uploadedFile');
+            /* fmcg selected */
+            $POST_VAR = Yii::$app->request->post('Products');
+            $fmcg = $POST_VAR['fmcg'];
 
             if ($model->upload()) {
 
                 $inputFile = \Yii::$app->basePath .'/web/uploads/' . $model->uploadedFile->baseName . '.' . $model->uploadedFile->extension;
 
-                Products::importExcel($inputFile);
+                Products::importExcel($inputFile, $fmcg);
 
                 Yii::$app->session->setFlash('success', "Products saved successfully!");
                 return $this->redirect(['index']);
@@ -51,7 +61,9 @@ class ProductsController extends \yii\web\Controller
         }
         
         return $this->render('index', [
-            'model' => $model
+            'model' => $model,
+            'productsModel' => $productsModel,
+            'allFMCGs' => $allFMCGs
         ]);
     }
 

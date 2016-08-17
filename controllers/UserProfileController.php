@@ -217,4 +217,14 @@ class UserProfileController extends Controller
         }
         echo Json::encode(['output'=>'', 'selected'=>'']);
     }
+
+    public function actionList()
+    {
+        $allFMCGs = UserProfile::find()->select("name, tel_address")
+                                ->where(['profile_type_id' => Yii::$app->params['FMCG']])->all();
+
+        return $this->render('list', [
+            'allFMCGs' => $allFMCGs,
+        ]);
+    }
 }

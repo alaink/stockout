@@ -102,7 +102,7 @@ if($ticket_status != null){
                 'buttons' => [
                     'view' => function ($model, $dataProvider) {
                         return Html::a('',
-                            Yii::$app->request->baseUrl .'/tickets/view/?id =' . $dataProvider['id'],
+                            Yii::$app->request->baseUrl .'/tickets/view/?id=' . $dataProvider['id'],
                             [
                                 'class' => 'glyphicon glyphicon-eye-open',
                                 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'View'

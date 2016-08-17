@@ -77,8 +77,10 @@ class SiteController extends Controller
                 'weeklyTicketStackedChart' => $weeklyTicketStackedChart,
                 'weeklyTicketLineChart' => $weeklyTicketLineChart
             ]);
-        else: // subdealers don't have a dashboard
+        elseif(RecordHelpers::getProfileType() == Yii::$app->params['SUBDEALER']): // subdealers don't have a dashboard
             $this->redirect(array('tickets/index'));
+        else: // admin
+            $this->redirect(array('user-profile/list'));
         endif;
     }
 

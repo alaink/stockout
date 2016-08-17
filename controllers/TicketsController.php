@@ -50,6 +50,8 @@ class TicketsController extends \yii\web\Controller
 
             if($fmcgSelected != null or $ticket_status != null):
                 $tickets = RecordHelpers::ticketsByFmcgByDistrict($fmcgSelected, $ticket_status);
+            elseif(RecordHelpers::getMyFmcgs() == null):
+                $message = "No FMCG has validated you yet!";
             else: 
                 $message = "Select an FMCG to view his tickets!";
             endif;
@@ -81,7 +83,6 @@ class TicketsController extends \yii\web\Controller
     public function actionCreate()
     {
         $model = new Tickets();
-
         $products = new Products();
 
         // from choose view
@@ -93,7 +94,6 @@ class TicketsController extends \yii\web\Controller
 
         // get products data concatenated with their bar code
         $products_bar_code = RecordHelpers::getProducts();
-
 
         if ($model->load(Yii::$app->request->post()))
         {

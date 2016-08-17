@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label(false)->textInput(array('placeholder' => 'Name')); ?>
 
                 <?php
-                $a= ['2' => 'SUBDEALER', '3' => 'FMCG'];
+                $a= ['2' => 'SUBDEALER', '3' => 'FMCG', '4' => 'Other'];
                 echo $form->field($model, 'profile_type_id')->dropDownList($a,['id' => 'profileType','prompt'=>'Select Profile Type'])->label(false);
                 ?>
 

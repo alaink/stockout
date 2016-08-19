@@ -67,14 +67,6 @@ task('deploy:upload', function() {
     }
 })->desc('Uploading files');
 
-//task('deploy:writable_dirs', function() {
-//    $deployPath = env('deploy_path');
-//    cd($deployPath);
-//
-////    set('writable_dirs', get('shared_dirs'));
-//    set('writable_dirs', ['web/assets', 'runtime']);
-//})->desc('Set writable dirs');
-
 task('deploy:set_dirs_writable', function(){
     $deployPath = env('deploy_path');
     cd($deployPath);
@@ -82,13 +74,6 @@ task('deploy:set_dirs_writable', function(){
     run('chmod -R 777 {{release_path}}/web/uploads');
     run('chmod -R 777 {{release_path}}/runtime');
 });
-
-//task('deploy:composer', function() {
-//    $deployPath = env('deploy_path');
-//    cd($deployPath . '/release');
-//
-//    run("composer update --no-dev --prefer-dist --optimize-autoloader");
-//})->desc('Run composer');
 
 task('deploy:unzip_vendor', function(){
     $deployPath = env('deploy_path');
@@ -105,9 +90,6 @@ task('deploy:staging', [
     'deploy:prepare',
     'deploy:release',
     'deploy:upload',
-//    'deploy:writable_dirs',
-//    'deploy:vendors',
-//    'deploy:composer',
     'deploy:unzip_vendor',  
     'deploy:run_migrations',
     'deploy:set_dirs_writable',

@@ -20,29 +20,30 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
-    <p>
-        <?php //change button as either in progress or not
-        if($currentTicketStatus == Yii::$app->params['IN_PROGRESS_TICKET']) {
-            echo Html::a('In progress', ['update', 'id' => $model->id], ['class' => 'btn btn-warning disabled']);
-        }elseif ($currentTicketStatus == Yii::$app->params['RESOLVED_TICKET']){
-            // nothing to display
-        }
-        else {
-            echo Html::a('Set to In Progress', ['update', 'id' => $model->id], ['class' => 'btn btn-warning']);
-        }
-        ?>
+    <?php if(RecordHelpers::getProfileType() == Yii::$app->params['FMCG']): ?>
+        <p>
+            <?php //change button as either in progress or not
+            if($currentTicketStatus == Yii::$app->params['IN_PROGRESS_TICKET']) {
+                echo Html::a('In progress', ['update', 'id' => $model->id], ['class' => 'btn btn-warning disabled']);
+            }elseif ($currentTicketStatus == Yii::$app->params['RESOLVED_TICKET']){
+                // nothing to display
+            }
+            else {
+                echo Html::a('Set to In Progress', ['update', 'id' => $model->id], ['class' => 'btn btn-warning']);
+            }
+            ?>
 
-        <?php //display this button only for unresolved tickets
-        if($currentTicketStatus == Yii::$app->params['RESOLVED_TICKET']) {
-            echo Html::a('Resolved', ['action-undertaken/resolve', 'id' => $model->id], [
-                'class' => 'btn btn-info disabled']);
-        } else {
-            echo Html::a('Resolve', ['action-undertaken/resolve', 'id' => $model->id], [
-                'class' => 'btn btn-success']);
-        }
-        ?>
-
-    </p>
+            <?php //display this button only for unresolved tickets
+            if($currentTicketStatus == Yii::$app->params['RESOLVED_TICKET']) {
+                echo Html::a('Resolved', ['action-undertaken/resolve', 'id' => $model->id], [
+                    'class' => 'btn btn-info disabled']);
+            } else {
+                echo Html::a('Resolve', ['action-undertaken/resolve', 'id' => $model->id], [
+                    'class' => 'btn btn-success']);
+            }
+            ?>
+        </p>
+    <?php endif; ?>
 
     <?= DetailView::widget([
         'model' => $model,

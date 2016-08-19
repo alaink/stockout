@@ -108,22 +108,24 @@ if($ticket_status != null){
                                 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'View'
                             ]);
                     },
+                    /* display update and resolve only if fmcg*/
                     'update' => function ($model, $dataProvider) {
-                        return Html::a('',
+                        return (RecordHelpers::getProfileType() == Yii::$app->params['FMCG']) ? Html::a('',
                             ['/tickets/update', 'id' => $dataProvider['id']],
                             [
                                 'class' => 'glyphicon glyphicon-pencil',
                                 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'To In Progress'
-                            ]);
+                            ]) : Html::a('','javascript:void(0);');
                     },
                     'resolve' => function ($model, $dataProvider) {
-                        return Html::a('',
+                        return (RecordHelpers::getProfileType() == Yii::$app->params['FMCG']) ? Html::a('',
                             ['/action-undertaken/resolve', 'id' => $dataProvider['id']],
                             [
                                 'class' => 'glyphicon glyphicon-ok',
                                 'data-toggle'=>'tooltip', 'data-placement'=>'left', 'title'=>'Resolve',
-                            ]);
+                            ]) : Html::a('','javascript:void(0);');
                     },
+                    //endif;
                 ],
             ],
         ],

@@ -25,8 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= $this->render('/_alert', ['module' => Yii::$app->getModule('user')]) ?>
 
-<div class="row col-md-4 col-md-offset-4" style="margin-top: 5px; width: 500px">
-    <img src="<?= yii\helpers\Url::to('@web/images/stocout_essai.png') ?>" style='margin: auto;display: block;width: 50%;margin-left: 20%; margin-bottom: 5px;'
+<div class="row col-md-4 col-md-offset-4" style="display: block;margin-top: 2%; width: 510px">
+    <img src="<?= yii\helpers\Url::to('@web/images/stocOut_LOGO_finalist.png') ?>" style='margin: auto;display: block;width: 55%;margin-left: 17%; margin-bottom: 5px;'
          alt="<?php echo Yii::$app->name ?>" title="<?php echo Yii::$app->name ?>">
 </div>
 <div class="row" style="margin-top: 150px; ">

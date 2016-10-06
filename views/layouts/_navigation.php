@@ -10,18 +10,11 @@ $profileType = RecordHelpers::getProfileType();
 ?>
 
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0; ">
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0px; ">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <!-- <a class="navbar-brand" href=<?php echo Yii::$app->getHomeUrl() ?>><?= Yii::$app->name?></a> -->
         <a class="brand brand-name navbar-left" href=<?php echo Yii::$app->getHomeUrl() ?>>
             <!--<?= Html::img('@web/images/stocout _logo_final.png', ['alt'=>'some', 'class'=>'thing',  'style'=>"max-width: 15%; max-height: 15%;"]);?></a>-->
-            <img src="<?= yii\helpers\Url::to('@web/images/stocout_essai.png') ?>" style='margin-top: -5px; width: 128px;'
+            <img src="<?= yii\helpers\Url::to('@web/images/stocOut_LOGO_finalist.png') ?>" style='margin-top: 0.5px; width: 143px;'
                  alt="<?php echo Yii::$app->name ?>" title="<?php echo Yii::$app->name ?>"></a>
     </div>
     <!-- /.navbar-header -->

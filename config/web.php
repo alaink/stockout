@@ -16,11 +16,11 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-//        'user' => [
-          //  'identityClass' => 'app\models\User',
-//            'enableAutoLogin' => true,
-//            'loginUrl' => ['user/security/login/'],
-//        ],
+        'user' => [
+            'identityClass' => 'app\models\User',
+            'enableAutoLogin' => true,
+            'loginUrl' => ['user/security/login/'],
+        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],

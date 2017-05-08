@@ -26,5 +26,9 @@ phpunit.phar
 # local phpunit config
 /phpunit.xml
 
+# Server deployment
+/recipe
+deploy.php
+
 # db config file
 /config/db.php

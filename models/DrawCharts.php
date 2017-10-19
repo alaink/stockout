@@ -281,14 +281,14 @@ class DrawCharts
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Retailers (hundreds)'
+                        text: 'Retailers'
                     }
                 },
                 legend: {
                     enabled: false
                 },
                 tooltip: {
-                    pointFormat: 'Retailers in 2016: <b>{point.y:.1f} hundreds</b>'
+                    pointFormat: 'Retailers: <b>{point.y}</b>'
                 },
                 series: [{
                     name: 'District',

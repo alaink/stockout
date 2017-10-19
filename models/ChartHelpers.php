@@ -315,6 +315,7 @@ class ChartHelpers
             ->addSelect('`cell`.`district_id` AS "districtID" ')
             ->from('`user_profile`, `cell`')
             ->where('`user_profile`.`cell_id` = `cell`.`id`')
+            ->andWhere('`user_profile`.`profile_type_id`= ' . Yii::$app->params['RETAILER'])
             ->groupBy('districtID')
             ->orderBy('districtID')
             ->all();

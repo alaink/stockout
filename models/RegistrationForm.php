@@ -66,9 +66,9 @@ class RegistrationForm extends BaseRegistrationForm
      */
     protected function loadAttributes(\dektrium\user\models\User $user)
     {
-//        $POST_VAR = Yii::$app->request->post('User');
-//        echo ($POST_VAR['from_id']); exit(0);
-//        print_r($this->from_id) ;
+        //        $POST_VAR = Yii::$app->request->post('User');
+        //        echo ($POST_VAR['from_id']); exit(0);
+        //        print_r($this->from_id) ;
         //echo ($this->district_id); exit(0);
         
 

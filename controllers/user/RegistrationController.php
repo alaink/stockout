@@ -17,5 +17,5 @@ use app\models\UserProfile;
 
 class RegistrationController extends BaseRegistrationController
 {
-    
+
 }

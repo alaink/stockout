@@ -7,6 +7,7 @@ $config = [
     'name' => 'StoCout',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -63,9 +64,17 @@ $config = [
                 ],
             ],
         ],
+
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
             'nullDisplay' => '',
+            'thousandSeparator' => ',',
+            'decimalSeparator' => '.',
+            'currencyCode' => 'RWF',
+            'datetimeFormat' => 'php:d-m-Y H:i:s',
+            'dateFormat' => 'php:d-m-Y',
+            'timeFormat' => 'php:H:i:s',
+            'timeZone' => 'CAT'
         ],
 
     ],

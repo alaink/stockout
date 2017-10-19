@@ -92,7 +92,7 @@ $this->title = 'stoCout';
                     </div>
                     <?php if ($weeklyTicketStackedChart != 'no data'): ?>
                         <div id="weekly-ticket-stacked" class="panel-body" style="min-width: 310px; height: 400px; max-width: 100%; margin: 0 auto"></div> <!-- panel body-->
-                        <?php $this->registerJs($weeklyTicketStackedChart, \yii\web\View::POS_END);?>
+                        <?php //$this->registerJs($weeklyTicketStackedChart, \yii\web\View::POS_END);?>
                     <?php else: ?>
                         <div class="alert alert-info">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -112,7 +112,7 @@ $this->title = 'stoCout';
                     </div>
                     <?php if ($weeklyTicketStackedChart != 'no data'): ?>
                         <div id="weekly-ticket-basic-line" class="panel-body" style="min-width: 310px; height: 400px; max-width: 100%; margin: 0 auto"></div> <!-- panel body-->
-                        <?php $this->registerJs($weeklyTicketLineChart, \yii\web\View::POS_END);?>
+                        <?php //$this->registerJs($weeklyTicketLineChart, \yii\web\View::POS_END);?>
                     <?php else: ?>
                         <div class="alert alert-info">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

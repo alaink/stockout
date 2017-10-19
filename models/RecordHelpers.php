@@ -359,7 +359,9 @@ class RecordHelpers
                 ->select('`tickets`.*')
                 ->from('`tickets`, `products`')
                 ->where('`products`.`id` = `tickets`.`product_id`')
-                ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id);
+                ->andWhere('`products`.`fmcg_id`= ' . Yii::$app->user->identity->user_profile_id)
+                ->orderBy(['created_at' => SORT_DESC]);
+
         else:
             $tickets = $query
                 ->select('`tickets`.*')

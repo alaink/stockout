@@ -24,16 +24,16 @@
         "phpoffice/phpexcel": "dev-develop",
         "kartik-v/yii2-widget-typeahead": "*",
         "kartik-v/yii2-widget-select2": "@dev",
-        "kartik-v/yii2-widget-depdrop": "@dev"
+        "kartik-v/yii2-widget-depdrop": "@dev",
+        "deployer/recipes": "3.1.1",
+        "deployer/deployer": "~3.1.1"
 
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
         "yiisoft/yii2-debug": "*",
         "yiisoft/yii2-gii": "*",
-        "yiisoft/yii2-faker": "*",
-        "deployer/recipes": "^4.0",
-        "deployer/deployer": "^4.3"
+        "yiisoft/yii2-faker": "*"
     },
     "config": {
         "process-timeout": 1800
